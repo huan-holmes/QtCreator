@@ -5,6 +5,7 @@ Widget::Widget():
     Paint(10,10,810,810),
     clear_flag_(false),
     virtual_wall_flag_(false),
+    double_click_(0),
     BigButton("放大",this),
     LittleButton("缩小",this),
     LiftButton("向左",this),
@@ -13,7 +14,8 @@ Widget::Widget():
     DownButton("向下",this),
     ResetButton("还原",this),
     ClearButton("清除", this),
-    VirtualWallButton("虚拟墙", this),
+    VirtualWallButton("虚拟墙1", this),
+    DoubleClickButton("虚拟墙2", this),
     OpenButton("打开文件",this),
 
     Alloffset(0,0),
@@ -49,8 +51,11 @@ Widget::Widget():
 
     VirtualWallButton.setGeometry(822,250,60,25);
     connect(&VirtualWallButton,SIGNAL(clicked()),this,SLOT(onVirtualWallClicked()));
-    OpenButton.setGeometry(822,280,60,25);
 
+    DoubleClickButton.setGeometry(822,280,60,25);
+    connect(&DoubleClickButton,SIGNAL(clicked()),this,SLOT(onDoubleClickClicked()));
+
+    OpenButton.setGeometry(822,310,60,25);
     connect(&OpenButton,SIGNAL(clicked()),this,SLOT(onOpenClicked()));
 
     label.move(840,260);
@@ -83,7 +88,10 @@ bool Widget::event(QEvent * event)
                {
                    QApplication::setOverrideCursor(Qt::SizeBDiagCursor);
                }
-
+//               if(double_click_ == 1)
+//               {
+//                   QApplication::setOverrideCursor(Qt::PointingHandCursor);
+//               }
 
                PreDot = mouse->pos();
            }
@@ -92,7 +100,6 @@ bool Widget::event(QEvent * event)
     else if(event->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent *mouse = dynamic_cast<QMouseEvent* >(event);
-
         //判断鼠标是否是左键释放,且之前是在绘画区域
         if(mouse->button()==Qt::LeftButton && press )
         {
@@ -100,6 +107,24 @@ bool Widget::event(QEvent * event)
             press=false;
             clear_flag_ = false;
             virtual_wall_flag_ = false;
+            if(double_click_ == 1)
+            {
+                double_click_x1_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio;
+                double_click_y1_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))*ratio;
+                double_click_ = 2;
+                QApplication::setOverrideCursor(Qt::PointingHandCursor);
+            }
+            else
+            {
+                if(double_click_ == 2)
+                {
+                    double_click_x2_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio;
+                    double_click_y2_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))*ratio;
+                    GridLine grid_line(double_click_x1_, double_click_y1_, double_click_x2_, double_click_y2_);
+                    drawLine(grid_line.line_xs_, grid_line.line_ys_);
+                }
+                double_click_ = 0;
+            }
         }
     }
 
@@ -315,6 +340,26 @@ void Widget::onVirtualWallClicked()
     }
     this->update();
 }
+void Widget::onDoubleClickClicked()
+{
+    action=Widget::DoubleClick;
+    double_click_ = 1;
+    QApplication::setOverrideCursor(Qt::PointingHandCursor);
+    this->update();
+}
+
+void Widget::drawLine(std::vector<int> line_xs, std::vector<int> line_ys)
+{
+    qDebug()<<line_xs.size()<<endl;
+    for (int i = 0; i < line_xs.size(); i++)
+    {
+        image.setPixel(line_xs[i], line_ys[i], qRgb(0, 0, 0));
+    }
+    pix = pix.fromImage(image);
+    action = Widget::Reset;
+    this->update();
+}
+
 
 void Widget::onOpenClicked()
 {
@@ -337,6 +382,7 @@ void Widget::onOpenClicked()
        pixH = image.height();           //图片高
        qDebug()<<str<<pixW<<pixH;
        this->setWindowTitle("图片浏览器("+str+")");
+
        onResetClicked();
     }
 }

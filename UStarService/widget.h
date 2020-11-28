@@ -10,6 +10,7 @@
 #include <QFileDialog>
 #include <QImage>
 #include <QMouseEvent>
+#include "gridline.h"
 class Widget : public QWidget
 {
     Q_OBJECT
@@ -26,6 +27,12 @@ private :
     QImage image;        //打开的图片
     bool clear_flag_;
     bool virtual_wall_flag_;
+    int double_click_;
+    int double_click_x1_;
+    int double_click_y1_;
+    int double_click_x2_;
+    int double_click_y2_;
+
 
     float ratio;              //缩放比例
     QPoint offset;           //一次的图片偏移值
@@ -41,11 +48,13 @@ private :
     QPushButton  ResetButton;
     QPushButton  ClearButton;
     QPushButton  VirtualWallButton;
+    QPushButton  DoubleClickButton;
     QPushButton  OpenButton;
 
     void AddComboItem(QComboBox* cmbo);
     bool event(QEvent * event);
     void wheelEvent(QWheelEvent* e);     //鼠标滑轮事件
+    void drawLine(std::vector<int> line_xs, std::vector<int> line_ys);
 
 private slots:
     void    onUpClicked();
@@ -57,6 +66,7 @@ private slots:
     void    onBigClicked();
     void    onClearClicked();
     void    onVirtualWallClicked();
+    void    onDoubleClickClicked();
     void    onOpenClicked();
 
    void paintEvent(QPaintEvent *event);
@@ -74,6 +84,7 @@ public:
         Move,
         Clear,
         VirtualWall,
+        DoubleClick,
         Reset
     };
 
