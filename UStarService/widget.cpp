@@ -4,8 +4,12 @@
 Widget::Widget():
     Paint(10,10,810,810),
     clear_flag_(false),
-    virtual_wall_flag_(false),
-    double_click_(0),
+    line_flag_(false),
+    virtual_wall_flag_(0),
+    virtual_wall_x1_(0),
+    virtual_wall_y1_(0),
+    virtual_wall_x2_(0),
+    virtual_wall_y2_(0),
     BigButton("放大",this),
     LittleButton("缩小",this),
     LiftButton("向左",this),
@@ -14,8 +18,8 @@ Widget::Widget():
     DownButton("向下",this),
     ResetButton("还原",this),
     ClearButton("清除", this),
-    VirtualWallButton("虚拟墙1", this),
-    DoubleClickButton("虚拟墙2", this),
+    LineButton("画线", this),
+    VirtualWallButton("虚拟墙", this),
     OpenButton("打开文件",this),
 
     Alloffset(0,0),
@@ -49,11 +53,11 @@ Widget::Widget():
     ClearButton.setGeometry(822,220,60,25);
     connect(&ClearButton,SIGNAL(clicked()),this,SLOT(onClearClicked()));
 
-    VirtualWallButton.setGeometry(822,250,60,25);
-    connect(&VirtualWallButton,SIGNAL(clicked()),this,SLOT(onVirtualWallClicked()));
+    LineButton.setGeometry(822,250,60,25);
+    connect(&LineButton,SIGNAL(clicked()),this,SLOT(onLineClicked()));
 
-    DoubleClickButton.setGeometry(822,280,60,25);
-    connect(&DoubleClickButton,SIGNAL(clicked()),this,SLOT(onDoubleClickClicked()));
+    VirtualWallButton.setGeometry(822,280,60,25);
+    connect(&VirtualWallButton,SIGNAL(clicked()),this,SLOT(onVirtualWallClicked()));
 
     OpenButton.setGeometry(822,310,60,25);
     connect(&OpenButton,SIGNAL(clicked()),this,SLOT(onOpenClicked()));
@@ -84,16 +88,24 @@ bool Widget::event(QEvent * event)
                    QApplication::setOverrideCursor(Qt::CrossCursor);
                }
 
-               if(virtual_wall_flag_)
+               if(line_flag_)
                {
                    QApplication::setOverrideCursor(Qt::SizeBDiagCursor);
                }
-//               if(double_click_ == 1)
-//               {
-//                   QApplication::setOverrideCursor(Qt::PointingHandCursor);
-//               }
 
                PreDot = mouse->pos();
+           }
+           if(mouse->button()==Qt::RightButton &&Paint.contains(mouse->pos()))
+           {
+               clear_flag_ = false;
+               line_flag_ = false;
+               virtual_wall_flag_ = 0;
+               virtual_wall_x1_ = 0;
+               virtual_wall_y1_ = 0;
+               virtual_wall_x2_ = 0;
+               virtual_wall_y2_ = 0;
+               QApplication::setOverrideCursor(Qt::ArrowCursor);
+
            }
 
     }
@@ -106,24 +118,31 @@ bool Widget::event(QEvent * event)
             QApplication::setOverrideCursor(Qt::ArrowCursor); //改回鼠标样式
             press=false;
             clear_flag_ = false;
-            virtual_wall_flag_ = false;
-            if(double_click_ == 1)
+            line_flag_ = false;
+            if(virtual_wall_flag_ == 1)
             {
-                double_click_x1_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio;
-                double_click_y1_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))*ratio;
-                double_click_ = 2;
+                virtual_wall_x1_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio;
+                virtual_wall_y1_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))*ratio;
+                virtual_wall_flag_ = 2;
                 QApplication::setOverrideCursor(Qt::PointingHandCursor);
+                if(virtual_wall_x2_ != 0 && virtual_wall_y2_ != 0)
+                {
+                    GridLine grid_line(virtual_wall_x2_, virtual_wall_y2_, virtual_wall_x1_, virtual_wall_y1_);
+                    drawLine(grid_line.line_xs_, grid_line.line_ys_);
+                }
             }
             else
             {
-                if(double_click_ == 2)
+                if(virtual_wall_flag_ == 2)
                 {
-                    double_click_x2_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio;
-                    double_click_y2_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))*ratio;
-                    GridLine grid_line(double_click_x1_, double_click_y1_, double_click_x2_, double_click_y2_);
+                    virtual_wall_x2_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio;
+                    virtual_wall_y2_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))*ratio;
+                    GridLine grid_line(virtual_wall_x1_, virtual_wall_y1_, virtual_wall_x2_, virtual_wall_y2_);
                     drawLine(grid_line.line_xs_, grid_line.line_ys_);
+                    virtual_wall_flag_ = 1;
+                    QApplication::setOverrideCursor(Qt::PointingHandCursor);
                 }
-                double_click_ = 0;
+
             }
         }
     }
@@ -134,7 +153,7 @@ bool Widget::event(QEvent * event)
          {
             QMouseEvent *mouse = dynamic_cast<QMouseEvent* >(event);
 
-            if(clear_flag_ or virtual_wall_flag_)
+            if(clear_flag_ or line_flag_)
             {
                 if(clear_flag_)
                 {
@@ -313,6 +332,7 @@ void  Widget::onLittleClicked()
 
 void Widget::onClearClicked()
 {
+  resetVirtualWallState();
   action=Widget::Clear;
   if(clear_flag_)
   {
@@ -325,35 +345,59 @@ void Widget::onClearClicked()
   }
   this->update();
 }
-void Widget::onVirtualWallClicked()
+void Widget::onLineClicked()
 {
-    action=Widget::VirtualWall;
-    if(virtual_wall_flag_)
+    resetVirtualWallState();
+    action=Widget::Line;
+    if(line_flag_)
     {
-        virtual_wall_flag_ = false;
+        line_flag_ = false;
     }
     else
     {
         QApplication::setOverrideCursor(Qt::SizeBDiagCursor);
-        virtual_wall_flag_ = true;
+        line_flag_ = true;
 
     }
     this->update();
 }
-void Widget::onDoubleClickClicked()
+void Widget::onVirtualWallClicked()
 {
-    action=Widget::DoubleClick;
-    double_click_ = 1;
-    QApplication::setOverrideCursor(Qt::PointingHandCursor);
+    virtual_wall_x1_ = 0;
+    virtual_wall_y1_ = 0;
+    virtual_wall_x2_ = 0;
+    virtual_wall_y2_ = 0;
+    action=Widget::VirtualWall;
+    if (virtual_wall_flag_ == 0)
+    {
+        virtual_wall_flag_ = 1;
+        QApplication::setOverrideCursor(Qt::PointingHandCursor);
+    }
+    else
+    {
+        virtual_wall_flag_ = 0;
+        QApplication::setOverrideCursor(Qt::ArrowCursor);
+    }
+
     this->update();
+}
+void Widget::resetVirtualWallState(){
+    virtual_wall_x1_ = 0;
+    virtual_wall_y1_ = 0;
+    virtual_wall_x2_ = 0;
+    virtual_wall_y2_ = 0;
+    virtual_wall_flag_ = 0;
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 void Widget::drawLine(std::vector<int> line_xs, std::vector<int> line_ys)
 {
-    qDebug()<<line_xs.size()<<endl;
     for (int i = 0; i < line_xs.size(); i++)
     {
-        image.setPixel(line_xs[i], line_ys[i], qRgb(0, 0, 0));
+        for(int j = -1; j <= 1; j++)
+        {
+            image.setPixel(line_xs[i+j], line_ys[i], qRgb(0, 0, 0));
+        }
     }
     pix = pix.fromImage(image);
     action = Widget::Reset;

@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Widget_t {
     QByteArrayData data[16];
-    char stringdata0[208];
+    char stringdata0[201];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,21 +39,20 @@ QT_MOC_LITERAL(6, 63, 14), // "OnRightClicked"
 QT_MOC_LITERAL(7, 78, 15), // "onLittleClicked"
 QT_MOC_LITERAL(8, 94, 12), // "onBigClicked"
 QT_MOC_LITERAL(9, 107, 14), // "onClearClicked"
-QT_MOC_LITERAL(10, 122, 20), // "onVirtualWallClicked"
-QT_MOC_LITERAL(11, 143, 20), // "onDoubleClickClicked"
-QT_MOC_LITERAL(12, 164, 13), // "onOpenClicked"
-QT_MOC_LITERAL(13, 178, 10), // "paintEvent"
-QT_MOC_LITERAL(14, 189, 12), // "QPaintEvent*"
-QT_MOC_LITERAL(15, 202, 5) // "event"
+QT_MOC_LITERAL(10, 122, 13), // "onLineClicked"
+QT_MOC_LITERAL(11, 136, 20), // "onVirtualWallClicked"
+QT_MOC_LITERAL(12, 157, 13), // "onOpenClicked"
+QT_MOC_LITERAL(13, 171, 10), // "paintEvent"
+QT_MOC_LITERAL(14, 182, 12), // "QPaintEvent*"
+QT_MOC_LITERAL(15, 195, 5) // "event"
 
     },
     "Widget\0onUpClicked\0\0onDownClicked\0"
     "onResetClicked\0OnLiftClicked\0"
     "OnRightClicked\0onLittleClicked\0"
-    "onBigClicked\0onClearClicked\0"
-    "onVirtualWallClicked\0onDoubleClickClicked\0"
-    "onOpenClicked\0paintEvent\0QPaintEvent*\0"
-    "event"
+    "onBigClicked\0onClearClicked\0onLineClicked\0"
+    "onVirtualWallClicked\0onOpenClicked\0"
+    "paintEvent\0QPaintEvent*\0event"
 };
 #undef QT_MOC_LITERAL
 
@@ -115,8 +114,8 @@ void Widget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 5: _t->onLittleClicked(); break;
         case 6: _t->onBigClicked(); break;
         case 7: _t->onClearClicked(); break;
-        case 8: _t->onVirtualWallClicked(); break;
-        case 9: _t->onDoubleClickClicked(); break;
+        case 8: _t->onLineClicked(); break;
+        case 9: _t->onVirtualWallClicked(); break;
         case 10: _t->onOpenClicked(); break;
         case 11: _t->paintEvent((*reinterpret_cast< QPaintEvent*(*)>(_a[1]))); break;
         default: ;

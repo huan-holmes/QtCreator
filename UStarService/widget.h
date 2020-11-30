@@ -26,12 +26,12 @@ private :
 
     QImage image;        //打开的图片
     bool clear_flag_;
-    bool virtual_wall_flag_;
-    int double_click_;
-    int double_click_x1_;
-    int double_click_y1_;
-    int double_click_x2_;
-    int double_click_y2_;
+    bool line_flag_;
+    int virtual_wall_flag_;
+    int virtual_wall_x1_;
+    int virtual_wall_y1_;
+    int virtual_wall_x2_;
+    int virtual_wall_y2_;
 
 
     float ratio;              //缩放比例
@@ -47,14 +47,15 @@ private :
     QPushButton  DownButton;
     QPushButton  ResetButton;
     QPushButton  ClearButton;
+    QPushButton  LineButton;
     QPushButton  VirtualWallButton;
-    QPushButton  DoubleClickButton;
     QPushButton  OpenButton;
 
     void AddComboItem(QComboBox* cmbo);
     bool event(QEvent * event);
     void wheelEvent(QWheelEvent* e);     //鼠标滑轮事件
     void drawLine(std::vector<int> line_xs, std::vector<int> line_ys);
+    void resetVirtualWallState();
 
 private slots:
     void    onUpClicked();
@@ -65,8 +66,8 @@ private slots:
     void    onLittleClicked();
     void    onBigClicked();
     void    onClearClicked();
+    void    onLineClicked();
     void    onVirtualWallClicked();
-    void    onDoubleClickClicked();
     void    onOpenClicked();
 
    void paintEvent(QPaintEvent *event);
@@ -83,8 +84,8 @@ public:
         Down,
         Move,
         Clear,
+        Line,
         VirtualWall,
-        DoubleClick,
         Reset
     };
 
