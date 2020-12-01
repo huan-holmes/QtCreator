@@ -49,12 +49,12 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../UStarService/main.cpp \
-		../UStarService/widget.cpp \
-		../UStarService/gridline.cpp moc_widget.cpp
+		../UStarService/gridline.cpp \
+		../UStarService/ustarservice.cpp moc_ustarservice.cpp
 OBJECTS       = main.o \
-		widget.o \
 		gridline.o \
-		moc_widget.o
+		ustarservice.o \
+		moc_ustarservice.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -142,10 +142,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../UStarService/UStarService.pro ../UStarService/widget.h \
-		../UStarService/gridline.h ../UStarService/main.cpp \
-		../UStarService/widget.cpp \
-		../UStarService/gridline.cpp
+		../UStarService/UStarService.pro ../UStarService/gridline.h \
+		../UStarService/ustarservice.h ../UStarService/main.cpp \
+		../UStarService/gridline.cpp \
+		../UStarService/ustarservice.cpp
 QMAKE_TARGET  = UStarService
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = UStarService
@@ -373,8 +373,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../UStarService/widget.h ../UStarService/gridline.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../UStarService/main.cpp ../UStarService/widget.cpp ../UStarService/gridline.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../UStarService/gridline.h ../UStarService/ustarservice.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../UStarService/main.cpp ../UStarService/gridline.cpp ../UStarService/ustarservice.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -397,12 +397,12 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_widget.cpp
+compiler_moc_header_make_all: moc_ustarservice.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_widget.cpp
-moc_widget.cpp: ../UStarService/gridline.h \
-		../UStarService/widget.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/boocax/QtCreator/UStarService -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../UStarService/widget.h -o moc_widget.cpp
+	-$(DEL_FILE) moc_ustarservice.cpp
+moc_ustarservice.cpp: ../UStarService/gridline.h \
+		../UStarService/ustarservice.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/boocax/QtCreator/UStarService -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../UStarService/ustarservice.h -o moc_ustarservice.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -418,19 +418,18 @@ compiler_clean: compiler_moc_header_clean
 
 ####### Compile
 
-main.o: ../UStarService/main.cpp ../UStarService/widget.h \
-		../UStarService/gridline.h
+main.o: ../UStarService/main.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../UStarService/main.cpp
-
-widget.o: ../UStarService/widget.cpp ../UStarService/widget.h \
-		../UStarService/gridline.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o widget.o ../UStarService/widget.cpp
 
 gridline.o: ../UStarService/gridline.cpp ../UStarService/gridline.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gridline.o ../UStarService/gridline.cpp
 
-moc_widget.o: moc_widget.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_widget.o moc_widget.cpp
+ustarservice.o: ../UStarService/ustarservice.cpp ../UStarService/ustarservice.h \
+		../UStarService/gridline.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ustarservice.o ../UStarService/ustarservice.cpp
+
+moc_ustarservice.o: moc_ustarservice.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_ustarservice.o moc_ustarservice.cpp
 
 ####### Install
 

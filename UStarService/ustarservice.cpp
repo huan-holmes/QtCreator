@@ -1,7 +1,7 @@
 
-#include "widget.h"
+#include "ustarservice.h"
 
-Widget::Widget():
+UStarService::UStarService():
     Paint(10,10,810,810),
     clear_flag_(false),
     line_flag_(false),
@@ -26,7 +26,7 @@ Widget::Widget():
     label("100%",this)
 {
     ratio= 1.0;             //初始化图片缩放比例
-    action = Widget::None;
+    action = UStarService::None;
 
 
 
@@ -68,7 +68,7 @@ Widget::Widget():
     this->setWindowTitle("图片浏览器(请打开文件)");
 }
 
-bool Widget::event(QEvent * event)
+bool UStarService::event(QEvent * event)
 {
     //return true;
     static bool press=false;
@@ -167,7 +167,7 @@ bool Widget::event(QEvent * event)
                     }
 
                     pix = pix.fromImage(image);
-                    action = Widget::Reset;
+                    action = UStarService::Reset;
                 }
                 else
                 {
@@ -181,7 +181,7 @@ bool Widget::event(QEvent * event)
                     }
 
                     pix = pix.fromImage(image);
-                    action = Widget::Reset;
+                    action = UStarService::Reset;
                 }
             }
             else
@@ -189,7 +189,7 @@ bool Widget::event(QEvent * event)
                 offset.setX(mouse->x() - PreDot.x());
                 offset.setY(mouse->y() - PreDot.y());
                 PreDot = mouse->pos();
-                action = Widget::Move;
+                action = UStarService::Move;
             }
             this->update();
          }
@@ -197,14 +197,14 @@ bool Widget::event(QEvent * event)
     return QWidget::event(event);
 }
 
-void Widget::wheelEvent(QWheelEvent* event)     //鼠标滑轮事件
+void UStarService::wheelEvent(QWheelEvent* event)     //鼠标滑轮事件
 {
  if (event->delta()>0) {      //上滑,缩小
 
-    action=Widget::Shrink;
+    action=UStarService::Shrink;
     this->update();
  } else {                    //下滑,放大
-     action=Widget::Amplification;
+     action=UStarService::Amplification;
      this->update();
  }
 
@@ -213,7 +213,7 @@ void Widget::wheelEvent(QWheelEvent* event)     //鼠标滑轮事件
 
 
 
-void Widget::paintEvent(QPaintEvent *event)
+void UStarService::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setRenderHints(QPainter::SmoothPixmapTransform|QPainter::Antialiasing|QPainter::TextAntialiasing);
@@ -227,7 +227,7 @@ void Widget::paintEvent(QPaintEvent *event)
     int NowW = ratio *pixW;
     int NowH = ratio *pixH;
 
-    if(action==Widget::Shrink)           //缩小
+    if(action==UStarService::Shrink)           //缩小
     {
           ratio+=0.05*ratio;
         if(ratio<0.018)
@@ -239,7 +239,7 @@ void Widget::paintEvent(QPaintEvent *event)
         label.setText(str) ;
         qDebug()<<"放大:"<<ratio;
     }
-    else  if(action==Widget::Amplification)           //放大
+    else  if(action==UStarService::Amplification)           //放大
     {
 
          ratio-=0.05*ratio;
@@ -254,7 +254,7 @@ void Widget::paintEvent(QPaintEvent *event)
     }
 
 
-    if(action==Widget::Amplification || action==Widget::Shrink || action==Widget::Reset)      //更新图片
+    if(action==UStarService::Amplification || action==UStarService::Shrink || action==UStarService::Reset)      //更新图片
     {
       NowW = ratio *pixW;
       NowH = ratio *pixH;
@@ -262,17 +262,17 @@ void Widget::paintEvent(QPaintEvent *event)
 
       crtPix= pix.scaled(NowW, NowH,Qt::KeepAspectRatio,Qt::SmoothTransformation); //重新装载
 
-      action=Widget::None;
+      action=UStarService::None;
     }
 
-    if(action==Widget::Move)                    //移动
+    if(action==UStarService::Move)                    //移动
     {
         int offsetx=Alloffset.x()+offset.x();
         Alloffset.setX(offsetx);
 
         int offsety=Alloffset.y()+offset.y();
         Alloffset.setY(offsety);
-        action=Widget::None;
+        action=UStarService::None;
     }
 
     if(abs(Alloffset.x())>=(Paint.width()/2 + NowW/2 -10))    //限制X偏移值
@@ -324,16 +324,16 @@ void Widget::paintEvent(QPaintEvent *event)
 
 }
 
-void  Widget::onLittleClicked()
+void  UStarService::onLittleClicked()
 {
-  action=Widget::Amplification;
+  action=UStarService::Amplification;
   this->update();
 }
 
-void Widget::onClearClicked()
+void UStarService::onClearClicked()
 {
   resetVirtualWallState();
-  action=Widget::Clear;
+  action=UStarService::Clear;
   if(clear_flag_)
   {
     clear_flag_ = false;
@@ -345,10 +345,10 @@ void Widget::onClearClicked()
   }
   this->update();
 }
-void Widget::onLineClicked()
+void UStarService::onLineClicked()
 {
     resetVirtualWallState();
-    action=Widget::Line;
+    action=UStarService::Line;
     if(line_flag_)
     {
         line_flag_ = false;
@@ -361,13 +361,13 @@ void Widget::onLineClicked()
     }
     this->update();
 }
-void Widget::onVirtualWallClicked()
+void UStarService::onVirtualWallClicked()
 {
     virtual_wall_x1_ = 0;
     virtual_wall_y1_ = 0;
     virtual_wall_x2_ = 0;
     virtual_wall_y2_ = 0;
-    action=Widget::VirtualWall;
+    action=UStarService::VirtualWall;
     if (virtual_wall_flag_ == 0)
     {
         virtual_wall_flag_ = 1;
@@ -381,7 +381,7 @@ void Widget::onVirtualWallClicked()
 
     this->update();
 }
-void Widget::resetVirtualWallState(){
+void UStarService::resetVirtualWallState(){
     virtual_wall_x1_ = 0;
     virtual_wall_y1_ = 0;
     virtual_wall_x2_ = 0;
@@ -390,7 +390,7 @@ void Widget::resetVirtualWallState(){
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
-void Widget::drawLine(std::vector<int> line_xs, std::vector<int> line_ys)
+void UStarService::drawLine(std::vector<int> line_xs, std::vector<int> line_ys)
 {
     for (int i = 0; i < line_xs.size(); i++)
     {
@@ -400,12 +400,12 @@ void Widget::drawLine(std::vector<int> line_xs, std::vector<int> line_ys)
         }
     }
     pix = pix.fromImage(image);
-    action = Widget::Reset;
+    action = UStarService::Reset;
     this->update();
 }
 
 
-void Widget::onOpenClicked()
+void UStarService::onOpenClicked()
 {
 
 
@@ -431,46 +431,46 @@ void Widget::onOpenClicked()
     }
 }
 
-void  Widget::onBigClicked()
+void  UStarService::onBigClicked()
 {
-  action=Widget::Shrink;
+  action=UStarService::Shrink;
   this->update();
 }
-void Widget::onUpClicked()
+void UStarService::onUpClicked()
 {
-  action=Widget::Move;
+  action=UStarService::Move;
   offset.setX(0);
   offset.setY(-20);
 
   this->update();
 }
-void Widget::onDownClicked()
+void UStarService::onDownClicked()
 {
-  action=Widget::Move;
+  action=UStarService::Move;
   offset.setX(0);
   offset.setY(20);
   this->update();
 }
-void Widget::onResetClicked()
+void UStarService::onResetClicked()
 {
-  action=Widget::Reset;
+  action=UStarService::Reset;
   Alloffset.setX(0);
   Alloffset.setY(0);
   ratio = 1.000;
   label.setText("100%");
   this->update();
 }
-void Widget::OnLiftClicked()
+void UStarService::OnLiftClicked()
 {
-  action=Widget::Move;
+  action=UStarService::Move;
   offset.setX(-20);
   offset.setY(0);
 
   this->update();
 }
-void Widget::OnRightClicked()
+void UStarService::OnRightClicked()
 {
-  action=Widget::Move;
+  action=UStarService::Move;
   offset.setX(20) ;
   offset.setY(0) ;
 

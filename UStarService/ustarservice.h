@@ -11,7 +11,7 @@
 #include <QImage>
 #include <QMouseEvent>
 #include "gridline.h"
-class Widget : public QWidget
+class UStarService : public QWidget
 {
     Q_OBJECT
 
@@ -72,7 +72,7 @@ private slots:
 
    void paintEvent(QPaintEvent *event);
 public:
-    explicit Widget();
+    explicit UStarService();
 
     enum  Type {
         None          = 0,
@@ -90,5 +90,5 @@ public:
     };
 
 };
-#endif // WIDGET_H
+#endif // USTARSERVICE_H
 

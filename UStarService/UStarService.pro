@@ -13,11 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    widget.cpp \
-    gridline.cpp
+    gridline.cpp \
+    ustarservice.cpp
 
 HEADERS  += \
-    widget.h \
-    gridline.h
+    gridline.h \
+    ustarservice.h
 
 FORMS    +=
