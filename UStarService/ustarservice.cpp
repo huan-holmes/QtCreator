@@ -121,8 +121,8 @@ bool UStarService::event(QEvent * event)
             line_flag_ = false;
             if(virtual_wall_flag_ == 1)
             {
-                virtual_wall_x1_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio;
-                virtual_wall_y1_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))*ratio;
+                virtual_wall_x1_ = (mouse->x() - Paint.x() - (Paint.width()/2-ratio*pixW/2)) / ratio;
+                virtual_wall_y1_ = (mouse->y() - Paint.y() - (Paint.height()/2-ratio*pixH/2)) / ratio;
                 virtual_wall_flag_ = 2;
                 QApplication::setOverrideCursor(Qt::PointingHandCursor);
                 if(virtual_wall_x2_ != 0 && virtual_wall_y2_ != 0)
@@ -135,8 +135,8 @@ bool UStarService::event(QEvent * event)
             {
                 if(virtual_wall_flag_ == 2)
                 {
-                    virtual_wall_x2_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio;
-                    virtual_wall_y2_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))*ratio;
+                    virtual_wall_x2_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))/ratio;
+                    virtual_wall_y2_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))/ratio;
                     GridLine grid_line(virtual_wall_x1_, virtual_wall_y1_, virtual_wall_x2_, virtual_wall_y2_);
                     drawLine(grid_line.line_xs_, grid_line.line_ys_);
                     virtual_wall_flag_ = 1;
@@ -161,7 +161,7 @@ bool UStarService::event(QEvent * event)
                     {
                         for(int j = -2; j < 3; j++)
                         {
-                            image.setPixel((mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio+i, ratio*(mouse->y()-Paint.y()-(Paint.height()/2-ratio*pixH/2))+j, qRgb(255, 255, 255));
+                            image.setPixel((mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))/ratio+i, (mouse->y()-Paint.y()-(Paint.height()/2-ratio*pixH/2))/ratio+j, qRgb(255, 255, 255));
                         }
 
                     }
@@ -175,7 +175,7 @@ bool UStarService::event(QEvent * event)
                     {
                         for(int j = -1; j < 1; j++)
                         {
-                            image.setPixel((mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))*ratio+i, ratio*(mouse->y()-Paint.y()-(Paint.height()/2-ratio*pixH/2))+j, qRgb(0, 0, 0));
+                            image.setPixel((mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))/ratio+i, (mouse->y()-Paint.y()-(Paint.height()/2-ratio*pixH/2))/ratio+j, qRgb(0, 0, 0));
                         }
 
                     }
