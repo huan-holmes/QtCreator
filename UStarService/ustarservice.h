@@ -1,6 +1,6 @@
 #ifndef WIDGET_H
 #define WIDGET_H
-
+#include <QMainWindow>
 #include <QWidget>
 #include <QtGui>
 #include <QLabel>
@@ -35,6 +35,7 @@ private :
 
     QString button_style_;
 
+    QLabel *tipLbl;  //"欢迎登录"标签
 
 
 

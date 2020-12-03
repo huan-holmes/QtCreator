@@ -29,6 +29,10 @@ UStarService::UStarService():
     Alloffset(0,0),
     label("100%",this)
 {
+
+    tipLbl = new QLabel(this);
+    //tipLbl->setText(tr("欢迎登录"));
+
     ratio= 1.0;             //初始化图片缩放比例
     action = UStarService::None;
 

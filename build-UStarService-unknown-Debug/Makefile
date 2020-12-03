@@ -50,13 +50,17 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../UStarService/main.cpp \
 		../UStarService/gridline.cpp \
-		../UStarService/ustarservice.cpp qrc_resource.cpp \
-		moc_ustarservice.cpp
+		../UStarService/ustarservice.cpp \
+		../UStarService/loginform.cpp qrc_resource.cpp \
+		moc_ustarservice.cpp \
+		moc_loginform.cpp
 OBJECTS       = main.o \
 		gridline.o \
 		ustarservice.o \
+		loginform.o \
 		qrc_resource.o \
-		moc_ustarservice.o
+		moc_ustarservice.o \
+		moc_loginform.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -145,9 +149,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../UStarService/UStarService.pro ../UStarService/gridline.h \
-		../UStarService/ustarservice.h ../UStarService/main.cpp \
+		../UStarService/ustarservice.h \
+		../UStarService/loginform.h ../UStarService/main.cpp \
 		../UStarService/gridline.cpp \
-		../UStarService/ustarservice.cpp
+		../UStarService/ustarservice.cpp \
+		../UStarService/loginform.cpp
 QMAKE_TARGET  = UStarService
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = UStarService
@@ -378,8 +384,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../UStarService/resource.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../UStarService/gridline.h ../UStarService/ustarservice.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../UStarService/main.cpp ../UStarService/gridline.cpp ../UStarService/ustarservice.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../UStarService/gridline.h ../UStarService/ustarservice.h ../UStarService/loginform.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../UStarService/main.cpp ../UStarService/gridline.cpp ../UStarService/ustarservice.cpp ../UStarService/loginform.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -407,12 +413,15 @@ qrc_resource.cpp: ../UStarService/resource.qrc \
 		../UStarService/button_circular.qss
 	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name resource ../UStarService/resource.qrc -o qrc_resource.cpp
 
-compiler_moc_header_make_all: moc_ustarservice.cpp
+compiler_moc_header_make_all: moc_ustarservice.cpp moc_loginform.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_ustarservice.cpp
+	-$(DEL_FILE) moc_ustarservice.cpp moc_loginform.cpp
 moc_ustarservice.cpp: ../UStarService/gridline.h \
 		../UStarService/ustarservice.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/boocax/QtCreator/UStarService -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../UStarService/ustarservice.h -o moc_ustarservice.cpp
+
+moc_loginform.cpp: ../UStarService/loginform.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/boocax/QtCreator/UStarService -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../UStarService/loginform.h -o moc_loginform.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -439,11 +448,17 @@ ustarservice.o: ../UStarService/ustarservice.cpp ../UStarService/ustarservice.h 
 		../UStarService/gridline.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ustarservice.o ../UStarService/ustarservice.cpp
 
+loginform.o: ../UStarService/loginform.cpp ../UStarService/loginform.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loginform.o ../UStarService/loginform.cpp
+
 qrc_resource.o: qrc_resource.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resource.o qrc_resource.cpp
 
 moc_ustarservice.o: moc_ustarservice.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_ustarservice.o moc_ustarservice.cpp
+
+moc_loginform.o: moc_loginform.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_loginform.o moc_loginform.cpp
 
 ####### Install
 
