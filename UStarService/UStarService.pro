@@ -21,3 +21,8 @@ HEADERS  += \
     ustarservice.h
 
 FORMS    +=
+
+RESOURCES += \
+    resource.qrc
+
+DISTFILES +=

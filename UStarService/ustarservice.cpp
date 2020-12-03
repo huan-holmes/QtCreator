@@ -10,6 +10,7 @@ UStarService::UStarService():
     virtual_wall_y1_(0),
     virtual_wall_x2_(0),
     virtual_wall_y2_(0),
+    button_style_(""),
     BigButton("放大",this),
     LittleButton("缩小",this),
     LiftButton("向左",this),
@@ -21,6 +22,9 @@ UStarService::UStarService():
     LineButton("画线", this),
     VirtualWallButton("虚拟墙", this),
     OpenButton("打开文件",this),
+    CircularRedButton("", this),
+    CircularGreenButton("", this),
+    CircularBlueButton("", this),
 
     Alloffset(0,0),
     label("100%",this)
@@ -62,6 +66,18 @@ UStarService::UStarService():
     OpenButton.setGeometry(822,310,60,25);
     connect(&OpenButton,SIGNAL(clicked()),this,SLOT(onOpenClicked()));
 
+    CircularRedButton.setGeometry(847, 350, 10, 10);
+    CircularRedButton.setStyleSheet("QPushButton{background-color:rgba(255,0,0,200);}");
+    connect(&CircularRedButton,SIGNAL(clicked()),this,SLOT(onButtonRedClicked()));
+
+    CircularGreenButton.setGeometry(847, 390, 10, 10);
+    CircularGreenButton.setStyleSheet("QPushButton{background-color:rgba(0,255,0,200);}");
+    connect(&CircularGreenButton,SIGNAL(clicked()),this,SLOT(onButtonGreenClicked()));
+
+    CircularBlueButton.setGeometry(847, 430, 10, 10);
+    CircularBlueButton.setStyleSheet("QPushButton{background-color:rgba(0,0,255,200);}");
+    connect(&CircularBlueButton,SIGNAL(clicked()),this,SLOT(onButtonBlueClicked()));
+
     label.move(840,260);
     resize(890,850);
 
@@ -91,6 +107,13 @@ bool UStarService::event(QEvent * event)
                if(line_flag_)
                {
                    QApplication::setOverrideCursor(Qt::SizeBDiagCursor);
+               }
+               if(button_style_ != "")
+               {
+                   int x = (mouse->x() - Paint.x() - (Paint.width()/2-ratio*pixW/2)) / ratio - Alloffset.x() / ratio;
+                   int y = (mouse->y() - Paint.y() - (Paint.height()/2-ratio*pixH/2)) / ratio - Alloffset.y() / ratio;
+                   addPointOfInterest(x, y);
+                   button_style_ = "";
                }
 
                PreDot = mouse->pos();
@@ -404,7 +427,49 @@ void UStarService::drawLine(std::vector<int> line_xs, std::vector<int> line_ys)
     this->update();
 }
 
+void UStarService::onButtonRedClicked()
+{
+    button_style_ = "red";
+    qDebug()<<button_style_;
+}
 
+void UStarService::onButtonGreenClicked()
+{
+    button_style_ = "green";
+    qDebug()<<button_style_;
+}
+
+void UStarService::onButtonBlueClicked()
+{
+    button_style_ = "blue";
+    qDebug()<<button_style_;
+}
+
+void UStarService::addPointOfInterest(int x, int y)
+{
+    qDebug()<<image.depth();
+    QRgb qrgb = qRgb(255, 0, 0);
+    if (button_style_ == "green")
+    {
+        qrgb = qRgb(0, 255, 0);
+    }
+    if (button_style_ == "blue")
+    {
+        qrgb = qRgb(0, 0, 255);
+    }
+    for (int i = -1; i < 2; i++)
+    {
+        for (int j = -1; j < 2; j++)
+        {
+            image.setPixel(x+i, y+j, qrgb);
+        }
+
+
+    }
+    pix = pix.fromImage(image);
+    action = UStarService::Reset;
+    this->update();
+}
 void UStarService::onOpenClicked()
 {
 

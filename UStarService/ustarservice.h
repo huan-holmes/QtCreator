@@ -33,6 +33,11 @@ private :
     int virtual_wall_x2_;
     int virtual_wall_y2_;
 
+    QString button_style_;
+
+
+
+
 
     float ratio;              //缩放比例
     QPoint offset;           //一次的图片偏移值
@@ -50,12 +55,17 @@ private :
     QPushButton  LineButton;
     QPushButton  VirtualWallButton;
     QPushButton  OpenButton;
+    QPushButton  CircularRedButton;
+    QPushButton  CircularGreenButton;
+    QPushButton  CircularBlueButton;
 
     void AddComboItem(QComboBox* cmbo);
     bool event(QEvent * event);
     void wheelEvent(QWheelEvent* e);     //鼠标滑轮事件
     void drawLine(std::vector<int> line_xs, std::vector<int> line_ys);
     void resetVirtualWallState();
+    void addPointOfInterest(int x, int y);
+
 
 private slots:
     void    onUpClicked();
@@ -69,8 +79,10 @@ private slots:
     void    onLineClicked();
     void    onVirtualWallClicked();
     void    onOpenClicked();
-
-   void paintEvent(QPaintEvent *event);
+    void    onButtonRedClicked();
+    void    onButtonGreenClicked();
+    void    onButtonBlueClicked();
+    void    paintEvent(QPaintEvent *event);
 public:
     explicit UStarService();
 
@@ -86,7 +98,8 @@ public:
         Clear,
         Line,
         VirtualWall,
-        Reset
+        Reset,
+        Style,
     };
 
 };

@@ -50,10 +50,12 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../UStarService/main.cpp \
 		../UStarService/gridline.cpp \
-		../UStarService/ustarservice.cpp moc_ustarservice.cpp
+		../UStarService/ustarservice.cpp qrc_resource.cpp \
+		moc_ustarservice.cpp
 OBJECTS       = main.o \
 		gridline.o \
 		ustarservice.o \
+		qrc_resource.o \
 		moc_ustarservice.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -264,6 +266,7 @@ Makefile: ../UStarService/UStarService.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../UStarService/UStarService.pro \
+		../UStarService/resource.qrc \
 		/usr/lib/x86_64-linux-gnu/libQt5Widgets.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Core.prl
@@ -356,6 +359,7 @@ Makefile: ../UStarService/UStarService.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 ../UStarService/UStarService.pro:
+../UStarService/resource.qrc:
 /usr/lib/x86_64-linux-gnu/libQt5Widgets.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Core.prl:
@@ -373,6 +377,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../UStarService/resource.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../UStarService/gridline.h ../UStarService/ustarservice.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../UStarService/main.cpp ../UStarService/gridline.cpp ../UStarService/ustarservice.cpp $(DISTDIR)/
 
@@ -395,8 +400,13 @@ mocables: compiler_moc_header_make_all compiler_moc_source_make_all
 
 check: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_resource.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_resource.cpp
+qrc_resource.cpp: ../UStarService/resource.qrc \
+		../UStarService/button_circular.qss
+	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name resource ../UStarService/resource.qrc -o qrc_resource.cpp
+
 compiler_moc_header_make_all: moc_ustarservice.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_ustarservice.cpp
@@ -414,11 +424,12 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_header_clean 
 
 ####### Compile
 
-main.o: ../UStarService/main.cpp 
+main.o: ../UStarService/main.cpp ../UStarService/ustarservice.h \
+		../UStarService/gridline.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../UStarService/main.cpp
 
 gridline.o: ../UStarService/gridline.cpp ../UStarService/gridline.h
@@ -427,6 +438,9 @@ gridline.o: ../UStarService/gridline.cpp ../UStarService/gridline.h
 ustarservice.o: ../UStarService/ustarservice.cpp ../UStarService/ustarservice.h \
 		../UStarService/gridline.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ustarservice.o ../UStarService/ustarservice.cpp
+
+qrc_resource.o: qrc_resource.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resource.o qrc_resource.cpp
 
 moc_ustarservice.o: moc_ustarservice.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_ustarservice.o moc_ustarservice.cpp
