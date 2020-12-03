@@ -449,6 +449,7 @@ void UStarService::addPointOfInterest(int x, int y)
 {
     qDebug()<<image.depth();
     QRgb qrgb = qRgb(255, 0, 0);
+
     if (button_style_ == "green")
     {
         qrgb = qRgb(0, 255, 0);
@@ -481,11 +482,12 @@ void UStarService::onOpenClicked()
 
     if(!str.isNull())
     {
-
-
-       image.load(str);
+       QImage frame;
+       frame.load(str);
+       qDebug()<<frame.depth()<<endl;
+       image = frame.convertToFormat(QImage::Format_RGBA8888);
        pix = pix.fromImage(image);
-
+       qDebug()<<image.depth()<<endl;
        crtPix = pix;
        pixW = image.width();            //图片宽
        pixH = image.height();           //图片高
