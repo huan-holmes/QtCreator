@@ -5,8 +5,9 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-
-
+#include <QDateTime>
+#include <QDebug>
+#include <QDir>
 class LoginForm : public QDialog
 {
     Q_OBJECT //使用信号与槽需要的宏

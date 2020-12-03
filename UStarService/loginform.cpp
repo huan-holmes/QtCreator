@@ -52,7 +52,42 @@ void LoginForm::login()
     //tr()函数，防止设置中文时乱码
     if(userNameLEd->text().trimmed() == tr("ustar") && pwdLEd->text() == tr("ustar123"))
     {
-       accept();//关闭窗体，并设置返回值为Accepted
+        QDateTime dTime;
+        QTime time;
+        QDate date;
+        dTime.setTime(time.currentTime());
+        dTime.setDate(date.currentDate());
+        QString currentDate = dTime.toString("yyyy:MM:dd:hh:mm:ss");
+        qDebug()<<currentDate;
+        QString data_file = "/home/boocax/QtCreator/log";
+        QDir dir_;
+        bool exist = dir_.exists(data_file);
+        if(!exist)
+        {
+
+            bool isok = dir_.mkdir(data_file); // 新建文件夹
+
+                if(!isok)
+
+                    QMessageBox::warning(this,"sdf","can't mkdir",QMessageBox::Yes);
+
+        }
+        QString fileName = data_file+"/"+"login.txt";
+        QFile file(fileName);
+        if(!file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append))
+
+        {
+
+            QMessageBox::warning(this,"sdf","can't open",QMessageBox::Yes);
+
+        }
+
+        QTextStream stream(&file);
+
+        stream<<currentDate+":"+"ustar"<<"\n";
+
+        file.close();
+        accept();//关闭窗体，并设置返回值为Accepted
     }
     else
     {                              //标题              内容                OK按钮
