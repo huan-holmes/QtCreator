@@ -25,6 +25,7 @@ UStarService::UStarService():
     CircularRedButton("", this),
     CircularGreenButton("", this),
     CircularBlueButton("", this),
+    ChooseRobotButton("选择机器人", this),
 
     Alloffset(0,0),
     label("100%",this)
@@ -81,6 +82,9 @@ UStarService::UStarService():
     CircularBlueButton.setGeometry(847, 430, 10, 10);
     CircularBlueButton.setStyleSheet("QPushButton{background-color:rgba(0,0,255,200);}");
     connect(&CircularBlueButton,SIGNAL(clicked()),this,SLOT(onButtonBlueClicked()));
+
+    ChooseRobotButton.setGeometry(822, 470, 60, 25);
+    connect(&ChooseRobotButton,SIGNAL(clicked()),this,SLOT(onChooseRobotClicked()));
 
     label.move(840,260);
     resize(890,850);
@@ -474,6 +478,15 @@ void UStarService::addPointOfInterest(int x, int y)
     pix = pix.fromImage(image);
     action = UStarService::Reset;
     this->update();
+}
+
+void UStarService::onChooseRobotClicked()
+{
+    qDebug()<<"robot"<<endl;
+
+    RobotWindow *robot = new RobotWindow();
+    robot->show();
+
 }
 void UStarService::onOpenClicked()
 {

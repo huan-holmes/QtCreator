@@ -11,6 +11,8 @@
 #include <QImage>
 #include <QMouseEvent>
 #include "gridline.h"
+#include "robot.h"
+#include "loginform.h"
 class UStarService : public QWidget
 {
     Q_OBJECT
@@ -60,6 +62,8 @@ private :
     QPushButton  CircularGreenButton;
     QPushButton  CircularBlueButton;
 
+    QPushButton  ChooseRobotButton;
+
     void AddComboItem(QComboBox* cmbo);
     bool event(QEvent * event);
     void wheelEvent(QWheelEvent* e);     //鼠标滑轮事件
@@ -84,6 +88,8 @@ private slots:
     void    onButtonGreenClicked();
     void    onButtonBlueClicked();
     void    paintEvent(QPaintEvent *event);
+
+    void    onChooseRobotClicked();
 public:
     explicit UStarService();
 
@@ -101,6 +107,7 @@ public:
         VirtualWall,
         Reset,
         Style,
+        ChooseRobot,
     };
 
 };
