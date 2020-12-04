@@ -5,37 +5,50 @@ LoginForm::LoginForm(QDialog *parent) :
     QDialog(parent)
 {
     //设置窗体标题
-    this->setWindowTitle(tr("登录界面"));
+    this->setStyleSheet("background-color:gray;");
+    this->setMaximumSize(600, 450);
+    this->setMinimumSize(600, 450);
+    this->setWindowTitle(tr("欢迎使用优智达"));
+
+    logo_label_ = new QLabel(this);
+
+    logo_ = new QImage();
+
+    logo_label_->setScaledContents(true);
+    logo_label_->resize(300, 100);
+    logo_label_->move(150, 50);
+    logo_->load("/home/boocax/QtCreator/log/IMG_0080.JPG");
+    logo_label_->setPixmap(QPixmap::fromImage(*logo_));
 
     //用户名Label
     userNameLbl = new QLabel(this);   //new一个标签对象
-    userNameLbl->move(70,80);         //移动到(70,80)位置(Label左上角坐标，相对于父窗体)
+    userNameLbl->move(200,180);         //移动到(70,80)位置(Label左上角坐标，相对于父窗体)
     userNameLbl->setText("用户名:");  //设置标签文本
 
     //用户名输入框
     userNameLEd = new QLineEdit(this);
-    userNameLEd->move(120,80);
+    userNameLEd->move(250,180);
     userNameLEd->setPlaceholderText(tr("请输入用户名!"));//占位符
 
     //密码Label
     pwdLbl = new QLabel(this);
-    pwdLbl->move(80,130);
+    pwdLbl->move(215,230);
     pwdLbl->setText("密码:");
 
     //密码输入框
     pwdLEd = new QLineEdit(this);
-    pwdLEd->move(120,130);
+    pwdLEd->move(250,230);
     pwdLEd->setPlaceholderText("请输入密码!");
     pwdLEd->setEchoMode(QLineEdit::Password);//输入的密码以圆点显示
 
     //登录按钮
     loginBtn = new QPushButton(this);
-    loginBtn->move(80,200);
+    loginBtn->move(190,320);
     loginBtn->setText("登录");
 
     //退出按钮
     exitBtn = new QPushButton(this);
-    exitBtn->move(170,200);
+    exitBtn->move(350,320);
     exitBtn->setText("退出");
 
     //单击登录按钮时 执行 LoginForm::login 槽函数(自定义)；单击退出按钮时 执行 LoginForm::close 槽函数(窗体的关闭函数，不用自己写)

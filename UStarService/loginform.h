@@ -25,6 +25,8 @@ private:
     QLineEdit *pwdLEd;           //密码编辑行
     QPushButton *loginBtn;       //登录按钮
     QPushButton *exitBtn;        //退出按钮
+    QLabel *logo_label_;
+    QImage *logo_;
 };
 
 #endif // LOGINFORM_H
