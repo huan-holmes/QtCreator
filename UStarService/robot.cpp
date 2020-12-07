@@ -2,7 +2,9 @@
 
 
 RobotWindow::RobotWindow(QDialog *parent) :
-    QDialog(parent)
+    QDialog(parent),
+    connect_flag_(false),
+    write_file_(false)
 {
     qDebug()<<"robot";
     //this->setGeometry(700, 350, 500, 400);
@@ -12,7 +14,7 @@ RobotWindow::RobotWindow(QDialog *parent) :
     this->setMinimumSize(500, 400);
 
 
-    socket_ = new QTcpSocket();
+
 
 
 
@@ -46,22 +48,96 @@ RobotWindow::RobotWindow(QDialog *parent) :
 
     //连接
     connect_ = new QPushButton(this);
-    connect_->move(200,270);
+    connect_->move(140,270);
     connect_->setText("连接");
 
+    send_ = new QPushButton(this);
+    send_->move(250, 270);
+    send_->setText("发送");
+
     connect(connect_,SIGNAL(clicked()),this,SLOT(onConnectClicked()));
+    connect(send_,SIGNAL(clicked()),this,SLOT(onSendData()));
 }
 
 RobotWindow::~RobotWindow()
 {
-
+    socket_->disconnectFromHost();
+    socket_->close();
 }
 
 void RobotWindow::onConnectClicked()
 {
+    socket_ = new QTcpSocket();
     QString ip = this->ip_edi_->text();
     qint16 port = this->port_edi_->text().toInt();
     qDebug()<< ip;
     qDebug()<< port;
 
+    socket_->connectToHost(QHostAddress(ip),port);
+    if (!socket_->waitForConnected(30000))
+    {
+        QMessageBox::information(this, "QT网络通信", "连接服务端失败！");
+        return;
+    }
+    connect(socket_, SIGNAL(readyRead()), this, SLOT(onReceivedData()));
+}
+void RobotWindow::onSendData()
+{
+    QString s;
+    if (!connect_flag_)
+    {
+        QString pwd = this->pwd_edi_->text();
+        s = pwd + "hello world!";
+        connect_flag_ = true;
+    }
+    else
+    {
+        s = "hello world!";
+    }
+    socket_->write(s.toUtf8().data());
+}
+
+void RobotWindow::onReceivedData()
+{
+    char recvMsg[1024] = {0};
+    int recvRe = socket_->read(recvMsg, 1024);
+    QString res = recvMsg;
+    if(recvRe == -1 || res == "登入失败")
+    {
+        QMessageBox::information(this, "QT网络通信", "接收服务端数据失败！");
+        connect_flag_ = false;
+    }
+    if(!write_file_)
+    {
+        QString data_file = "/home/boocax/QtCreator/log";
+        QDir dir_;
+        bool exist = dir_.exists(data_file);
+        if(!exist)
+        {
+
+            bool isok = dir_.mkdir(data_file); // 新建文件夹
+
+                if(!isok)
+
+                    QMessageBox::warning(this,"sdf","can't mkdir",QMessageBox::Yes);
+
+        }
+        QString fileName = data_file+"/"+"login.txt";
+        QFile file(fileName);
+        if(!file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append))
+
+        {
+
+            QMessageBox::warning(this,"sdf","can't open",QMessageBox::Yes);
+
+        }
+
+        QTextStream stream(&file);
+
+        stream<<ip_edi_->text()<<"\n";
+
+        file.close();
+        write_file_ = true;
+    }
+    qDebug()<<res;
 }

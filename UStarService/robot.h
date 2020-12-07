@@ -11,7 +11,8 @@
 #include <QDir>
 #include <QDialog>
 #include <QTcpSocket>
-
+#include <QHostAddress>
+#include <QMessageBox>
 class RobotWindow : public QDialog
 {
     Q_OBJECT
@@ -22,6 +23,8 @@ public:
 
 private slots:
     void onConnectClicked();
+    void onSendData();
+    void onReceivedData();
 
 private:
     QLabel *ip_;         //"ip"标签
@@ -31,8 +34,11 @@ private:
     QLineEdit *port_edi_;
     QLineEdit *pwd_edi_;           //密码编辑行
     QPushButton *connect_;       //连接按钮
+    QPushButton *send_;
 
     QTcpSocket *socket_;
+    bool connect_flag_;
+    bool write_file_;
 };
 
 #endif // ROBOT_H
