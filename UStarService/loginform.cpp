@@ -22,33 +22,33 @@ LoginForm::LoginForm(QDialog *parent) :
 
     //用户名Label
     userNameLbl = new QLabel(this);   //new一个标签对象
-    userNameLbl->move(200,180);         //移动到(70,80)位置(Label左上角坐标，相对于父窗体)
+    userNameLbl->move(195,180);         //移动到(70,80)位置(Label左上角坐标，相对于父窗体)
     userNameLbl->setText("用户名:");  //设置标签文本
 
     //用户名输入框
     userNameLEd = new QLineEdit(this);
-    userNameLEd->move(250,180);
+    userNameLEd->move(245,180);
     userNameLEd->setPlaceholderText(tr("请输入用户名!"));//占位符
 
     //密码Label
     pwdLbl = new QLabel(this);
-    pwdLbl->move(215,230);
+    pwdLbl->move(210,230);
     pwdLbl->setText("密码:");
 
     //密码输入框
     pwdLEd = new QLineEdit(this);
-    pwdLEd->move(250,230);
+    pwdLEd->move(245,230);
     pwdLEd->setPlaceholderText("请输入密码!");
     pwdLEd->setEchoMode(QLineEdit::Password);//输入的密码以圆点显示
 
     //登录按钮
     loginBtn = new QPushButton(this);
-    loginBtn->move(190,320);
+    loginBtn->move(185,320);
     loginBtn->setText("登录");
 
     //退出按钮
     exitBtn = new QPushButton(this);
-    exitBtn->move(350,320);
+    exitBtn->move(345,320);
     exitBtn->setText("退出");
 
     //单击登录按钮时 执行 LoginForm::login 槽函数(自定义)；单击退出按钮时 执行 LoginForm::close 槽函数(窗体的关闭函数，不用自己写)

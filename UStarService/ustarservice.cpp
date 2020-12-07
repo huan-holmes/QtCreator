@@ -1,7 +1,8 @@
 
 #include "ustarservice.h"
 
-UStarService::UStarService():
+UStarService::UStarService(QDialog *parent):
+    QDialog(parent),
     Paint(10,10,810,810),
     clear_flag_(false),
     line_flag_(false),
@@ -30,6 +31,7 @@ UStarService::UStarService():
     Alloffset(0,0),
     label("100%",this)
 {
+    //this->setGeometry(550, 100, 1000, 800);
 
     tipLbl = new QLabel(this);
     //tipLbl->setText(tr("欢迎登录"));
