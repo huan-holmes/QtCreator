@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_RobotWindow_t {
     QByteArrayData data[5];
-    char stringdata0[56];
+    char stringdata0[63];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,12 +32,12 @@ static const qt_meta_stringdata_RobotWindow_t qt_meta_stringdata_RobotWindow = {
 QT_MOC_LITERAL(0, 0, 11), // "RobotWindow"
 QT_MOC_LITERAL(1, 12, 16), // "onConnectClicked"
 QT_MOC_LITERAL(2, 29, 0), // ""
-QT_MOC_LITERAL(3, 30, 10), // "onSendData"
-QT_MOC_LITERAL(4, 41, 14) // "onReceivedData"
+QT_MOC_LITERAL(3, 30, 17), // "onSendDataClicked"
+QT_MOC_LITERAL(4, 48, 14) // "onReceivedData"
 
     },
-    "RobotWindow\0onConnectClicked\0\0onSendData\0"
-    "onReceivedData"
+    "RobotWindow\0onConnectClicked\0\0"
+    "onSendDataClicked\0onReceivedData"
 };
 #undef QT_MOC_LITERAL
 
@@ -74,7 +74,7 @@ void RobotWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->onConnectClicked(); break;
-        case 1: _t->onSendData(); break;
+        case 1: _t->onSendDataClicked(); break;
         case 2: _t->onReceivedData(); break;
         default: ;
         }

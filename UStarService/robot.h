@@ -23,22 +23,22 @@ public:
 
 private slots:
     void onConnectClicked();
-    void onSendData();
+    void onSendDataClicked();
     void onReceivedData();
 
 private:
-    QLabel *ip_;         //"ip"标签
-    QLabel *port_;
-    QLabel *pwd_;              //"密码"标签
-    QLineEdit *ip_edi_;      //ip编辑行
-    QLineEdit *port_edi_;
-    QLineEdit *pwd_edi_;           //密码编辑行
-    QPushButton *connect_;       //连接按钮
-    QPushButton *send_;
+    QLabel *IpLabel;         //"ip"标签
+    QLabel *PortLabel;
+    QLabel *PwdLabel;              //"密码"标签
+    QLineEdit *IpLineEdit;      //ip编辑行
+    QLineEdit *PortLineEdit;
+    QLineEdit *PwdLineEdit;           //密码编辑行
+    QPushButton *ConnectButton;       //连接按钮
+    QPushButton *SendButton;
 
     QTcpSocket *socket_;
     bool connect_flag_;
-    bool write_file_;
+    bool write_flag_;
 };
 
 #endif // ROBOT_H

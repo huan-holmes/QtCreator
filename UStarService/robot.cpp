@@ -4,7 +4,7 @@
 RobotWindow::RobotWindow(QDialog *parent) :
     QDialog(parent),
     connect_flag_(false),
-    write_file_(false)
+    write_flag_(false)
 {
     qDebug()<<"robot";
     //this->setGeometry(700, 350, 500, 400);
@@ -19,44 +19,44 @@ RobotWindow::RobotWindow(QDialog *parent) :
 
 
     //ip Label
-    ip_ = new QLabel(this);   //new一个标签对象
-    ip_->move(140,80);         //移动到(70,80)位置(Label左上角坐标，相对于父窗体)
-    ip_->setText("ip :");  //设置标签文本
+    IpLabel = new QLabel(this);   //new一个标签对象
+    IpLabel->move(140,80);         //移动到(70,80)位置(Label左上角坐标，相对于父窗体)
+    IpLabel->setText("ip :");  //设置标签文本
 
     //ip 输入框
-    ip_edi_ = new QLineEdit(this);
-    ip_edi_->move(180,80);
-    ip_edi_->setPlaceholderText(tr("请输入ip!"));//占位符
+    IpLineEdit = new QLineEdit(this);
+    IpLineEdit->move(180,80);
+    IpLineEdit->setPlaceholderText(tr("请输入ip!"));//占位符
 
-    port_ = new QLabel(this);
-    port_->move(140, 130);
-    port_->setText("port :");
+    PortLabel = new QLabel(this);
+    PortLabel->move(140, 130);
+    PortLabel->setText("port :");
     //
-    port_edi_ = new QLineEdit(this);
-    port_edi_->move(180, 130);
-    ip_edi_->setPlaceholderText(tr("请输入port!"));//占位符
+    PortLineEdit = new QLineEdit(this);
+    PortLineEdit->move(180, 130);
+    PortLineEdit->setPlaceholderText(tr("请输入port!"));//占位符
     //密码Label
-    pwd_ = new QLabel(this);
-    pwd_->move(140,180);
-    pwd_->setText("密码:");
+    PwdLabel = new QLabel(this);
+    PwdLabel->move(140,180);
+    PwdLabel->setText("密码:");
 
     //密码输入框
-    pwd_edi_ = new QLineEdit(this);
-    pwd_edi_->move(180,180);
-    pwd_edi_->setPlaceholderText("请输入密码!");
-    pwd_edi_->setEchoMode(QLineEdit::Password);//输入的密码以圆点显示
+    PwdLineEdit = new QLineEdit(this);
+    PwdLineEdit->move(180,180);
+    PwdLineEdit->setPlaceholderText("请输入密码!");
+    PwdLineEdit->setEchoMode(QLineEdit::Password);//输入的密码以圆点显示
 
     //连接
-    connect_ = new QPushButton(this);
-    connect_->move(140,270);
-    connect_->setText("连接");
+    ConnectButton = new QPushButton(this);
+    ConnectButton->move(140,270);
+    ConnectButton->setText("连接");
 
-    send_ = new QPushButton(this);
-    send_->move(250, 270);
-    send_->setText("发送");
+    SendButton = new QPushButton(this);
+    SendButton->move(250, 270);
+    SendButton->setText("发送");
 
-    connect(connect_,SIGNAL(clicked()),this,SLOT(onConnectClicked()));
-    connect(send_,SIGNAL(clicked()),this,SLOT(onSendData()));
+    connect(ConnectButton,SIGNAL(clicked()),this,SLOT(onConnectClicked()));
+    connect(SendButton,SIGNAL(clicked()),this,SLOT(onSendDataClicked()));
 }
 
 RobotWindow::~RobotWindow()
@@ -68,8 +68,8 @@ RobotWindow::~RobotWindow()
 void RobotWindow::onConnectClicked()
 {
     socket_ = new QTcpSocket();
-    QString ip = this->ip_edi_->text();
-    qint16 port = this->port_edi_->text().toInt();
+    QString ip = this->IpLineEdit->text();
+    qint16 port = this->PortLineEdit->text().toInt();
     qDebug()<< ip;
     qDebug()<< port;
 
@@ -77,16 +77,17 @@ void RobotWindow::onConnectClicked()
     if (!socket_->waitForConnected(30000))
     {
         QMessageBox::information(this, "QT网络通信", "连接服务端失败！");
+
         return;
     }
     connect(socket_, SIGNAL(readyRead()), this, SLOT(onReceivedData()));
 }
-void RobotWindow::onSendData()
+void RobotWindow::onSendDataClicked()
 {
     QString s;
     if (!connect_flag_)
     {
-        QString pwd = this->pwd_edi_->text();
+        QString pwd = this->PwdLineEdit->text();
         s = pwd + "hello world!";
         connect_flag_ = true;
     }
@@ -106,8 +107,11 @@ void RobotWindow::onReceivedData()
     {
         QMessageBox::information(this, "QT网络通信", "接收服务端数据失败！");
         connect_flag_ = false;
+        socket_->disconnectFromHost();
+        socket_->close();
+        return;
     }
-    if(!write_file_)
+    if(!write_flag_)
     {
         QString data_file = "/home/boocax/QtCreator/log";
         QDir dir_;
@@ -134,10 +138,10 @@ void RobotWindow::onReceivedData()
 
         QTextStream stream(&file);
 
-        stream<<ip_edi_->text()<<"\n";
+        stream<<IpLineEdit->text()<<"\n";
 
         file.close();
-        write_file_ = true;
+        write_flag_ = true;
     }
     qDebug()<<res;
 }
