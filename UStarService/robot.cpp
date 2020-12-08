@@ -77,8 +77,6 @@ void RobotWindow::onConnectClicked()
     if (!socket_->waitForConnected(30000))
     {
         QMessageBox::information(this, "QT网络通信", "连接服务端失败！");
-
-        return;
     }
     connect(socket_, SIGNAL(readyRead()), this, SLOT(onReceivedData()));
 }
@@ -107,8 +105,6 @@ void RobotWindow::onReceivedData()
     {
         QMessageBox::information(this, "QT网络通信", "接收服务端数据失败！");
         connect_flag_ = false;
-        socket_->disconnectFromHost();
-        socket_->close();
         return;
     }
     if(!write_flag_)
