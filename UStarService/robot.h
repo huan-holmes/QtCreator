@@ -23,7 +23,6 @@ public:
 
 private slots:
     void onConnectClicked();
-    void onSendDataClicked();
     void onReceivedData();
 
 private:
@@ -34,7 +33,6 @@ private:
     QLineEdit *PortLineEdit;
     QLineEdit *PwdLineEdit;           //密码编辑行
     QPushButton *ConnectButton;       //连接按钮
-    QPushButton *SendButton;
 
     QTcpSocket *socket_;
     bool connect_flag_;

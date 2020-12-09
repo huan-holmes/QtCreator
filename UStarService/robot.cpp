@@ -14,6 +14,7 @@ RobotWindow::RobotWindow(QDialog *parent) :
     this->setMinimumSize(500, 400);
 
 
+    socket_ = new QTcpSocket();
 
 
 
@@ -48,15 +49,11 @@ RobotWindow::RobotWindow(QDialog *parent) :
 
     //连接
     ConnectButton = new QPushButton(this);
-    ConnectButton->move(140,270);
+    ConnectButton->move(220,270);
     ConnectButton->setText("连接");
 
-    SendButton = new QPushButton(this);
-    SendButton->move(250, 270);
-    SendButton->setText("发送");
 
     connect(ConnectButton,SIGNAL(clicked()),this,SLOT(onConnectClicked()));
-    connect(SendButton,SIGNAL(clicked()),this,SLOT(onSendDataClicked()));
 }
 
 RobotWindow::~RobotWindow()
@@ -67,46 +64,51 @@ RobotWindow::~RobotWindow()
 
 void RobotWindow::onConnectClicked()
 {
-    socket_ = new QTcpSocket();
+    if (connect_flag_)
+    {
+        QMessageBox::information(this, "ustar", "登录成功!");
+        return;
+    }
+
     QString ip = this->IpLineEdit->text();
     qint16 port = this->PortLineEdit->text().toInt();
     qDebug()<< ip;
     qDebug()<< port;
-
     socket_->connectToHost(QHostAddress(ip),port);
     if (!socket_->waitForConnected(30000))
     {
         QMessageBox::information(this, "QT网络通信", "连接服务端失败！");
     }
-    connect(socket_, SIGNAL(readyRead()), this, SLOT(onReceivedData()));
-}
-void RobotWindow::onSendDataClicked()
-{
-    QString s;
-    if (!connect_flag_)
-    {
-        QString pwd = this->PwdLineEdit->text();
-        s = pwd + "hello world!";
-        connect_flag_ = true;
-    }
-    else
-    {
-        s = "hello world!";
-    }
-    socket_->write(s.toUtf8().data());
-}
-
-void RobotWindow::onReceivedData()
-{
+    QString pwd = this->PwdLineEdit->text();
+    socket_->write(pwd.toUtf8().data());
+    socket_->waitForReadyRead(1000);
     char recvMsg[1024] = {0};
     int recvRe = socket_->read(recvMsg, 1024);
     QString res = recvMsg;
-    if(recvRe == -1 || res == "登入失败")
+    qDebug()<<res;
+    qDebug()<<recvRe;
+    if(recvRe == 0 || res == "登入失败")
     {
-        QMessageBox::information(this, "QT网络通信", "接收服务端数据失败！");
+
+        QMessageBox::information(this, "接收服务端数据失败", "密码错误!");
         connect_flag_ = false;
-        return;
+        //return;
+
     }
+    else
+    {
+        connect_flag_ = true;
+        onReceivedData();
+        QMessageBox::information(this, "ustar", "登录成功!");
+
+    }
+    //connect(socket_, SIGNAL(readyRead()), this, SLOT(onReceivedData()));
+}
+
+
+void RobotWindow::onReceivedData()
+{
+
     if(!write_flag_)
     {
         QString data_file = "/home/boocax/QtCreator/log";
@@ -139,5 +141,5 @@ void RobotWindow::onReceivedData()
         file.close();
         write_flag_ = true;
     }
-    qDebug()<<res;
+    //qDebug()<<res;
 }

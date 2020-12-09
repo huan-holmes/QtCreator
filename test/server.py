@@ -12,15 +12,11 @@ while 1:
         print'Connected by', addr  # 输出客户端的IP地址
         while 1:
 		data = conn.recv(100)  # 把接收的数据实例化
-		if not flag:
-			if data[:8] != "ustar123":
-				conn.send('登入失败')
+		print(data)
+		if data[:8] != "ustar123":
+			conn.send('登入失败')
 
-				print("failed")
-			else:
-				conn.send('登入成功')
-				flag = True
-		if flag:
-			print(data)
-			conn.sendall(data)
+			print("failed")
+		else:
+			conn.send('登入成功')
 conn.close()  # 关闭连接
