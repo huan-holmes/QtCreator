@@ -14,7 +14,7 @@
 #include "robot.h"
 #include "loginform.h"
 #include <QDialog>
-class UStarService : public QDialog
+class UStarService : public QWidget
 {
     Q_OBJECT
 
@@ -92,7 +92,7 @@ private slots:
 
     void    onChooseRobotClicked();
 public:
-    explicit UStarService(QDialog *parent = 0);
+    explicit UStarService(QWidget *parent = 0);
 
     enum  Type {
         None          = 0,
