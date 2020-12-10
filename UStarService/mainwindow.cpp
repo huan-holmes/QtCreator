@@ -1,70 +1,141 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 
-//MainWindow::MainWindow(QWidget *parent) :
-//    QMainWindow(parent),
-//    ui(new Ui::MainWindow)
-//{
-//    ui->setupUi(this);
-//}
-
+#include "mianwindow.h"
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    Paint(10,10,810,810),
-    BigButton("放大",ui),
-    LittleButton("缩小",ui),
-    LiftButton("向左",ui),
-    RightButton("向右",ui),
-    UpButton("向上",ui),
-    DownButton("向下",ui),
-    ResetButton("还原",ui),
-    OpenButton("打开文件",ui),
+    Paint(30,30,800,800),
+    clear_flag_(false),
+    line_flag_(false),
+    virtual_wall_flag_(0),
+    virtual_wall_x1_(0),
+    virtual_wall_y1_(0),
+    virtual_wall_x2_(0),
+    virtual_wall_y2_(0),
+    button_style_(""),
+    BigButton("放大",this),
+    LittleButton("缩小",this),
+    LiftButton("向左",this),
+    RightButton("向右",this),
+    UpButton("向上",this),
+    DownButton("向下",this),
+    ResetButton("还原",this),
+    ClearButton("清除", this),
+    LineButton("画线", this),
+    VirtualWallButton("虚拟墙", this),
+    OpenButton("打开文件",this),
+    CircularRedButton("", this),
+    CircularGreenButton("", this),
+    CircularBlueButton("", this),
+    ChooseRobotButton("选择机器人", this),
+
     Alloffset(0,0),
-    label("100%",ui)
+    label("100%",this)
 {
-    ui->setupUi(this);
+    this->setGeometry(450, 50, 1200, 1000);
+    this->setStyleSheet("background-color:#1E1E1E;");
+    //this->setStyleSheet("background-color:white;");
+    tipLbl = new QLabel(this);
+    //tipLbl->setText(tr("欢迎登录"));
+
     ratio= 1.0;             //初始化图片缩放比例
     action = MainWindow::None;
 
 
+    QMenuBar *menuBar = new QMenuBar(this); //1.创建菜单栏
+    menuBar->setGeometry(0,20,width(),40);   //设置大小
 
+    QMenu *fileMenu = new QMenu("文件(&F)");   //2.创建菜单
+    //3.创建行为(Action)
+    QAction *fileCreateAction = new QAction("打开(&O)", this);
+    //fileCreateAction->setIcon(QIcon(":/ReplicationTool/png/open.png"));
+    //QAction *fileSaveAction = new QAction("&save",this);
+    //QAction *fileImportAction = new QAction("&import",this);
+    //QAction *fileExportAction = new QAction("&export",this);
+    //4.将行为添加到菜单
+    //fileMenu->addAction(fileSaveAction);
+    //fileMenu->addAction(fileImportAction);
+    //fileMenu->addAction(fileExportAction);
+    fileCreateAction->setShortcut(Qt::CTRL | Qt::Key_O);
+    fileMenu->addAction(fileCreateAction);
+    //5.将菜单添加到菜单栏
+    menuBar->addMenu(fileMenu);
+    menuBar->addSeparator();
 
-    BigButton.setGeometry(822,10,60,25);
+    QMenu *slam = new QMenu("SLAM");
+    menuBar->addMenu(slam);
+    menuBar->addSeparator();
+
+    QMenu *virtualWall = new QMenu("虚拟墙");
+    menuBar->addMenu(virtualWall);
+    menuBar->addSeparator();
+
+    QMenu *virtualNav = new QMenu("虚拟导轨");
+    menuBar->addMenu(virtualNav);
+    menuBar->addSeparator();
+
+    QMenu *poi = new QMenu("POI");
+    menuBar->addMenu(poi);
+    menuBar->addSeparator();
+
+    QMenu *help = new QMenu("帮助(&H)");
+    menuBar->addMenu(help);
+    menuBar->addSeparator();
+
+    BigButton.setGeometry(842,30,60,25);
     connect(&BigButton,SIGNAL(clicked()),this,SLOT(onBigClicked()));
 
-    LittleButton.setGeometry(822,40,60,25);
+    LittleButton.setGeometry(842,60,60,25);
     connect(&LittleButton,SIGNAL(clicked()),this,SLOT(onLittleClicked()));
 
-    LiftButton.setGeometry(822,70,60,25);
+    LiftButton.setGeometry(842,90,60,25);
     connect(&LiftButton,SIGNAL(clicked()),this,SLOT(OnLiftClicked()));
-    RightButton.setGeometry(822,100,60,25);
+    RightButton.setGeometry(842,120,60,25);
     connect(&RightButton,SIGNAL(clicked()),this,SLOT(OnRightClicked()));
-    UpButton.setGeometry(822,130,60,25);
+    UpButton.setGeometry(842,150,60,25);
     connect(&UpButton,SIGNAL(clicked()),this,SLOT(onUpClicked()));
-    DownButton.setGeometry(822,160,60,25);
+    DownButton.setGeometry(842,180,60,25);
     connect(&DownButton,SIGNAL(clicked()),this,SLOT(onDownClicked()));
 
 
-    ResetButton.setGeometry(822,190,60,25);
+    ResetButton.setGeometry(842,210,60,25);
     connect(&ResetButton,SIGNAL(clicked()),this,SLOT(onResetClicked()));
 
-    OpenButton.setGeometry(822,220,60,25);
+    ClearButton.setGeometry(842,240,60,25);
+    connect(&ClearButton,SIGNAL(clicked()),this,SLOT(onClearClicked()));
+
+    LineButton.setGeometry(842,270,60,25);
+    connect(&LineButton,SIGNAL(clicked()),this,SLOT(onLineClicked()));
+
+    VirtualWallButton.setGeometry(842,300,60,25);
+    connect(&VirtualWallButton,SIGNAL(clicked()),this,SLOT(onVirtualWallClicked()));
+
+    OpenButton.setGeometry(842,330,60,25);
     connect(&OpenButton,SIGNAL(clicked()),this,SLOT(onOpenClicked()));
 
-    label.move(840,260);
-    resize(890,850);
+    CircularRedButton.setGeometry(867, 370, 10, 10);
+    CircularRedButton.setStyleSheet("QPushButton{background-color:rgba(255,0,0,200);}");
+    connect(&CircularRedButton,SIGNAL(clicked()),this,SLOT(onButtonRedClicked()));
+
+    CircularGreenButton.setGeometry(867, 410, 10, 10);
+    CircularGreenButton.setStyleSheet("QPushButton{background-color:rgba(0,255,0,200);}");
+    connect(&CircularGreenButton,SIGNAL(clicked()),this,SLOT(onButtonGreenClicked()));
+
+    CircularBlueButton.setGeometry(867, 450, 10, 10);
+    CircularBlueButton.setStyleSheet("QPushButton{background-color:rgba(0,0,255,200);}");
+    connect(&CircularBlueButton,SIGNAL(clicked()),this,SLOT(onButtonBlueClicked()));
+
+    ChooseRobotButton.setGeometry(842, 490, 60, 25);
+    connect(&ChooseRobotButton,SIGNAL(clicked()),this,SLOT(onChooseRobotClicked()));
+
+    label.move(860,530);
+    //resize(890,850);
 
     this->setWindowTitle("图片浏览器(请打开文件)");
-}
-MainWindow::~MainWindow()
-{
-    delete ui;
 }
 
 bool MainWindow::event(QEvent * event)
 {
+    //return true;
     static bool press=false;
     static QPoint PreDot;
 
@@ -77,20 +148,74 @@ bool MainWindow::event(QEvent * event)
            {
                press=true;
                QApplication::setOverrideCursor(Qt::OpenHandCursor); //设置鼠标样式
+               if(clear_flag_)
+               {
+                   QApplication::setOverrideCursor(Qt::CrossCursor);
+               }
+
+               if(line_flag_)
+               {
+                   QApplication::setOverrideCursor(Qt::SizeBDiagCursor);
+               }
+               if(button_style_ != "")
+               {
+                   int x = (mouse->x() - Paint.x() - (Paint.width()/2-ratio*pixW/2)) / ratio - Alloffset.x() / ratio;
+                   int y = (mouse->y() - Paint.y() - (Paint.height()/2-ratio*pixH/2)) / ratio - Alloffset.y() / ratio;
+                   addPointOfInterest(x, y);
+                   button_style_ = "";
+               }
 
                PreDot = mouse->pos();
+           }
+           if(mouse->button()==Qt::RightButton &&Paint.contains(mouse->pos()))
+           {
+               clear_flag_ = false;
+               line_flag_ = false;
+               virtual_wall_flag_ = 0;
+               virtual_wall_x1_ = 0;
+               virtual_wall_y1_ = 0;
+               virtual_wall_x2_ = 0;
+               virtual_wall_y2_ = 0;
+               QApplication::setOverrideCursor(Qt::ArrowCursor);
+
            }
 
     }
     else if(event->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent *mouse = dynamic_cast<QMouseEvent* >(event);
-
         //判断鼠标是否是左键释放,且之前是在绘画区域
         if(mouse->button()==Qt::LeftButton && press )
         {
             QApplication::setOverrideCursor(Qt::ArrowCursor); //改回鼠标样式
             press=false;
+            clear_flag_ = false;
+            line_flag_ = false;
+            if(virtual_wall_flag_ == 1)
+            {
+                virtual_wall_x1_ = (mouse->x() - Paint.x() - (Paint.width()/2-ratio*pixW/2)) / ratio - Alloffset.x() / ratio;
+                virtual_wall_y1_ = (mouse->y() - Paint.y() - (Paint.height()/2-ratio*pixH/2)) / ratio - Alloffset.y() / ratio;
+                virtual_wall_flag_ = 2;
+                QApplication::setOverrideCursor(Qt::PointingHandCursor);
+                if(virtual_wall_x2_ != 0 && virtual_wall_y2_ != 0)
+                {
+                    GridLine grid_line(virtual_wall_x2_, virtual_wall_y2_, virtual_wall_x1_, virtual_wall_y1_);
+                    drawLine(grid_line.line_xs_, grid_line.line_ys_);
+                }
+            }
+            else
+            {
+                if(virtual_wall_flag_ == 2)
+                {
+                    virtual_wall_x2_ = (mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))/ratio - Alloffset.x() / ratio;
+                    virtual_wall_y2_ = (mouse->y()-Paint.y() - (Paint.height()/2-ratio*pixH/2))/ratio - Alloffset.y() / ratio;
+                    GridLine grid_line(virtual_wall_x1_, virtual_wall_y1_, virtual_wall_x2_, virtual_wall_y2_);
+                    drawLine(grid_line.line_xs_, grid_line.line_ys_);
+                    virtual_wall_flag_ = 1;
+                    QApplication::setOverrideCursor(Qt::PointingHandCursor);
+                }
+
+            }
         }
     }
 
@@ -100,11 +225,44 @@ bool MainWindow::event(QEvent * event)
          {
             QMouseEvent *mouse = dynamic_cast<QMouseEvent* >(event);
 
-            offset.setX(mouse->x() - PreDot.x());
-            offset.setY(mouse->y() - PreDot.y());
-            PreDot = mouse->pos();
-            action = MainWindow::Move;
+            if(clear_flag_ or line_flag_)
+            {
+                if(clear_flag_)
+                {
+                    for(int i=-2; i < 3; i++)
+                    {
+                        for(int j = -2; j < 3; j++)
+                        {
+                            image.setPixel((mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))/ratio - Alloffset.x() / ratio+i, (mouse->y()-Paint.y()-(Paint.height()/2-ratio*pixH/2))/ratio - Alloffset.y() / ratio+j, qRgb(255, 255, 255));
+                        }
 
+                    }
+
+                    pix = pix.fromImage(image);
+                    action = MainWindow::Reset;
+                }
+                else
+                {
+                    for(int i=-1; i < 1; i++)
+                    {
+                        for(int j = -1; j < 1; j++)
+                        {
+                            image.setPixel((mouse->x()-Paint.x() - (Paint.width()/2-ratio*pixW/2))/ratio - Alloffset.x() / ratio +i, (mouse->y()-Paint.y()-(Paint.height()/2-ratio*pixH/2))/ratio -Alloffset.y() / ratio+ j, qRgb(0, 0, 0));
+                        }
+
+                    }
+
+                    pix = pix.fromImage(image);
+                    action = MainWindow::Reset;
+                }
+            }
+            else
+            {
+                offset.setX(mouse->x() - PreDot.x());
+                offset.setY(mouse->y() - PreDot.y());
+                PreDot = mouse->pos();
+                action = MainWindow::Move;
+            }
             this->update();
          }
      }
@@ -143,7 +301,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     if(action==MainWindow::Shrink)           //缩小
     {
-          ratio-=0.05*ratio;
+          ratio+=0.05*ratio;
         if(ratio<0.018)
           ratio = 0.01;
 
@@ -151,12 +309,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
         QString str;
         str.sprintf("%.0f%",ratio*100);
         label.setText(str) ;
-        qDebug()<<"缩小:"<<ratio;
+        qDebug()<<"放大:"<<ratio;
     }
     else  if(action==MainWindow::Amplification)           //放大
     {
 
-         ratio+=0.05*ratio;
+         ratio-=0.05*ratio;
        if(ratio>4.5)
          ratio = 5.000;
 
@@ -164,7 +322,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
         QString str;
         str.sprintf("%.0f%",ratio*100);
         label.setText(str);
-        qDebug()<<"放大:"<<ratio;
+        qDebug()<<"缩小:"<<ratio;
     }
 
 
@@ -244,27 +402,156 @@ void  MainWindow::onLittleClicked()
   this->update();
 }
 
+void MainWindow::onClearClicked()
+{
+  resetVirtualWallState();
+  action=MainWindow::Clear;
+  if(clear_flag_)
+  {
+    clear_flag_ = false;
+  }
+  else
+  {
+    QApplication::setOverrideCursor(Qt::CrossCursor);
+    clear_flag_ = true;
+  }
+  this->update();
+}
+void MainWindow::onLineClicked()
+{
+    resetVirtualWallState();
+    action=MainWindow::Line;
+    if(line_flag_)
+    {
+        line_flag_ = false;
+    }
+    else
+    {
+        QApplication::setOverrideCursor(Qt::SizeBDiagCursor);
+        line_flag_ = true;
+
+    }
+    this->update();
+}
+void MainWindow::onVirtualWallClicked()
+{
+    virtual_wall_x1_ = 0;
+    virtual_wall_y1_ = 0;
+    virtual_wall_x2_ = 0;
+    virtual_wall_y2_ = 0;
+    action=MainWindow::VirtualWall;
+    if (virtual_wall_flag_ == 0)
+    {
+        virtual_wall_flag_ = 1;
+        QApplication::setOverrideCursor(Qt::PointingHandCursor);
+    }
+    else
+    {
+        virtual_wall_flag_ = 0;
+        QApplication::setOverrideCursor(Qt::ArrowCursor);
+    }
+
+    this->update();
+}
+void MainWindow::resetVirtualWallState(){
+    virtual_wall_x1_ = 0;
+    virtual_wall_y1_ = 0;
+    virtual_wall_x2_ = 0;
+    virtual_wall_y2_ = 0;
+    virtual_wall_flag_ = 0;
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+}
+
+void MainWindow::drawLine(std::vector<int> line_xs, std::vector<int> line_ys)
+{
+    for (int i = 0; i < line_xs.size(); i++)
+    {
+        for(int j = -1; j <= 1; j++)
+        {
+            image.setPixel(line_xs[i+j], line_ys[i], qRgb(0, 0, 0));
+        }
+    }
+    pix = pix.fromImage(image);
+    action = MainWindow::Reset;
+    this->update();
+}
+
+void MainWindow::onButtonRedClicked()
+{
+    button_style_ = "red";
+    qDebug()<<button_style_;
+}
+
+void MainWindow::onButtonGreenClicked()
+{
+    button_style_ = "green";
+    qDebug()<<button_style_;
+}
+
+void MainWindow::onButtonBlueClicked()
+{
+    button_style_ = "blue";
+    qDebug()<<button_style_;
+}
+
+void MainWindow::addPointOfInterest(int x, int y)
+{
+    qDebug()<<image.depth();
+    QRgb qrgb = qRgb(255, 0, 0);
+
+    if (button_style_ == "green")
+    {
+        qrgb = qRgb(0, 255, 0);
+    }
+    if (button_style_ == "blue")
+    {
+        qrgb = qRgb(0, 0, 255);
+    }
+    for (int i = -1; i < 2; i++)
+    {
+        for (int j = -1; j < 2; j++)
+        {
+            image.setPixel(x+i, y+j, qrgb);
+        }
+
+
+    }
+    pix = pix.fromImage(image);
+    action = MainWindow::Reset;
+    this->update();
+}
+
+void MainWindow::onChooseRobotClicked()
+{
+    qDebug()<<"robot"<<endl;
+
+    RobotWindow *robot = new RobotWindow();
+    robot->show();
+
+}
 void MainWindow::onOpenClicked()
 {
 
 
     QString str = QFileDialog::getOpenFileName(this,
-                                 "open",
-                                 "D:",
-                                 "img (*.png *.jpg, *.pgm)");
+                                               "Please choose an image file",
+                                               "",
+                                               "Image Files(*.jpg *.png *.bmp *.pgm *.pbm);;All(*.*)");
 
     if(!str.isNull())
     {
-
-
-       image.load(str);
+       QImage frame;
+       frame.load(str);
+       qDebug()<<frame.depth()<<endl;
+       image = frame.convertToFormat(QImage::Format_RGBA8888);
        pix = pix.fromImage(image);
-
+       qDebug()<<image.depth()<<endl;
        crtPix = pix;
        pixW = image.width();            //图片宽
        pixH = image.height();           //图片高
        qDebug()<<str<<pixW<<pixH;
        this->setWindowTitle("图片浏览器("+str+")");
+
        onResetClicked();
     }
 }

@@ -15,15 +15,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     gridline.cpp \
-    ustarservice.cpp \
     loginform.cpp \
-    robot.cpp
+    robot.cpp \
+    mainwindow.cpp
 
 HEADERS  += \
     gridline.h \
-    ustarservice.h \
     loginform.h \
-    robot.h
+    robot.h \
+    mianwindow.h
 
 FORMS    +=
 

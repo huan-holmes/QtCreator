@@ -9,7 +9,7 @@ RobotWindow::RobotWindow(QDialog *parent) :
     qDebug()<<"robot";
     //this->setGeometry(700, 350, 500, 400);
     this->setWindowTitle(tr("选择机器人"));
-    this->setStyleSheet("background-color:gray;");
+    this->setStyleSheet("background-color:#1E1E1E;");
     this->setMaximumSize(500, 400);
     this->setMinimumSize(500, 400);
 

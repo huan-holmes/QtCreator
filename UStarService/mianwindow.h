@@ -1,5 +1,5 @@
-#ifndef WIDGET_H
-#define WIDGET_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 #include <QMainWindow>
 #include <QWidget>
 #include <QtGui>
@@ -14,7 +14,12 @@
 #include "robot.h"
 #include "loginform.h"
 #include <QDialog>
-class UStarService : public QWidget
+#include <QToolBar>
+#include <QMenu>
+#include <QAction>
+#include <QMenuBar>
+
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -62,8 +67,10 @@ private :
     QPushButton  CircularRedButton;
     QPushButton  CircularGreenButton;
     QPushButton  CircularBlueButton;
-
     QPushButton  ChooseRobotButton;
+
+
+
 
     void AddComboItem(QComboBox* cmbo);
     bool event(QEvent * event);
@@ -92,7 +99,7 @@ private slots:
 
     void    onChooseRobotClicked();
 public:
-    explicit UStarService(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0);
 
     enum  Type {
         None          = 0,
@@ -112,5 +119,5 @@ public:
     };
 
 };
-#endif // USTARSERVICE_H
+#endif // MAINWINDOW_H
 

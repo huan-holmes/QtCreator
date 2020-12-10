@@ -5,7 +5,7 @@ LoginForm::LoginForm(QDialog *parent) :
     QDialog(parent)
 {
     //设置窗体标题
-    this->setStyleSheet("background-color:gray;");
+    this->setStyleSheet("background-color:#1E1E1E;");
     this->setMaximumSize(600, 450);
     this->setMinimumSize(600, 450);
     this->setWindowTitle(tr("欢迎使用优智达"));
