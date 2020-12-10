@@ -40,23 +40,28 @@ MainWindow::MainWindow(QWidget *parent):
     ratio= 1.0;             //初始化图片缩放比例
     action = MainWindow::None;
 
-
-    QMenuBar *menuBar = new QMenuBar(this); //1.创建菜单栏
-    menuBar->setGeometry(0,20,width(),40);   //设置大小
-
+    //QFrame *frame = new QFrame(this);
+    //frame->setFrameShape(QFrame::StyledPanel);
+    //frame->setFrameShadow(QFrame::Raised);
+    //frame->setStyleSheet("background-color:gray;");
+    //frame->setGeometry(0, 0, width(), 40);
+    QMenuBar *menuBar = this->menuBar(); //1.创建菜单栏
     QMenu *fileMenu = new QMenu("文件(&F)");   //2.创建菜单
     //3.创建行为(Action)
     QAction *fileCreateAction = new QAction("打开(&O)", this);
     //fileCreateAction->setIcon(QIcon(":/ReplicationTool/png/open.png"));
-    //QAction *fileSaveAction = new QAction("&save",this);
+    QAction *fileSaveAction = new QAction("保存(&S)",this);
     //QAction *fileImportAction = new QAction("&import",this);
     //QAction *fileExportAction = new QAction("&export",this);
     //4.将行为添加到菜单
-    //fileMenu->addAction(fileSaveAction);
+
     //fileMenu->addAction(fileImportAction);
     //fileMenu->addAction(fileExportAction);
-    fileCreateAction->setShortcut(Qt::CTRL | Qt::Key_O);
+
     fileMenu->addAction(fileCreateAction);
+    fileCreateAction->setShortcut(Qt::CTRL | Qt::Key_O);
+    fileMenu->addAction(fileSaveAction);
+    fileSaveAction->setShortcut(Qt::CTRL | Qt::Key_S);
     //5.将菜单添加到菜单栏
     menuBar->addMenu(fileMenu);
     menuBar->addSeparator();
@@ -80,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent):
     QMenu *help = new QMenu("帮助(&H)");
     menuBar->addMenu(help);
     menuBar->addSeparator();
+
 
     BigButton.setGeometry(842,30,60,25);
     connect(&BigButton,SIGNAL(clicked()),this,SLOT(onBigClicked()));

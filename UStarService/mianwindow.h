@@ -18,6 +18,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QMenuBar>
+#include <QFrame>
 
 class MainWindow : public QMainWindow
 {
@@ -102,7 +103,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
 
     enum  Type {
-        None          = 0,
+        None = 0,
         Amplification ,
         Shrink,
         Lift,
