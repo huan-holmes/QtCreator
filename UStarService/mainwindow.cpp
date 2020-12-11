@@ -1,9 +1,11 @@
 
 #include "mianwindow.h"
-
+#include <QToolButton>
+#include <QSpinBox>
+#include <QStatusBar>
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
-    Paint(30,30,800,800),
+    Paint(10,50,800,800),
     clear_flag_(false),
     line_flag_(false),
     virtual_wall_flag_(0),
@@ -14,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent):
     button_style_(""),
     BigButton("放大",this),
     LittleButton("缩小",this),
-    LiftButton("向左",this),
+    LeftButton("向左",this),
     RightButton("向右",this),
     UpButton("向上",this),
     DownButton("向下",this),
@@ -31,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent):
     Alloffset(0,0),
     label("100%",this)
 {
-    this->setGeometry(450, 50, 1200, 1000);
+    this->setGeometry(450, 50, 900, 850);
     this->setStyleSheet("background-color:#1E1E1E;");
     //this->setStyleSheet("background-color:white;");
     tipLbl = new QLabel(this);
@@ -45,19 +47,24 @@ MainWindow::MainWindow(QWidget *parent):
     //frame->setFrameShadow(QFrame::Raised);
     //frame->setStyleSheet("background-color:gray;");
     //frame->setGeometry(0, 0, width(), 40);
-    QMenuBar *menuBar = this->menuBar(); //1.创建菜单栏
-    QMenu *fileMenu = new QMenu("文件(&F)");   //2.创建菜单
-    //3.创建行为(Action)
     QAction *fileCreateAction = new QAction("打开(&O)", this);
     //fileCreateAction->setIcon(QIcon(":/ReplicationTool/png/open.png"));
     QAction *fileSaveAction = new QAction("保存(&S)",this);
-    //QAction *fileImportAction = new QAction("&import",this);
-    //QAction *fileExportAction = new QAction("&export",this);
-    //4.将行为添加到菜单
 
-    //fileMenu->addAction(fileImportAction);
-    //fileMenu->addAction(fileExportAction);
+    QAction *baseAction = new QAction("&还原", this);
+    QAction *bigAction = new QAction("&放大", this);
+    QAction *littleAction = new QAction("&缩小", this);
+    QAction *rightAction = new QAction("&向右", this);
+    QAction *leftAction = new QAction("&向左", this);
+    QAction *upAction = new QAction("&向上", this);
+    QAction *downAction = new QAction("&向下", this);
 
+    QMenuBar *menuBar = this->menuBar(); //1.创建菜单栏
+    QMenu *fileMenu = new QMenu("文件(&F)");   //2.创建菜单
+    //3.创建行为(Action)
+
+    //QAction *bold = new QAction("粗",this);
+    //QAction *thin = new QAction("细", this);
     fileMenu->addAction(fileCreateAction);
     fileCreateAction->setShortcut(Qt::CTRL | Qt::Key_O);
     fileMenu->addAction(fileSaveAction);
@@ -66,72 +73,153 @@ MainWindow::MainWindow(QWidget *parent):
     menuBar->addMenu(fileMenu);
     menuBar->addSeparator();
 
-    QMenu *slam = new QMenu("SLAM");
-    menuBar->addMenu(slam);
+    QMenu *editMenu = new QMenu("编辑(&E)");
+    editMenu->addAction(baseAction);
+    editMenu->addAction(bigAction);
+    editMenu->addAction(littleAction);
+    editMenu->addAction(rightAction);
+    editMenu->addAction(leftAction);
+    editMenu->addAction(upAction);
+    editMenu->addAction(downAction);
+    menuBar->addMenu(editMenu);
     menuBar->addSeparator();
 
-    QMenu *virtualWall = new QMenu("虚拟墙");
-    menuBar->addMenu(virtualWall);
+    QMenu *tool = new QMenu("工具(&T)");
+    menuBar->addMenu(tool);
     menuBar->addSeparator();
 
-    QMenu *virtualNav = new QMenu("虚拟导轨");
-    menuBar->addMenu(virtualNav);
-    menuBar->addSeparator();
+//    QMenu *virtualNav = new QMenu("虚拟导轨");
+//    menuBar->addMenu(virtualNav);
+//    menuBar->addSeparator();
 
-    QMenu *poi = new QMenu("POI");
-    menuBar->addMenu(poi);
-    menuBar->addSeparator();
+//    QMenu *poi = new QMenu("POI");
+//    menuBar->addMenu(poi);
+//    menuBar->addSeparator();
 
     QMenu *help = new QMenu("帮助(&H)");
     menuBar->addMenu(help);
     menuBar->addSeparator();
 
 
-    BigButton.setGeometry(842,30,60,25);
-    connect(&BigButton,SIGNAL(clicked()),this,SLOT(onBigClicked()));
-
-    LittleButton.setGeometry(842,60,60,25);
-    connect(&LittleButton,SIGNAL(clicked()),this,SLOT(onLittleClicked()));
-
-    LiftButton.setGeometry(842,90,60,25);
-    connect(&LiftButton,SIGNAL(clicked()),this,SLOT(OnLiftClicked()));
-    RightButton.setGeometry(842,120,60,25);
-    connect(&RightButton,SIGNAL(clicked()),this,SLOT(OnRightClicked()));
-    UpButton.setGeometry(842,150,60,25);
-    connect(&UpButton,SIGNAL(clicked()),this,SLOT(onUpClicked()));
-    DownButton.setGeometry(842,180,60,25);
-    connect(&DownButton,SIGNAL(clicked()),this,SLOT(onDownClicked()));
 
 
-    ResetButton.setGeometry(842,210,60,25);
-    connect(&ResetButton,SIGNAL(clicked()),this,SLOT(onResetClicked()));
 
-    ClearButton.setGeometry(842,240,60,25);
-    connect(&ClearButton,SIGNAL(clicked()),this,SLOT(onClearClicked()));
+    QAction *virtualWallAction = new QAction(tr("&虚拟墙"), this);
+    //virtualWallAction->setShortcut(QKeySequence::Open);
 
-    LineButton.setGeometry(842,270,60,25);
-    connect(&LineButton,SIGNAL(clicked()),this,SLOT(onLineClicked()));
+    QAction *clearAction = new QAction(tr("&清除"), this);
 
-    VirtualWallButton.setGeometry(842,300,60,25);
-    connect(&VirtualWallButton,SIGNAL(clicked()),this,SLOT(onVirtualWallClicked()));
+    QAction *lineAction = new QAction(tr("&绘图"), this);
 
-    OpenButton.setGeometry(842,330,60,25);
-    connect(&OpenButton,SIGNAL(clicked()),this,SLOT(onOpenClicked()));
+    QAction *slamAction = new QAction(tr("&SLAM"), this);
 
-    CircularRedButton.setGeometry(867, 370, 10, 10);
-    CircularRedButton.setStyleSheet("QPushButton{background-color:rgba(255,0,0,200);}");
-    connect(&CircularRedButton,SIGNAL(clicked()),this,SLOT(onButtonRedClicked()));
+    QAction *chooseAction = new QAction(tr("&选择机器人"), this);
 
-    CircularGreenButton.setGeometry(867, 410, 10, 10);
-    CircularGreenButton.setStyleSheet("QPushButton{background-color:rgba(0,255,0,200);}");
-    connect(&CircularGreenButton,SIGNAL(clicked()),this,SLOT(onButtonGreenClicked()));
+    QToolButton *redToolButton = new QToolButton;
+    redToolButton->setStyleSheet("QToolButton{background-color:rgba(255,0,0,200);width:15px;height:15px}");
+    QToolButton *greenToolButton = new QToolButton;
+    greenToolButton->setStyleSheet("QToolButton{background-color:rgba(0,255,0,200);width:15px;height:15px}}");
+    QToolButton *blueToolButton = new QToolButton;
+    blueToolButton->setStyleSheet("QToolButton{background-color:rgba(0,0,255,200);width:15px;height:15px}");
 
-    CircularBlueButton.setGeometry(867, 450, 10, 10);
-    CircularBlueButton.setStyleSheet("QPushButton{background-color:rgba(0,0,255,200);}");
-    connect(&CircularBlueButton,SIGNAL(clicked()),this,SLOT(onButtonBlueClicked()));
+    QMenu *virtualWall = new QMenu("&虚拟墙");
+    menuBar->addMenu(virtualWall);
+    virtualWall->addAction(virtualWallAction);
+    menuBar->addSeparator();
 
-    ChooseRobotButton.setGeometry(842, 490, 60, 25);
-    connect(&ChooseRobotButton,SIGNAL(clicked()),this,SLOT(onChooseRobotClicked()));
+
+
+    QToolBar *toolBar = addToolBar(tr("工具栏"));
+    toolBar->setStyleSheet("background-color:gray;");
+
+    toolBar->addAction(fileCreateAction);
+    toolBar->addSeparator();
+    toolBar->addAction(slamAction);
+    toolBar->addSeparator();
+    toolBar->addAction(clearAction);
+    toolBar->addSeparator();
+    toolBar->addAction(virtualWallAction);
+    toolBar->addSeparator();
+    toolBar->addAction(lineAction);
+    toolBar->addSeparator();
+    toolBar->addAction(chooseAction);
+    toolBar->addSeparator();
+    toolBar->addWidget(redToolButton);
+    toolBar->addSeparator();
+    toolBar->addWidget(greenToolButton);
+    toolBar->addSeparator();
+    toolBar->addWidget(blueToolButton);
+
+
+    QStatusBar *statusBar = this->statusBar();
+    //QLabel *l = &label;
+    label.setStyleSheet("background-color: rgba(255, 255, 224, 0%);border:0px;");
+    statusBar->addWidget(&label);
+
+    statusBar->setStyleSheet("background-color:gray;");
+
+    connect(fileCreateAction, &QAction::triggered, this, &MainWindow::onOpenClicked);
+    connect(clearAction, &QAction::triggered, this, &MainWindow::onClearClicked);
+    connect(virtualWallAction, &QAction::triggered, this, &MainWindow::onVirtualWallClicked);
+    connect(lineAction, &QAction::triggered, this, &MainWindow::onLineClicked);
+    connect(chooseAction, &QAction::triggered, this, &MainWindow::onChooseRobotClicked);
+    connect(baseAction, &QAction::triggered, this, &MainWindow::onResetClicked);
+    connect(bigAction, &QAction::triggered, this, &MainWindow::onBigClicked);
+    connect(littleAction, &QAction::triggered, this, &MainWindow::onLittleClicked);
+    connect(rightAction, &QAction::triggered, this, &MainWindow::OnRightClicked);
+    connect(leftAction, &QAction::triggered, this, &MainWindow::OnLeftClicked);
+    connect(upAction, &QAction::triggered, this, &MainWindow::onUpClicked);
+    connect(downAction, &QAction::triggered, this, &MainWindow::onDownClicked);
+    connect(redToolButton, SIGNAL(clicked()), this, SLOT(onButtonRedClicked()));
+    connect(greenToolButton, SIGNAL(clicked()), this, SLOT(onButtongreenClicked()));
+    connect(blueToolButton, SIGNAL(clicked()), this, SLOT(onButtonblueClicked()));
+
+
+//    BigButton.setGeometry(842,30,60,25);
+//    connect(&BigButton,SIGNAL(clicked()),this,SLOT(onBigClicked()));
+
+//    LittleButton.setGeometry(842,60,60,25);
+//    connect(&LittleButton,SIGNAL(clicked()),this,SLOT(onLittleClicked()));
+
+//    LeftButton.setGeometry(842,90,60,25);
+//    connect(&LeftButton,SIGNAL(clicked()),this,SLOT(OnLeftClicked()));
+//    RightButton.setGeometry(842,120,60,25);
+//    connect(&RightButton,SIGNAL(clicked()),this,SLOT(OnRightClicked()));
+//    UpButton.setGeometry(842,150,60,25);
+//    connect(&UpButton,SIGNAL(clicked()),this,SLOT(onUpClicked()));
+//    DownButton.setGeometry(842,180,60,25);
+//    connect(&DownButton,SIGNAL(clicked()),this,SLOT(onDownClicked()));
+
+
+//    ResetButton.setGeometry(842,210,60,25);
+//    connect(&ResetButton,SIGNAL(clicked()),this,SLOT(onResetClicked()));
+
+//    ClearButton.setGeometry(842,240,60,25);
+//    connect(&ClearButton,SIGNAL(clicked()),this,SLOT(onClearClicked()));
+
+//    LineButton.setGeometry(842,270,60,25);
+//    connect(&LineButton,SIGNAL(clicked()),this,SLOT(onLineClicked()));
+
+//    VirtualWallButton.setGeometry(842,300,60,25);
+//    connect(&VirtualWallButton,SIGNAL(clicked()),this,SLOT(onVirtualWallClicked()));
+
+//    OpenButton.setGeometry(842,330,60,25);
+//    connect(&OpenButton,SIGNAL(clicked()),this,SLOT(onOpenClicked()));
+
+//    CircularRedButton.setGeometry(867, 370, 10, 10);
+//    CircularRedButton.setStyleSheet("QPushButton{background-color:rgba(255,0,0,200);}");
+//    connect(&CircularRedButton,SIGNAL(clicked()),this,SLOT(onButtonRedClicked()));
+
+//    CircularGreenButton.setGeometry(867, 410, 10, 10);
+//    CircularGreenButton.setStyleSheet("QPushButton{background-color:rgba(0,255,0,200);}");
+//    connect(&CircularGreenButton,SIGNAL(clicked()),this,SLOT(onButtonGreenClicked()));
+
+//    CircularBlueButton.setGeometry(867, 450, 10, 10);
+//    CircularBlueButton.setStyleSheet("QPushButton{background-color:rgba(0,0,255,200);}");
+//    connect(&CircularBlueButton,SIGNAL(clicked()),this,SLOT(onButtonBlueClicked()));
+
+//    ChooseRobotButton.setGeometry(842, 490, 60, 25);
+//    connect(&ChooseRobotButton,SIGNAL(clicked()),this,SLOT(onChooseRobotClicked()));
 
     label.move(860,530);
     //resize(890,850);
@@ -591,7 +679,7 @@ void MainWindow::onResetClicked()
   label.setText("100%");
   this->update();
 }
-void MainWindow::OnLiftClicked()
+void MainWindow::OnLeftClicked()
 {
   action=MainWindow::Move;
   offset.setX(-20);

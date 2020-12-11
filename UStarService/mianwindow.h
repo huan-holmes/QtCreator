@@ -56,7 +56,7 @@ private :
 
     QPushButton  BigButton;
     QPushButton  LittleButton;
-    QPushButton  LiftButton;
+    QPushButton  LeftButton;
     QPushButton  RightButton;
     QPushButton  UpButton;
     QPushButton  DownButton;
@@ -85,7 +85,7 @@ private slots:
     void    onUpClicked();
     void    onDownClicked();
     void    onResetClicked();
-    void    OnLiftClicked();
+    void    OnLeftClicked();
     void    OnRightClicked();
     void    onLittleClicked();
     void    onBigClicked();

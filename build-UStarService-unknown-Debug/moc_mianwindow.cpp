@@ -34,7 +34,7 @@ QT_MOC_LITERAL(1, 11, 11), // "onUpClicked"
 QT_MOC_LITERAL(2, 23, 0), // ""
 QT_MOC_LITERAL(3, 24, 13), // "onDownClicked"
 QT_MOC_LITERAL(4, 38, 14), // "onResetClicked"
-QT_MOC_LITERAL(5, 53, 13), // "OnLiftClicked"
+QT_MOC_LITERAL(5, 53, 13), // "OnLeftClicked"
 QT_MOC_LITERAL(6, 67, 14), // "OnRightClicked"
 QT_MOC_LITERAL(7, 82, 15), // "onLittleClicked"
 QT_MOC_LITERAL(8, 98, 12), // "onBigClicked"
@@ -52,7 +52,7 @@ QT_MOC_LITERAL(19, 265, 20) // "onChooseRobotClicked"
 
     },
     "MainWindow\0onUpClicked\0\0onDownClicked\0"
-    "onResetClicked\0OnLiftClicked\0"
+    "onResetClicked\0OnLeftClicked\0"
     "OnRightClicked\0onLittleClicked\0"
     "onBigClicked\0onClearClicked\0onLineClicked\0"
     "onVirtualWallClicked\0onOpenClicked\0"
@@ -123,7 +123,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 0: _t->onUpClicked(); break;
         case 1: _t->onDownClicked(); break;
         case 2: _t->onResetClicked(); break;
-        case 3: _t->OnLiftClicked(); break;
+        case 3: _t->OnLeftClicked(); break;
         case 4: _t->OnRightClicked(); break;
         case 5: _t->onLittleClicked(); break;
         case 6: _t->onBigClicked(); break;
