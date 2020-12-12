@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[20];
-    char stringdata0[286];
+    char stringdata0[268];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,13 +42,13 @@ QT_MOC_LITERAL(9, 111, 14), // "onClearClicked"
 QT_MOC_LITERAL(10, 126, 13), // "onLineClicked"
 QT_MOC_LITERAL(11, 140, 20), // "onVirtualWallClicked"
 QT_MOC_LITERAL(12, 161, 13), // "onOpenClicked"
-QT_MOC_LITERAL(13, 175, 18), // "onButtonRedClicked"
-QT_MOC_LITERAL(14, 194, 20), // "onButtonGreenClicked"
-QT_MOC_LITERAL(15, 215, 19), // "onButtonBlueClicked"
-QT_MOC_LITERAL(16, 235, 10), // "paintEvent"
-QT_MOC_LITERAL(17, 246, 12), // "QPaintEvent*"
-QT_MOC_LITERAL(18, 259, 5), // "event"
-QT_MOC_LITERAL(19, 265, 20) // "onChooseRobotClicked"
+QT_MOC_LITERAL(13, 175, 12), // "onRedClicked"
+QT_MOC_LITERAL(14, 188, 14), // "onGreenClicked"
+QT_MOC_LITERAL(15, 203, 13), // "onBlueClicked"
+QT_MOC_LITERAL(16, 217, 10), // "paintEvent"
+QT_MOC_LITERAL(17, 228, 12), // "QPaintEvent*"
+QT_MOC_LITERAL(18, 241, 5), // "event"
+QT_MOC_LITERAL(19, 247, 20) // "onChooseRobotClicked"
 
     },
     "MainWindow\0onUpClicked\0\0onDownClicked\0"
@@ -56,9 +56,9 @@ QT_MOC_LITERAL(19, 265, 20) // "onChooseRobotClicked"
     "OnRightClicked\0onLittleClicked\0"
     "onBigClicked\0onClearClicked\0onLineClicked\0"
     "onVirtualWallClicked\0onOpenClicked\0"
-    "onButtonRedClicked\0onButtonGreenClicked\0"
-    "onButtonBlueClicked\0paintEvent\0"
-    "QPaintEvent*\0event\0onChooseRobotClicked"
+    "onRedClicked\0onGreenClicked\0onBlueClicked\0"
+    "paintEvent\0QPaintEvent*\0event\0"
+    "onChooseRobotClicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -131,9 +131,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 8: _t->onLineClicked(); break;
         case 9: _t->onVirtualWallClicked(); break;
         case 10: _t->onOpenClicked(); break;
-        case 11: _t->onButtonRedClicked(); break;
-        case 12: _t->onButtonGreenClicked(); break;
-        case 13: _t->onButtonBlueClicked(); break;
+        case 11: _t->onRedClicked(); break;
+        case 12: _t->onGreenClicked(); break;
+        case 13: _t->onBlueClicked(); break;
         case 14: _t->paintEvent((*reinterpret_cast< QPaintEvent*(*)>(_a[1]))); break;
         case 15: _t->onChooseRobotClicked(); break;
         default: ;

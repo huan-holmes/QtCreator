@@ -19,21 +19,57 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QFrame>
+#include <QToolButton>
+#include <QSpinBox>
+#include <QStatusBar>
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 private :
-    QPixmap  pix;
-    QPixmap  crtPix;
-    int action;          //动作(放大,缩小,移动...)
-    int pixW;            //图片宽
-    int pixH;            //图片高
+    QPixmap  Pixmap;
+    QPixmap  CrtPixmap;
+    QRect PaintRect;         //绘画区域
+    QImage Image;        //打开的图片
+    QPoint offset;           //一次的图片偏移值
+    QPoint Alloffset;          //总偏移
+    QLabel label;
 
-    QRect Paint;         //绘画区域
+    QMenuBar *MainWindowMenuBar;
+    QToolBar *MainWindowToolBar;
+    QStatusBar *MainWindowStatusBar;
+    QMenu *FileMenu;
+    QMenu *EditMenu;
+    QMenu *ToolMenu;
+    QMenu *HelpMenu;
+    QMenu *VirtualWallMenu;
 
-    QImage image;        //打开的图片
+    QLabel *StateLabel;
+
+    QAction *FileCreateAction;
+    QAction *FileSaveAction;
+    QAction *BaseAction;
+    QAction *BigAction;
+    QAction *LittleAction;
+    QAction *RightAction;
+    QAction *LeftAction;
+    QAction *UpAction;
+    QAction *DownAction;
+    QAction *VirtualWallAction;
+    QAction *ClearAction;
+    QAction *LineAction;
+    QAction *SlamAction;
+    QAction *ChooseAction;
+    QToolButton *RedToolButton;
+    QToolButton *GreenToolButton;
+    QToolButton *BlueToolButton;
+
+    QString button_style_;
+    float ratio_;              //缩放比例
+    int action_;          //动作(放大,缩小,移动...)
+    int pix_width_;            //图片宽
+    int pix_height_;            //图片高
     bool clear_flag_;
     bool line_flag_;
     int virtual_wall_flag_;
@@ -41,37 +77,6 @@ private :
     int virtual_wall_y1_;
     int virtual_wall_x2_;
     int virtual_wall_y2_;
-
-    QString button_style_;
-
-    QLabel *tipLbl;  //"欢迎登录"标签
-
-
-
-
-    float ratio;              //缩放比例
-    QPoint offset;           //一次的图片偏移值
-    QPoint Alloffset;          //总偏移
-    QLabel label;
-
-    QPushButton  BigButton;
-    QPushButton  LittleButton;
-    QPushButton  LeftButton;
-    QPushButton  RightButton;
-    QPushButton  UpButton;
-    QPushButton  DownButton;
-    QPushButton  ResetButton;
-    QPushButton  ClearButton;
-    QPushButton  LineButton;
-    QPushButton  VirtualWallButton;
-    QPushButton  OpenButton;
-    QPushButton  CircularRedButton;
-    QPushButton  CircularGreenButton;
-    QPushButton  CircularBlueButton;
-    QPushButton  ChooseRobotButton;
-
-
-
 
     void AddComboItem(QComboBox* cmbo);
     bool event(QEvent * event);
@@ -93,12 +98,12 @@ private slots:
     void    onLineClicked();
     void    onVirtualWallClicked();
     void    onOpenClicked();
-    void    onButtonRedClicked();
-    void    onButtonGreenClicked();
-    void    onButtonBlueClicked();
+    void    onRedClicked();
+    void    onGreenClicked();
+    void    onBlueClicked();
     void    paintEvent(QPaintEvent *event);
-
     void    onChooseRobotClicked();
+
 public:
     explicit MainWindow(QWidget *parent = 0);
 
