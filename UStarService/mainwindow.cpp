@@ -1,9 +1,9 @@
 
 #include "mianwindow.h"
 
-MainWindow::MainWindow(QWidget *parent):
+MainWindow::MainWindow(QMainWindow *parent):
     QMainWindow(parent),
-    PaintRect(10,50,800,800),
+
     clear_flag_(false),
     line_flag_(false),
     virtual_wall_flag_(0),
@@ -14,14 +14,37 @@ MainWindow::MainWindow(QWidget *parent):
     button_style_(""),
     Alloffset(0,0)
 {
-    this->setGeometry(450, 50, 900, 850);
-    this->setStyleSheet("background-color:#1E1E1E;");
-    //this->setStyleSheet("background-color:white;");
+    this->setGeometry(300, 30, 1500, 1200);
+    this->setStyleSheet("background-color:white;");
+    PaintRect = QRect(4,45,width()/3*2 - 20 + 6, 1 + 5 + height() - 40 - this->statusBar()->height() - this->menuBar()->height() - 10 - 140);
+    MainVLayout = new QVBoxLayout(this);
+    MainSplitter = new QSplitter(Qt::Vertical, this);
+    TopWidget = new QWidget(this);
+    MainVLayout->addWidget(TopWidget);
+    MainVLayout->addWidget(MainSplitter);
+    LeftWidget = new QWidget(this);
+    RightWidget = new QWidget(this);
+    MainSplitter->addWidget(LeftWidget);
+    MainSplitter->addWidget(RightWidget);
+    MainSplitter->setStretchFactor(0, 6);
+    MainSplitter->setStretchFactor(1, 4);
+    TopWidget->setGeometry(0, 0, width(), 40);
+    TopWidget->setStyleSheet("background-color:white;");
+    qDebug()<<height();
+    qDebug()<<this->menuBar()->height();
+    qDebug()<<this->statusBar()->height();
+    qDebug()<<TopWidget->height();
+    qDebug()<<height() - TopWidget->height() - this->statusBar()->height() - 40;
+    MainSplitter->setGeometry(width() / 3 * 2 - 8, TopWidget->height() + 10 - 7, width() / 3 + 5, 4 + 5 + height() - TopWidget->height() - this->statusBar()->height() - this->menuBar()->height() - 10 - 140);
+    MainSplitter->setStyleSheet("background-color:black;");
+
+    this->setLayout(MainVLayout);
     ratio_= 1.0;             //初始化图片缩放比例
     action_ = MainWindow::None;
-
     MainWindowMenuBar = this->menuBar(); //1.创建菜单栏
-    MainWindowToolBar = addToolBar(tr("工具栏")); //2.创建工具栏
+    //MainWindowToolBar = addToolBar(tr("工具栏"));
+    MainWindowToolBar = new QToolBar(tr("工具栏"), TopWidget); //2.创建工具栏
+    MainWindowToolBar->setGeometry(0, 0, TopWidget->width(), TopWidget->height());
     MainWindowStatusBar = this->statusBar();    //3.状态栏
 
     MainWindowToolBar->setStyleSheet("background-color:gray;");
@@ -123,7 +146,6 @@ MainWindow::MainWindow(QWidget *parent):
     connect(GreenToolButton, SIGNAL(clicked()), this, SLOT(onGreenClicked()));
     connect(BlueToolButton, SIGNAL(clicked()), this, SLOT(onBlueClicked()));
 
-    this->setWindowTitle("图片浏览器(请打开文件)");
 }
 
 bool MainWindow::event(QEvent * event)
@@ -281,9 +303,9 @@ void MainWindow::wheelEvent(QWheelEvent* event)     //鼠标滑轮事件
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     QPainter PaintRecter(this);
+
     PaintRecter.setRenderHints(QPainter::SmoothPixmapTransform|QPainter::Antialiasing|QPainter::TextAntialiasing);
     PaintRecter.drawRect(PaintRect.x()-1,PaintRect.y()-1,PaintRect.width()+1,PaintRect.height()+1); //画框
-
     if(Image.isNull())
     {
      return;

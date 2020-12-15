@@ -22,7 +22,12 @@
 #include <QToolButton>
 #include <QSpinBox>
 #include <QStatusBar>
-
+#include <QSplitter>
+#include <QTextEdit>
+#include <QObject>
+#include <QHBoxLayout>
+#include <QTimer>
+#include <QVBoxLayout>
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -36,6 +41,14 @@ private :
     QPoint Alloffset;          //总偏移
     QLabel label;
 
+    QSplitter *MainSplitter;
+    QWidget *LeftWidget;
+    QWidget *RightWidget;
+    QVBoxLayout *MainVLayout;
+    QWidget *TopWidget;
+    QWidget *BottomWidget;
+
+
     QMenuBar *MainWindowMenuBar;
     QToolBar *MainWindowToolBar;
     QStatusBar *MainWindowStatusBar;
@@ -46,6 +59,8 @@ private :
     QMenu *VirtualWallMenu;
 
     QLabel *StateLabel;
+
+    QLabel *OpencvLabel;
 
     QAction *FileCreateAction;
     QAction *FileSaveAction;
@@ -105,7 +120,7 @@ private slots:
     void    onChooseRobotClicked();
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QMainWindow *parent = 0);
 
     enum  Type {
         None = 0,
