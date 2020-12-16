@@ -31,7 +31,7 @@ MainWindow::MainWindow(QMainWindow *parent):
     TopWidget->setGeometry(0, 0, width(), 40);
     TopWidget->setStyleSheet("background-color:white;");
     MainSplitter->setGeometry(width() / 3 * 2 - 8, TopWidget->height() + 10 - 7, width() / 3 + 5, 4 + 5 + height() - TopWidget->height() - this->statusBar()->height() - this->menuBar()->height() - 10 - 140);
-    MainSplitter->setStyleSheet("background-color:black;");
+    MainSplitter->setStyleSheet("background-color:#1E1E1E;");
 
     this->setLayout(MainVLayout);
     ratio_= 1.0;             //初始化图片缩放比例
@@ -136,10 +136,10 @@ MainWindow::MainWindow(QMainWindow *parent):
     PicLabel = new QLabel(SplitterBottomWidget);
 
     MvLabel->resize(MainSplitter->width(), MainSplitter->height() * 0.6);
-    MvLabel->setStyleSheet("background-color: gray");
+    MvLabel->setStyleSheet("background-color:gray;");
 
     PicLabel->resize(MainSplitter->width(), MainSplitter->height() * 0.4);
-    //PicLabel->setStyleSheet("background-color: gray");
+    PicLabel->setStyleSheet("background-color: #1E1E1E");
 
     //connect(timer_, SIGNAL(timeout()), this, SLOT(readCameraFrame());
     //connect(OpenCameraAction, &QAction::triggered, this, &MainWindow::onOpenCameraClicked);
