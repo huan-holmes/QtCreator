@@ -28,6 +28,7 @@
 #include <QHBoxLayout>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <cv.h>
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -42,8 +43,8 @@ private :
     QLabel label;
 
     QSplitter *MainSplitter;
-    QWidget *LeftWidget;
-    QWidget *RightWidget;
+    QWidget *SplitterTopWidget;
+    QWidget *SplitterBottomWidget;
     QVBoxLayout *MainVLayout;
     QWidget *TopWidget;
     QWidget *BottomWidget;
@@ -56,11 +57,14 @@ private :
     QMenu *EditMenu;
     QMenu *ToolMenu;
     QMenu *HelpMenu;
-    QMenu *VirtualWallMenu;
+    QMenu *CameraMenu;
 
     QLabel *StateLabel;
 
     QLabel *OpencvLabel;
+
+    QLabel *MvLabel;
+    QLabel *PicLabel;
 
     QAction *FileCreateAction;
     QAction *FileSaveAction;
@@ -76,9 +80,14 @@ private :
     QAction *LineAction;
     QAction *SlamAction;
     QAction *ChooseAction;
+    QAction *OpenCameraAction;
+    QAction *CloseCameraAction;
+    QAction *TakeCameraPictureAction;
     QToolButton *RedToolButton;
     QToolButton *GreenToolButton;
     QToolButton *BlueToolButton;
+
+
 
     QString button_style_;
     float ratio_;              //缩放比例
@@ -92,6 +101,7 @@ private :
     int virtual_wall_y1_;
     int virtual_wall_x2_;
     int virtual_wall_y2_;
+    QTimer *timer_;
 
     void AddComboItem(QComboBox* cmbo);
     bool event(QEvent * event);
@@ -119,12 +129,17 @@ private slots:
     void    paintEvent(QPaintEvent *event);
     void    onChooseRobotClicked();
 
+    //void    onOpenCameraClicked();
+    //void    onCloseCameraClicked();
+    //void    onTakePictureClicked();
+    //void    readCameraFrame();
+
 public:
     explicit MainWindow(QMainWindow *parent = 0);
 
     enum  Type {
         None = 0,
-        Amplification ,
+        Amplification,
         Shrink,
         Lift,
         Right,

@@ -31,3 +31,8 @@ RESOURCES += \
     resource.qrc
 
 DISTFILES +=
+
+INCLUDEPATH += .
+INCLUDEPATH += /usr/local/include
+INCLUDEPATH += /usr/local/include/opencv
+INCLUDEPATH += /usr/local/include/opencv2

@@ -22,19 +22,14 @@ MainWindow::MainWindow(QMainWindow *parent):
     TopWidget = new QWidget(this);
     MainVLayout->addWidget(TopWidget);
     MainVLayout->addWidget(MainSplitter);
-    LeftWidget = new QWidget(this);
-    RightWidget = new QWidget(this);
-    MainSplitter->addWidget(LeftWidget);
-    MainSplitter->addWidget(RightWidget);
+    SplitterTopWidget = new QWidget(this);
+    SplitterBottomWidget = new QWidget(this);
+    MainSplitter->addWidget(SplitterTopWidget);
+    MainSplitter->addWidget(SplitterBottomWidget);
     MainSplitter->setStretchFactor(0, 6);
     MainSplitter->setStretchFactor(1, 4);
     TopWidget->setGeometry(0, 0, width(), 40);
     TopWidget->setStyleSheet("background-color:white;");
-    qDebug()<<height();
-    qDebug()<<this->menuBar()->height();
-    qDebug()<<this->statusBar()->height();
-    qDebug()<<TopWidget->height();
-    qDebug()<<height() - TopWidget->height() - this->statusBar()->height() - 40;
     MainSplitter->setGeometry(width() / 3 * 2 - 8, TopWidget->height() + 10 - 7, width() / 3 + 5, 4 + 5 + height() - TopWidget->height() - this->statusBar()->height() - this->menuBar()->height() - 10 - 140);
     MainSplitter->setStyleSheet("background-color:black;");
 
@@ -54,7 +49,7 @@ MainWindow::MainWindow(QMainWindow *parent):
     EditMenu = new QMenu("编辑(&E)");
     ToolMenu = new QMenu("工具(&T)");
     HelpMenu = new QMenu("帮助(&H)");
-    VirtualWallMenu = new QMenu("&虚拟墙");
+    CameraMenu = new QMenu("摄像头(&C)");
 
     StateLabel = new QLabel("100%",this);
 
@@ -69,6 +64,10 @@ MainWindow::MainWindow(QMainWindow *parent):
     UpAction = new QAction("&向上", this);
     DownAction = new QAction("&向下", this);
 
+    OpenCameraAction = new QAction(tr("&打开摄像头"), this);
+    CloseCameraAction = new QAction(tr("&关闭摄像头"), this);
+    TakeCameraPictureAction = new QAction(tr("捕获"), this);
+
     VirtualWallAction = new QAction(tr("&虚拟墙"), this);
     ClearAction = new QAction(tr("&清除"), this);
     LineAction = new QAction(tr("&绘图"), this);
@@ -77,6 +76,7 @@ MainWindow::MainWindow(QMainWindow *parent):
     RedToolButton = new QToolButton;
     GreenToolButton = new QToolButton;
     BlueToolButton = new QToolButton;
+
 
     MainWindowMenuBar->addMenu(FileMenu);
     MainWindowMenuBar->addSeparator();
@@ -101,9 +101,11 @@ MainWindow::MainWindow(QMainWindow *parent):
     MainWindowMenuBar->addMenu(HelpMenu);
     MainWindowMenuBar->addSeparator();
 
-    MainWindowMenuBar->addMenu(VirtualWallMenu);
+    MainWindowMenuBar->addMenu(CameraMenu);
     MainWindowMenuBar->addSeparator();
-    VirtualWallMenu->addAction(VirtualWallAction);
+    CameraMenu->addAction(OpenCameraAction);
+    CameraMenu->addAction(CloseCameraAction);
+    CameraMenu->addAction(TakeCameraPictureAction);
 
     MainWindowToolBar->addAction(FileCreateAction);
     MainWindowToolBar->addSeparator();
@@ -129,6 +131,20 @@ MainWindow::MainWindow(QMainWindow *parent):
     MainWindowStatusBar->addWidget(StateLabel);
     StateLabel->setStyleSheet("background-color: rgba(255, 255, 224, 0%);border:0px;");
 
+    timer_ = new QTimer(this);
+    MvLabel = new QLabel(SplitterTopWidget);
+    PicLabel = new QLabel(SplitterBottomWidget);
+
+    MvLabel->resize(MainSplitter->width(), MainSplitter->height() * 0.6);
+    MvLabel->setStyleSheet("background-color: gray");
+
+    PicLabel->resize(MainSplitter->width(), MainSplitter->height() * 0.4);
+    //PicLabel->setStyleSheet("background-color: gray");
+
+    //connect(timer_, SIGNAL(timeout()), this, SLOT(readCameraFrame());
+    //connect(OpenCameraAction, &QAction::triggered, this, &MainWindow::onOpenCameraClicked);
+    //connect(CloseCameraAction, &QAction::triggered, this, &MainWindow::onCloseCameraClicked);
+    //connect(TakeCameraPictureAction, &QAction::triggered, this, &MainWindow::onTakePictureClicked);
 
     connect(FileCreateAction, &QAction::triggered, this, &MainWindow::onOpenClicked);
     connect(ClearAction, &QAction::triggered, this, &MainWindow::onClearClicked);
