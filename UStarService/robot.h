@@ -13,6 +13,10 @@
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <QMessageBox>
+#include <cv.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/opencv.hpp>
+#include <vector>
 class RobotWindow : public QDialog
 {
     Q_OBJECT
@@ -37,6 +41,9 @@ private:
     QTcpSocket *socket_;
     bool connect_flag_;
     bool write_flag_;
+public:
+    cv::Mat image_;
+    bool flag_;
 };
 
 #endif // ROBOT_H

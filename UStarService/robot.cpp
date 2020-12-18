@@ -4,7 +4,8 @@
 RobotWindow::RobotWindow(QDialog *parent) :
     QDialog(parent),
     connect_flag_(false),
-    write_flag_(false)
+    write_flag_(false),
+    flag_(false)
 {
     qDebug()<<"robot";
     //this->setGeometry(700, 350, 500, 400);
@@ -82,28 +83,58 @@ void RobotWindow::onConnectClicked()
     QString pwd = this->PwdLineEdit->text();
     socket_->write(pwd.toUtf8().data());
     socket_->waitForReadyRead(1000);
-    char recvMsg[1024] = {0};
-    int recvRe = socket_->read(recvMsg, 1024);
-    QString res = recvMsg;
-    qDebug()<<res;
-    qDebug()<<recvRe;
-    if(recvRe == 0 || res == "登入失败")
-    {
-
-        QMessageBox::information(this, "接收服务端数据失败", "密码错误!");
-        connect_flag_ = false;
-        //return;
-
-    }
-    else
-    {
-        connect_flag_ = true;
-        onReceivedData();
-        QMessageBox::information(this, "ustar", "登录成功!");
-
-    }
-    //connect(socket_, SIGNAL(readyRead()), this, SLOT(onReceivedData()));
+    char recvMsg[65536] = {0};
+    int recvRe = socket_->read(recvMsg, 65536);
+    //QString res = recvMsg;
+    std::vector<uchar> vec_data(recvMsg, recvMsg+65536);
+    //qDebug()<<vec_data[0];
+    cv::imdecode(cv::Mat(vec_data), CV_LOAD_IMAGE_COLOR, &image_);
+    flag_ = true;
+    //cv::imshow("server_recv_video", compressed);
 }
+
+//void RobotWindow::onConnectClicked()
+//{
+//    if (connect_flag_)
+//    {
+//        QMessageBox::information(this, "ustar", "登录成功!");
+//        return;
+//    }
+
+//    QString ip = this->IpLineEdit->text();
+//    qint16 port = this->PortLineEdit->text().toInt();
+//    qDebug()<< ip;
+//    qDebug()<< port;
+//    socket_->connectToHost(QHostAddress(ip),port);
+//    if (!socket_->waitForConnected(30000))
+//    {
+//        QMessageBox::information(this, "QT网络通信", "连接服务端失败！");
+//    }
+//    QString pwd = this->PwdLineEdit->text();
+//    socket_->write(pwd.toUtf8().data());
+//    socket_->waitForReadyRead(1000);
+//    char recvMsg[1024] = {0};
+//    int recvRe = socket_->read(recvMsg, 1024);
+//    QString res = recvMsg;
+//    qDebug()<<res;
+//    qDebug()<<recvRe;
+//    if(recvRe == 0 || res == "登入失败")
+//    {
+
+//        QMessageBox::information(this, "接收服务端数据失败", "密码错误!");
+//        connect_flag_ = false;
+//        //return;
+
+//    }
+//    else
+//    {
+//        connect_flag_ = true;
+//        onReceivedData();
+//        QMessageBox::information(this, "ustar", "登录成功!");
+
+//    }
+//    //connect(socket_, SIGNAL(readyRead()), this, SLOT(onReceivedData()));
+//}
 
 
 void RobotWindow::onReceivedData()

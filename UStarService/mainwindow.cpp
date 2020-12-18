@@ -558,7 +558,22 @@ void MainWindow::onChooseRobotClicked()
 
     RobotWindow *robot = new RobotWindow();
     robot->show();
-
+    cv::Mat mat = robot->image_;
+    qDebug()<<robot->image_.channels();
+    cv::Mat Rgb;
+    QImage Img;
+    if (mat.channels() == 3)//RGB Img
+    {
+        cv::cvtColor(mat, Rgb, CV_BGR2RGB);//颜色空间转换
+        Img = QImage((const uchar*)(Rgb.data), Rgb.cols, Rgb.rows, Rgb.cols * Rgb.channels(), QImage::Format_RGB888);
+    }
+    else//Gray Img
+    {
+        Img = QImage((const uchar*)(mat.data), mat.cols, mat.rows, mat.cols*mat.channels(), QImage::Format_Indexed8);
+    }
+    MvLabel->setPixmap(QPixmap::fromImage(Img));
+    //qDebug()<<Img.byteCount();
+    //SplitterTopWidget->update();
 }
 void MainWindow::onOpenClicked()
 {
