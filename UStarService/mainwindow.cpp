@@ -12,15 +12,21 @@ MainWindow::MainWindow(QMainWindow *parent):
     virtual_wall_x2_(0),
     virtual_wall_y2_(0),
     button_style_(""),
-    Alloffset(0,0)
+    Alloffset(0,0),
+    choose_(MAPSET)
 {
     this->setGeometry(300, 30, 1500, 1200);
-    this->setStyleSheet("background-color:white;");
-    PaintRect = QRect(4,45,width()/3*2 - 20 + 6, 1 + 5 + height() - 40 - this->statusBar()->height() - this->menuBar()->height() - 10 - 140);
+    this->setStyleSheet("background-color:#1E1E1E;");
+    //PaintRect = QRect(4,45,width()/3*2 - 20 + 6, 1 + 5 + height() - 40 - this->statusBar()->height() - this->menuBar()->height() - 10 - 140);
+    PaintRect = QRect(4,95,width()/3*2 - 20 + 6, 1 + 5 + height() - 40 - this->statusBar()->height() - this->menuBar()->height() - 10 - 140 - 50);
     MainVLayout = new QVBoxLayout(this);
     MainSplitter = new QSplitter(Qt::Vertical, this);
     TopWidget = new QWidget(this);
+
+    SecondWidget = new QWidget(this);
+
     MainVLayout->addWidget(TopWidget);
+    MainVLayout->addWidget(SecondWidget);
     MainVLayout->addWidget(MainSplitter);
     SplitterTopWidget = new QWidget(this);
     SplitterBottomWidget = new QWidget(this);
@@ -28,10 +34,14 @@ MainWindow::MainWindow(QMainWindow *parent):
     MainSplitter->addWidget(SplitterBottomWidget);
     MainSplitter->setStretchFactor(0, 6);
     MainSplitter->setStretchFactor(1, 4);
-    TopWidget->setGeometry(0, 0, width(), 40);
-    TopWidget->setStyleSheet("background-color:white;");
-    MainSplitter->setGeometry(width() / 3 * 2 - 8, TopWidget->height() + 10 - 7, width() / 3 + 5, 4 + 5 + height() - TopWidget->height() - this->statusBar()->height() - this->menuBar()->height() - 10 - 140);
-    MainSplitter->setStyleSheet("background-color:#1E1E1E;");
+    TopWidget->setGeometry(0, 0, width(), 30);
+    TopWidget->setStyleSheet("background-color:#1E1E1E;color:#FFFFFF");
+    SecondWidget->setGeometry(0, TopWidget->height(), width(), 60);
+    SecondWidget->setStyleSheet("background-color:#1E1E1E;color:#FFFFFF");
+
+    //MainSplitter->setGeometry(width() / 3 * 2 - 8, TopWidget->height() + 10 - 7, width() / 3 + 5, 4 + 5 + height() - TopWidget->height() - this->statusBar()->height() - this->menuBar()->height() - 10 - 140);
+    MainSplitter->setGeometry(width() / 3 * 2 - 8, TopWidget->height() + 10 - 7 + 60, width() / 3 + 5, 4 + 5 + height() - TopWidget->height() - this->statusBar()->height() - this->menuBar()->height() - 10 - 140 - 60);
+    MainSplitter->setStyleSheet("background-color:gray;");
 
     this->setLayout(MainVLayout);
     ratio_= 1.0;             //初始化图片缩放比例
@@ -40,10 +50,14 @@ MainWindow::MainWindow(QMainWindow *parent):
     //MainWindowToolBar = addToolBar(tr("工具栏"));
     MainWindowToolBar = new QToolBar(tr("工具栏"), TopWidget); //2.创建工具栏
     MainWindowToolBar->setGeometry(0, 0, TopWidget->width(), TopWidget->height());
+    SecondToolBar = new QToolBar(tr("工具栏2"), SecondWidget); //2.创建工具栏
+    SecondToolBar->setGeometry(0, 0, SecondWidget->width(), SecondWidget->height());
+    SecondToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     MainWindowStatusBar = this->statusBar();    //3.状态栏
 
-    MainWindowToolBar->setStyleSheet("background-color:gray;");
-    MainWindowStatusBar->setStyleSheet("background-color:gray;");
+    MainWindowToolBar->setStyleSheet("background-color:#1E1E1E;");
+    SecondToolBar->setStyleSheet("background-color:#1E1E1E;");
+    MainWindowStatusBar->setStyleSheet("background-color:#1E1E1E;");
 
     FileMenu = new QMenu("文件(&F)");
     EditMenu = new QMenu("编辑(&E)");
@@ -54,6 +68,7 @@ MainWindow::MainWindow(QMainWindow *parent):
     StateLabel = new QLabel("100%",this);
 
     FileCreateAction = new QAction("打开(&O)", this);
+    FileCreateAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/remap.png"));
     //fileCreateAction->setIcon(QIcon(":/ReplicationTool/png/open.png"));
     FileSaveAction = new QAction("保存(&S)",this);
     BaseAction = new QAction("&还原", this);
@@ -107,26 +122,53 @@ MainWindow::MainWindow(QMainWindow *parent):
     CameraMenu->addAction(CloseCameraAction);
     CameraMenu->addAction(TakeCameraPictureAction);
 
-    MainWindowToolBar->addAction(FileCreateAction);
-    MainWindowToolBar->addSeparator();
-    MainWindowToolBar->addAction(SlamAction);
-    MainWindowToolBar->addSeparator();
-    MainWindowToolBar->addAction(ClearAction);
-    MainWindowToolBar->addSeparator();
-    MainWindowToolBar->addAction(VirtualWallAction);
-    MainWindowToolBar->addSeparator();
-    MainWindowToolBar->addAction(LineAction);
-    MainWindowToolBar->addSeparator();
-    MainWindowToolBar->addAction(ChooseAction);
-    MainWindowToolBar->addSeparator();
-    MainWindowToolBar->addWidget(RedToolButton);
-    MainWindowToolBar->addSeparator();
-    MainWindowToolBar->addWidget(GreenToolButton);
-    MainWindowToolBar->addSeparator();
-    MainWindowToolBar->addWidget(BlueToolButton);
-    RedToolButton->setStyleSheet("QToolButton{background-color:rgba(255,0,0,200);width:15px;height:15px}");
-    GreenToolButton->setStyleSheet("QToolButton{background-color:rgba(0,255,0,200);width:15px;height:15px}}");
-    BlueToolButton->setStyleSheet("QToolButton{background-color:rgba(0,0,255,200);width:15px;height:15px}");
+
+    QLabel *ToolLogLable = new QLabel;
+    QImage *img=new QImage; //新建一个image对象
+
+    img->load("/home/boocax/QtCreator/log/Icon/logo.png"); //将图像资源载入对象img，注意路径，可点进图片右键复制路径
+    ToolLogLable->setPixmap(QPixmap::fromImage(*img)); //将图片放入label，使用setPixmap,注意指针*img
+    MainWindowToolBar->addWidget(ToolLogLable);
+    QToolButton *MapSetToolButton = new QToolButton;
+    QToolButton *MapBagToolButton = new QToolButton;
+    QToolButton *FunctionToolButton = new QToolButton;
+    QToolButton *POIToolButton = new QToolButton;
+    QToolButton *OperationLogToolButton = new QToolButton;
+    MapSetToolButton->setText("地图构建");
+    MapSetToolButton->setCheckable(true);
+    MapBagToolButton->setText("地图包");
+    MapBagToolButton->setCheckable(true);
+    FunctionToolButton->setText("功能操作");
+    FunctionToolButton->setCheckable(true);
+    POIToolButton->setText("POI");
+    POIToolButton->setCheckable(true);
+    OperationLogToolButton->setText("操作记录");
+    OperationLogToolButton->setCheckable(true);
+    MainWindowToolBar->addWidget(MapSetToolButton);
+    MainWindowToolBar->addWidget(MapBagToolButton);
+    MainWindowToolBar->addWidget(FunctionToolButton);
+    MainWindowToolBar->addWidget(POIToolButton);
+    MainWindowToolBar->addWidget(OperationLogToolButton);
+//    MainWindowToolBar->addAction(FileCreateAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(SlamAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(ClearAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(VirtualWallAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(LineAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(ChooseAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addWidget(RedToolButton);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addWidget(GreenToolButton);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addWidget(BlueToolButton);
+//    RedToolButton->setStyleSheet("QToolButton{background-color:rgba(255,0,0,200);width:15px;height:15px}");
+//    GreenToolButton->setStyleSheet("QToolButton{background-color:rgba(0,255,0,200);width:15px;height:15px}}");
+//    BlueToolButton->setStyleSheet("QToolButton{background-color:rgba(0,0,255,200);width:15px;height:15px}");
 
     MainWindowStatusBar->addWidget(StateLabel);
     StateLabel->setStyleSheet("background-color: rgba(255, 255, 224, 0%);border:0px;");
@@ -161,6 +203,9 @@ MainWindow::MainWindow(QMainWindow *parent):
     connect(RedToolButton, SIGNAL(clicked()), this, SLOT(onRedClicked()));
     connect(GreenToolButton, SIGNAL(clicked()), this, SLOT(onGreenClicked()));
     connect(BlueToolButton, SIGNAL(clicked()), this, SLOT(onBlueClicked()));
+
+    connect(MapSetToolButton, SIGNAL(clicked()), this, SLOT(onMapSetClicked()));
+    connect(MapBagToolButton, SIGNAL(clicked()), this, SLOT(onMapBagClicked()));
 
 }
 
@@ -647,3 +692,41 @@ void MainWindow::OnRightClicked()
 
   this->update();
 }
+
+
+
+
+void MainWindow::onMapSetClicked()
+{
+    SecondToolBar->clear();
+    NewMapAction = new QAction((tr("&新建地图")), SecondWidget);
+    NewMapAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/newmap.png"));
+
+    AddMapAction = new QAction((tr("&增量构建")), SecondWidget);
+    AddMapAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/zengliang.png"));
+
+    SecondToolBar->addAction(NewMapAction);
+    SecondToolBar->addAction(AddMapAction);
+    //SecondWidget->update();
+}
+
+
+
+void MainWindow::onMapBagClicked()
+{
+    qDebug()<<SecondToolBar->actions().size();
+    SecondToolBar->clear();
+    qDebug()<<SecondToolBar->actions().size();
+    QAction *LoaclCopyAction = new QAction((tr("&新建地图")), SecondWidget);
+    LoaclCopyAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/localbeifen.png"));
+
+    QAction *ServerCopyAction = new QAction((tr("&增量构建")), SecondWidget);
+    ServerCopyAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/fuwuqibeifen.png"));
+
+    SecondToolBar->addAction(LoaclCopyAction);
+    SecondToolBar->addAction(ServerCopyAction);
+
+
+
+}
+

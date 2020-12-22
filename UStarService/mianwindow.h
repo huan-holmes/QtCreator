@@ -33,6 +33,15 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+enum ToolChoose
+{
+    MAPSET,
+    MAPBAG,
+    FUNCTION,
+    POI,
+    LOG,
+};
+
 private :
     QPixmap  Pixmap;
     QPixmap  CrtPixmap;
@@ -47,11 +56,13 @@ private :
     QWidget *SplitterBottomWidget;
     QVBoxLayout *MainVLayout;
     QWidget *TopWidget;
+    QWidget *SecondWidget;
     QWidget *BottomWidget;
 
 
     QMenuBar *MainWindowMenuBar;
     QToolBar *MainWindowToolBar;
+    QToolBar *SecondToolBar;
     QStatusBar *MainWindowStatusBar;
     QMenu *FileMenu;
     QMenu *EditMenu;
@@ -88,6 +99,9 @@ private :
     QToolButton *BlueToolButton;
 
 
+    QAction *NewMapAction;
+    QAction *AddMapAction;
+
 
     QString button_style_;
     float ratio_;              //缩放比例
@@ -111,6 +125,8 @@ private :
     void addPointOfInterest(int x, int y);
 
 
+    ToolChoose choose_;
+
 private slots:
     void    onUpClicked();
     void    onDownClicked();
@@ -128,6 +144,8 @@ private slots:
     void    onBlueClicked();
     void    paintEvent(QPaintEvent *event);
     void    onChooseRobotClicked();
+    void    onMapSetClicked();
+    void    onMapBagClicked();
 
     //void    onOpenCameraClicked();
     //void    onCloseCameraClicked();
