@@ -123,9 +123,61 @@ MainWindow::MainWindow(QMainWindow *parent):
     CameraMenu->addAction(TakeCameraPictureAction);
 
 
+    InitSecondToolBarAction();
+//    MainWindowToolBar->addAction(FileCreateAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(SlamAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(ClearAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(VirtualWallAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(LineAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addAction(ChooseAction);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addWidget(RedToolButton);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addWidget(GreenToolButton);
+//    MainWindowToolBar->addSeparator();
+//    MainWindowToolBar->addWidget(BlueToolButton);
+//    RedToolButton->setStyleSheet("QToolButton{background-color:rgba(255,0,0,200);width:15px;height:15px}");
+//    GreenToolButton->setStyleSheet("QToolButton{background-color:rgba(0,255,0,200);width:15px;height:15px}}");
+//    BlueToolButton->setStyleSheet("QToolButton{background-color:rgba(0,0,255,200);width:15px;height:15px}");
+    MainWindowStatusBar->addWidget(StateLabel);
+    StateLabel->setStyleSheet("background-color: rgba(255, 255, 224, 0%);border:0px;");
+    timer_ = new QTimer(this);
+    MvLabel = new QLabel(SplitterTopWidget);
+    PicLabel = new QLabel(SplitterBottomWidget);
+    MvLabel->resize(MainSplitter->width(), MainSplitter->height() * 0.6);
+    MvLabel->setStyleSheet("background-color:gray;");
+    PicLabel->resize(MainSplitter->width(), MainSplitter->height() * 0.4);
+    PicLabel->setStyleSheet("background-color: #1E1E1E");
+    //connect(timer_, SIGNAL(timeout()), this, SLOT(readCameraFrame());
+    //connect(OpenCameraAction, &QAction::triggered, this, &MainWindow::onOpenCameraClicked);
+    //connect(CloseCameraAction, &QAction::triggered, this, &MainWindow::onCloseCameraClicked);
+    //connect(TakeCameraPictureAction, &QAction::triggered, this, &MainWindow::onTakePictureClicked);
+    connect(FileCreateAction, &QAction::triggered, this, &MainWindow::onOpenClicked);
+    connect(ClearAction, &QAction::triggered, this, &MainWindow::onClearClicked);
+    connect(VirtualWallAction, &QAction::triggered, this, &MainWindow::onVirtualWallClicked);
+    connect(LineAction, &QAction::triggered, this, &MainWindow::onLineClicked);
+    connect(ChooseAction, &QAction::triggered, this, &MainWindow::onChooseRobotClicked);
+    connect(BaseAction, &QAction::triggered, this, &MainWindow::onResetClicked);
+    connect(BigAction, &QAction::triggered, this, &MainWindow::onBigClicked);
+    connect(LittleAction, &QAction::triggered, this, &MainWindow::onLittleClicked);
+    connect(RightAction, &QAction::triggered, this, &MainWindow::OnRightClicked);
+    connect(LeftAction, &QAction::triggered, this, &MainWindow::OnLeftClicked);
+    connect(UpAction, &QAction::triggered, this, &MainWindow::onUpClicked);
+    connect(DownAction, &QAction::triggered, this, &MainWindow::onDownClicked);
+    connect(RedToolButton, SIGNAL(clicked()), this, SLOT(onRedClicked()));
+    connect(GreenToolButton, SIGNAL(clicked()), this, SLOT(onGreenClicked()));
+    connect(BlueToolButton, SIGNAL(clicked()), this, SLOT(onBlueClicked()));
+}
+
+void MainWindow::InitSecondToolBarAction()
+{
     QLabel *ToolLogLable = new QLabel;
     QImage *img=new QImage; //新建一个image对象
-
     img->load("/home/boocax/QtCreator/log/Icon/logo.png"); //将图像资源载入对象img，注意路径，可点进图片右键复制路径
     ToolLogLable->setPixmap(QPixmap::fromImage(*img)); //将图片放入label，使用setPixmap,注意指针*img
     MainWindowToolBar->addWidget(ToolLogLable);
@@ -149,64 +201,52 @@ MainWindow::MainWindow(QMainWindow *parent):
     MainWindowToolBar->addWidget(FunctionToolButton);
     MainWindowToolBar->addWidget(POIToolButton);
     MainWindowToolBar->addWidget(OperationLogToolButton);
-//    MainWindowToolBar->addAction(FileCreateAction);
-//    MainWindowToolBar->addSeparator();
-//    MainWindowToolBar->addAction(SlamAction);
-//    MainWindowToolBar->addSeparator();
-//    MainWindowToolBar->addAction(ClearAction);
-//    MainWindowToolBar->addSeparator();
-//    MainWindowToolBar->addAction(VirtualWallAction);
-//    MainWindowToolBar->addSeparator();
-//    MainWindowToolBar->addAction(LineAction);
-//    MainWindowToolBar->addSeparator();
-//    MainWindowToolBar->addAction(ChooseAction);
-//    MainWindowToolBar->addSeparator();
-//    MainWindowToolBar->addWidget(RedToolButton);
-//    MainWindowToolBar->addSeparator();
-//    MainWindowToolBar->addWidget(GreenToolButton);
-//    MainWindowToolBar->addSeparator();
-//    MainWindowToolBar->addWidget(BlueToolButton);
-//    RedToolButton->setStyleSheet("QToolButton{background-color:rgba(255,0,0,200);width:15px;height:15px}");
-//    GreenToolButton->setStyleSheet("QToolButton{background-color:rgba(0,255,0,200);width:15px;height:15px}}");
-//    BlueToolButton->setStyleSheet("QToolButton{background-color:rgba(0,0,255,200);width:15px;height:15px}");
+    NewMapAction = new QAction((tr("&新建地图")), SecondWidget);
+    NewMapAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/newmap.png"));
+    AddMapAction = new QAction((tr("&增量构建")), SecondWidget);
+    AddMapAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/zengliang.png"));
+    DecorateAction = new QAction((tr("&修饰地图")), SecondWidget);
+    DecorateAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/xiushiditu.png"));
+    VirtualWallSetAction = new QAction((tr("&虚拟墙设置")), SecondWidget);
+    VirtualWallSetAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/virtualWall.png"));
+    LoaclCopyAction = new QAction((tr("&新建地图")), SecondWidget);
+    LoaclCopyAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/localbeifen.png"));
+    ServerCopyAction = new QAction((tr("&增量构建")), SecondWidget);
+    ServerCopyAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/fuwuqibeifen.png"));
+    RobotAction = new QAction((tr("&机器人功能")), SecondWidget);
+    RobotAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/robot.png"));
+    DrawerAction = new QAction((tr("&抽屉挂钩")), SecondWidget);
+    DrawerAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/choutiguagou.png"));
+    CallAction = new QAction((tr("&呼叫电梯")), SecondWidget);
+    CallAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/dianti.png"));
+    RouteAction = new QAction((tr("&行进路线")), SecondWidget);
+    RouteAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/route.png"));
+    ContainerControlAction = new QAction((tr("&货柜控制")), SecondWidget);
+    ContainerControlAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/huoguikongzhi.png"));
+    OrderAction = new QAction((tr("&订单")), SecondWidget);
+    OrderAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/order.png"));
+    LogAction = new QAction((tr("&日志")), SecondWidget);
+    LogAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/log.png"));
 
-    MainWindowStatusBar->addWidget(StateLabel);
-    StateLabel->setStyleSheet("background-color: rgba(255, 255, 224, 0%);border:0px;");
-
-    timer_ = new QTimer(this);
-    MvLabel = new QLabel(SplitterTopWidget);
-    PicLabel = new QLabel(SplitterBottomWidget);
-
-    MvLabel->resize(MainSplitter->width(), MainSplitter->height() * 0.6);
-    MvLabel->setStyleSheet("background-color:gray;");
-
-    PicLabel->resize(MainSplitter->width(), MainSplitter->height() * 0.4);
-    PicLabel->setStyleSheet("background-color: #1E1E1E");
-
-    //connect(timer_, SIGNAL(timeout()), this, SLOT(readCameraFrame());
-    //connect(OpenCameraAction, &QAction::triggered, this, &MainWindow::onOpenCameraClicked);
-    //connect(CloseCameraAction, &QAction::triggered, this, &MainWindow::onCloseCameraClicked);
-    //connect(TakeCameraPictureAction, &QAction::triggered, this, &MainWindow::onTakePictureClicked);
-
-    connect(FileCreateAction, &QAction::triggered, this, &MainWindow::onOpenClicked);
-    connect(ClearAction, &QAction::triggered, this, &MainWindow::onClearClicked);
-    connect(VirtualWallAction, &QAction::triggered, this, &MainWindow::onVirtualWallClicked);
-    connect(LineAction, &QAction::triggered, this, &MainWindow::onLineClicked);
-    connect(ChooseAction, &QAction::triggered, this, &MainWindow::onChooseRobotClicked);
-    connect(BaseAction, &QAction::triggered, this, &MainWindow::onResetClicked);
-    connect(BigAction, &QAction::triggered, this, &MainWindow::onBigClicked);
-    connect(LittleAction, &QAction::triggered, this, &MainWindow::onLittleClicked);
-    connect(RightAction, &QAction::triggered, this, &MainWindow::OnRightClicked);
-    connect(LeftAction, &QAction::triggered, this, &MainWindow::OnLeftClicked);
-    connect(UpAction, &QAction::triggered, this, &MainWindow::onUpClicked);
-    connect(DownAction, &QAction::triggered, this, &MainWindow::onDownClicked);
-    connect(RedToolButton, SIGNAL(clicked()), this, SLOT(onRedClicked()));
-    connect(GreenToolButton, SIGNAL(clicked()), this, SLOT(onGreenClicked()));
-    connect(BlueToolButton, SIGNAL(clicked()), this, SLOT(onBlueClicked()));
-
+    RoomPointAction = new QAction((tr("&房间点")), SecondWidget);
+    RoomPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/blue.png"));
+    GoalPointAction = new QAction((tr("&目标点")), SecondWidget);
+    GoalPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/yellow.png"));
+    DeceleratePointAction = new QAction((tr("&减速点")), SecondWidget);
+    DeceleratePointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/red.png"));
+    ChargePointAction = new QAction((tr("&充电点")), SecondWidget);
+    ChargePointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/green.png"));
+    LiftPointAction = new QAction((tr("&电梯点")), SecondWidget);
+    LiftPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/white.png"));
+    SecondToolBar->addAction(NewMapAction);
+    SecondToolBar->addAction(AddMapAction);
+    SecondToolBar->addAction(DecorateAction);
+    SecondToolBar->addAction(VirtualWallSetAction);
     connect(MapSetToolButton, SIGNAL(clicked()), this, SLOT(onMapSetClicked()));
     connect(MapBagToolButton, SIGNAL(clicked()), this, SLOT(onMapBagClicked()));
-
+    connect(FunctionToolButton, SIGNAL(clicked()), this, SLOT(onFunctionClicked()));
+    connect(POIToolButton, SIGNAL(clicked()), this, SLOT(onPOIClicked()));
+    connect(OperationLogToolButton, SIGNAL(clicked()), this, SLOT(onOperationClicked()));
 }
 
 bool MainWindow::event(QEvent * event)
@@ -699,14 +739,23 @@ void MainWindow::OnRightClicked()
 void MainWindow::onMapSetClicked()
 {
     SecondToolBar->clear();
-    NewMapAction = new QAction((tr("&新建地图")), SecondWidget);
-    NewMapAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/newmap.png"));
+    SecondToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+//    NewMapAction = new QAction((tr("&新建地图")), SecondWidget);
+//    NewMapAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/newmap.png"));
 
-    AddMapAction = new QAction((tr("&增量构建")), SecondWidget);
-    AddMapAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/zengliang.png"));
+//    AddMapAction = new QAction((tr("&增量构建")), SecondWidget);
+//    AddMapAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/zengliang.png"));
+
+//    DecorateAction = new QAction((tr("&修饰地图")), SecondWidget);
+//    DecorateAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/xiushiditu.png"));
+
+//    VirtualWallSetAction = new QAction((tr("&虚拟墙设置")), SecondWidget);
+//    VirtualWallSetAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/virtualWall.png"));
 
     SecondToolBar->addAction(NewMapAction);
     SecondToolBar->addAction(AddMapAction);
+    SecondToolBar->addAction(DecorateAction);
+    SecondToolBar->addAction(VirtualWallSetAction);
     //SecondWidget->update();
 }
 
@@ -714,14 +763,10 @@ void MainWindow::onMapSetClicked()
 
 void MainWindow::onMapBagClicked()
 {
-    qDebug()<<SecondToolBar->actions().size();
-    SecondToolBar->clear();
-    qDebug()<<SecondToolBar->actions().size();
-    QAction *LoaclCopyAction = new QAction((tr("&新建地图")), SecondWidget);
-    LoaclCopyAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/localbeifen.png"));
 
-    QAction *ServerCopyAction = new QAction((tr("&增量构建")), SecondWidget);
-    ServerCopyAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/fuwuqibeifen.png"));
+    SecondToolBar->clear();
+
+    SecondToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     SecondToolBar->addAction(LoaclCopyAction);
     SecondToolBar->addAction(ServerCopyAction);
@@ -730,3 +775,81 @@ void MainWindow::onMapBagClicked()
 
 }
 
+void MainWindow::onFunctionClicked()
+{
+    SecondToolBar->clear();
+    SecondToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    SecondToolBar->addAction(RobotAction);
+    SecondToolBar->addAction(DrawerAction);
+    SecondToolBar->addAction(CallAction);
+    SecondToolBar->addAction(RouteAction);
+    SecondToolBar->addAction(ContainerControlAction);
+    SecondToolBar->addAction(OrderAction);
+    SecondToolBar->addAction(LogAction);
+
+}
+
+void MainWindow::onPOIClicked()
+{
+    SecondToolBar->clear();
+    SecondToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    ToolStoreyLable = new QLabel;
+    ToolStoreyLable->setText("当前楼层:");
+    StoreyComboBox = new QComboBox;
+    StoreyComboBox->setStyleSheet("QComboBox { min-width: 24px; }");
+    StoreyComboBox->addItem("1F");
+    StoreyComboBox->addItem("2F");
+    StoreyComboBox->addItem("3F");
+    StoreyComboBox->addItem("4F");
+    StoreyComboBox->addItem("5F");
+    StoreyComboBox->addItem("6F");
+
+    SecondToolBar->addWidget(ToolStoreyLable);
+    SecondToolBar->addWidget(StoreyComboBox);
+    SecondToolBar->addAction(RoomPointAction);
+    SecondToolBar->addAction(GoalPointAction);
+    SecondToolBar->addAction(DeceleratePointAction);
+    SecondToolBar->addAction(ChargePointAction);
+    SecondToolBar->addAction(LiftPointAction);
+}
+
+void MainWindow::onOperationClicked()
+{
+
+    SecondToolBar->clear();
+    UserNameLabel = new QLabel;
+    QLabel *loginTimeLabel = new QLabel;
+    loginTimeLabel->setText("登录时间: ");
+    QLabel *endTimeLabel = new QLabel;
+    endTimeLabel->setText("至：");
+    UserNameLabel->setText("用户名:");
+    UserNameLineEdit = new QLineEdit;
+    UserNameLineEdit->setStyleSheet("QLineEdit { min-width: 120px; max-width: 120px}");
+    UserNameLineEdit->setPlaceholderText(tr("请输入用户名!"));
+    QDateTimeEdit *startDateEdit = new QDateTimeEdit(QDate::currentDate(), this);
+    startDateEdit->setStyleSheet("QDateTimeEdit { min-width: 120px; max-width: 120px; min-height: 30};");
+    startDateEdit->setMinimumDate(QDate::currentDate().addDays(-365));  // -365天
+    startDateEdit->setMaximumDate(QDate::currentDate().addDays(365));  // +365天
+    startDateEdit->setCalendarPopup(true);  // 日历弹出
+
+    QDateTimeEdit *endDateEdit = new QDateTimeEdit(QDate::currentDate(), this);
+    endDateEdit->setStyleSheet("QDateTimeEdit { min-width: 120px; max-width: 120px; min-height: 30};");
+    endDateEdit->setMinimumDate(QDate::currentDate().addDays(-365));  // -365天
+    endDateEdit->setMaximumDate(QDate::currentDate().addDays(365));  // +365天
+    endDateEdit->setCalendarPopup(true);  // 日历弹出
+
+    QToolButton *searchToolButton = new QToolButton;
+    searchToolButton->setText(tr("查询"));
+    searchToolButton->setStyleSheet("QToolButton {background-color:#FFFFC8; color: black};");
+    SecondToolBar->addWidget(UserNameLabel);
+    SecondToolBar->addWidget(UserNameLineEdit);
+    SecondToolBar->addWidget(loginTimeLabel);
+    SecondToolBar->addWidget(startDateEdit);
+    SecondToolBar->addWidget(endTimeLabel);
+    SecondToolBar->addWidget(endDateEdit);
+    SecondToolBar->addWidget(searchToolButton);
+
+
+
+
+}

@@ -29,6 +29,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <cv.h>
+#include <QTimeEdit>
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -101,6 +102,26 @@ private :
 
     QAction *NewMapAction;
     QAction *AddMapAction;
+    QAction *DecorateAction;
+    QAction *VirtualWallSetAction;
+    QAction *LoaclCopyAction;
+    QAction *ServerCopyAction;
+    QAction *RobotAction;
+    QAction *DrawerAction;
+    QAction *CallAction;
+    QAction *RouteAction;
+    QAction *ContainerControlAction;
+    QAction *OrderAction;
+    QAction *LogAction;
+    QLabel *ToolStoreyLable;
+    QAction *RoomPointAction;
+    QComboBox *StoreyComboBox;
+    QAction *GoalPointAction;
+    QAction *DeceleratePointAction;
+    QAction *ChargePointAction;
+    QAction *LiftPointAction;
+    QLabel *UserNameLabel;
+    QLineEdit *UserNameLineEdit;
 
 
     QString button_style_;
@@ -124,6 +145,8 @@ private :
     void resetVirtualWallState();
     void addPointOfInterest(int x, int y);
 
+    void InitSecondToolBarAction();
+
 
     ToolChoose choose_;
 
@@ -146,6 +169,9 @@ private slots:
     void    onChooseRobotClicked();
     void    onMapSetClicked();
     void    onMapBagClicked();
+    void    onFunctionClicked();
+    void    onPOIClicked();
+    void    onOperationClicked();
 
     //void    onOpenCameraClicked();
     //void    onCloseCameraClicked();
