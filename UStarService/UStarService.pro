@@ -17,13 +17,17 @@ SOURCES += main.cpp\
     gridline.cpp \
     loginform.cpp \
     robot.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    paint.cpp \
+    operationwidget.cpp
 
 HEADERS  += \
     gridline.h \
     loginform.h \
     robot.h \
-    mianwindow.h
+    mianwindow.h \
+    paint.h \
+    operationwidget.h
 
 FORMS    +=
 
