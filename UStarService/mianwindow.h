@@ -30,6 +30,7 @@
 #include <QVBoxLayout>
 #include <cv.h>
 #include <QTimeEdit>
+#include <QDockWidget>
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
