@@ -17,6 +17,7 @@ public:
 
 private slots:
     void    onMapBagClicked();
+    void    onFunctionClicked();
 private:
     QVBoxLayout *MainVLayout;
     QWidget *MVLFirstWidget;
@@ -28,8 +29,20 @@ private:
     QToolBar *SecondToolBar;
 
     QToolButton *MapBagToolButton;
+    QAction *LocalImportAction;
+    QAction *ServerImportAction;
     QAction *LoaclCopyAction;
     QAction *ServerCopyAction;
+    QToolButton *FunctionToolButton;
+    QAction *RobotAction;
+    QAction *DrawerAction;
+    QAction *CallAction;
+    QAction *RouteAction;
+    QAction *ContainerControlAction;
+    QAction *OrderAction;
+    QAction *LogAction;
+    QAction *AbnormalPushAction;
+
 
 
 
