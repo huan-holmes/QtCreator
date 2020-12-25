@@ -18,7 +18,7 @@ OperationWidget::OperationWidget(QWidget *parent):
     MVLSecondWidget->setGeometry(0, MVLFirstWidget->height(), width(), 60);
     MVLSecondWidget->setStyleSheet("background-color:gray;color:#FFFFFF;max-height: 60px;min-height: 60px;");
     MVLThirdWidget->setGeometry(0, MVLFirstWidget->height() + MVLSecondWidget->height(), width(), height() - MVLFirstWidget->height() - MVLFirstWidget->height() -30);
-    MVLThirdWidget->setStyleSheet("background-color:#1E1E1E;color:#FFFFFF;border:1px solid gray;");
+    MVLThirdWidget->setStyleSheet("background-color:#1E1E1E;color:#FFFFFF;border:1px solid gray;min-height: 890px; min-width: 1200");
     MVLFourthWidget->setGeometry(0, MVLFirstWidget->height() + MVLSecondWidget->height() + MVLThirdWidget->height(), width(), 30);
     MVLFourthWidget->setStyleSheet("background-color:#1E1E1E;color:#FFFFFF;max-height: 30px;min-height: 30px;border:1px solid gray;");
     this->setLayout(MainVLayout);
@@ -29,6 +29,9 @@ OperationWidget::OperationWidget(QWidget *parent):
     //SecondToolBar->setStyleSheet("QToolBar{border:1px solid gray;}");
     SecondToolBar->setGeometry(0, 0, MVLSecondWidget->width(), MVLSecondWidget->height());
     InitToolBarAction();
+    connect(LocalImportAction, &QAction::triggered, this, &OperationWidget::onLocalImportClicked);
+    connect(MapBagToolButton, SIGNAL(clicked()), this, SLOT(onMapBagClicked()));
+    connect(FunctionToolButton, SIGNAL(clicked()), this, SLOT(onFunctionClicked()));
 }
 void OperationWidget::InitToolBarAction()
 {
@@ -68,8 +71,16 @@ void OperationWidget::InitToolBarAction()
     AbnormalPushAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/log.png"));
 
     onMapBagClicked();
-    connect(MapBagToolButton, SIGNAL(clicked()), this, SLOT(onMapBagClicked()));
-    connect(FunctionToolButton, SIGNAL(clicked()), this, SLOT(onFunctionClicked()));
+    InitPaint();
+
+}
+void OperationWidget::InitPaint()
+{
+    qDebug()<<"----InitPaint()----";
+    qDebug()<<MVLThirdWidget->width();
+    qDebug()<<MVLThirdWidget->height();
+    paint_ = new Paint(MVLThirdWidget);
+    paint_->setPaintRect(MVLThirdWidget->width(), MVLThirdWidget->height());
 }
 void OperationWidget::onMapBagClicked()
 {
@@ -81,6 +92,7 @@ void OperationWidget::onMapBagClicked()
     SecondToolBar->addAction(ServerImportAction);
     SecondToolBar->addAction(LoaclCopyAction);
     SecondToolBar->addAction(ServerCopyAction);
+
 }
 
 void OperationWidget::onFunctionClicked()
@@ -99,5 +111,15 @@ void OperationWidget::onFunctionClicked()
     SecondToolBar->addAction(LogAction);
     SecondToolBar->addAction(AbnormalPushAction);
 
+
+}
+
+void OperationWidget::onLocalImportClicked()
+{
+    QString str = QFileDialog::getOpenFileName(this,
+                                               "Please choose an Image file",
+                                               "",
+                                               "Image Files(*.jpg *.png *.bmp *.pgm *.pbm);;All(*.*)");
+    paint_->showImage(str);
 
 }

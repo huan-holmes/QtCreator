@@ -6,6 +6,7 @@
 #include <QToolButton>
 #include <QAction>
 #include <QDebug>
+#include <QFileDialog>
 #include "paint.h"
 
 class OperationWidget : public QWidget
@@ -14,10 +15,15 @@ class OperationWidget : public QWidget
 public:
     explicit OperationWidget(QWidget *parent = 0);
     void InitToolBarAction();
+    void InitPaint();
 
 private slots:
     void    onMapBagClicked();
     void    onFunctionClicked();
+    void    onLocalImportClicked();
+
+public:
+    Paint *paint_;
 private:
     QVBoxLayout *MainVLayout;
     QWidget *MVLFirstWidget;

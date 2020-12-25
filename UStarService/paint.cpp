@@ -421,3 +421,28 @@ void Paint::addPointOfInterest(int x, int y)
     action_ = Paint::Reset;
     this->update();
 }
+
+void Paint::setPaintRect(int width, int height)
+{
+    qDebug()<<width;
+    qDebug()<<height;
+    paintRect_ = QRect(0, 0, width, height);
+}
+void Paint::showImage(QString str)
+{
+    if(!str.isNull())
+    {
+       QImage frame;
+       frame.load(str);
+       qDebug()<<frame.depth()<<endl;
+       image_ = frame.convertToFormat(QImage::Format_RGBA8888);
+       pixmap_ = pixmap_.fromImage(image_);
+       crtPixmap_ = pixmap_;
+       pix_width_ = image_.width();            //图片宽
+       pix_height_ = image_.height();           //图片高
+       qDebug()<<str<<pix_width_<<pix_height_;
+       //this->setWindowTitle("图片浏览器("+str+")");
+
+       onResetClicked();
+    }
+}

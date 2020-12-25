@@ -22,6 +22,9 @@ public:
 
     void resetVirtualWallState();
     void addPointOfInterest(int x, int y);
+    void setPaintRect(int width, int height);
+    void showImage(QString str);
+    //void onResetClicked();
 public:
     enum  Type {
         None = 0,
