@@ -1,7 +1,16 @@
 #include "paint.h"
 
 Paint::Paint(QWidget *parent):
-    QWidget(parent)
+    QWidget(parent),
+    clear_flag_(false),
+    line_flag_(false),
+    virtual_wall_flag_(0),
+    virtual_wall_x1_(0),
+    virtual_wall_y1_(0),
+    virtual_wall_x2_(0),
+    virtual_wall_y2_(0),
+    button_style_(""),
+    allOffset_(0,0)
 {
     paintRect_ = QRect(0, 0, width(), height());
     ratio_= 1.0;             //初始化图片缩放比例

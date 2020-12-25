@@ -4,7 +4,18 @@ OperationWidget::OperationWidget(QWidget *parent):
 {
     this->setGeometry(300, 30, 1200, 1000);
     this->setStyleSheet("background-color:#1E1E1E;");
+    createView();
+    InitToolBarAction();
+    connect(LocalImportAction, &QAction::triggered, this, &OperationWidget::onLocalImportClicked);
+    connect(MapBagToolButton, SIGNAL(clicked()), this, SLOT(onMapBagClicked()));
+    connect(FunctionToolButton, SIGNAL(clicked()), this, SLOT(onFunctionClicked()));
+}
+void OperationWidget::createView()
+{
     MainVLayout = new QVBoxLayout(this);
+    MainVLayout->setMargin(0);
+    MainVLayout->setSpacing(0);
+    this->setLayout(MainVLayout);
     MVLFirstWidget = new QWidget(this);
     MVLSecondWidget = new QWidget(this);
     MVLThirdWidget = new QWidget(this);
@@ -13,31 +24,28 @@ OperationWidget::OperationWidget(QWidget *parent):
     MainVLayout->addWidget(MVLSecondWidget);
     MainVLayout->addWidget(MVLThirdWidget);
     MainVLayout->addWidget(MVLFourthWidget);
-    MVLFirstWidget->setGeometry(0, 0, width(), 30);
-    MVLFirstWidget->setStyleSheet("background-color:gray;color:#FFFFFF;max-height: 30px;min-height: 30px;");
-    MVLSecondWidget->setGeometry(0, MVLFirstWidget->height(), width(), 60);
-    MVLSecondWidget->setStyleSheet("background-color:gray;color:#FFFFFF;max-height: 60px;min-height: 60px;");
-    MVLThirdWidget->setGeometry(0, MVLFirstWidget->height() + MVLSecondWidget->height(), width(), height() - MVLFirstWidget->height() - MVLFirstWidget->height() -30);
-    MVLThirdWidget->setStyleSheet("background-color:#1E1E1E;color:#FFFFFF;border:1px solid gray;min-height: 890px; min-width: 1200");
-    MVLFourthWidget->setGeometry(0, MVLFirstWidget->height() + MVLSecondWidget->height() + MVLThirdWidget->height(), width(), 30);
-    MVLFourthWidget->setStyleSheet("background-color:#1E1E1E;color:#FFFFFF;max-height: 30px;min-height: 30px;border:1px solid gray;");
-    this->setLayout(MainVLayout);
+    MVLFirstWidget->setFixedHeight(height() * 0.03);
+    MVLSecondWidget->setFixedHeight(height() * 0.06);
+    MVLThirdWidget->setFixedHeight(height() * 0.88);
+    MVLFourthWidget->setFixedHeight(height() * 0.03);
+    MVLFirstWidget->setFixedWidth(width());
+    MVLSecondWidget->setFixedWidth(width());
+    MVLThirdWidget->setFixedWidth(width());
+    MVLFourthWidget->setFixedWidth(width());
+    MVLFirstWidget->setStyleSheet("QWidget{color:#FFFFFF;}");
+    MVLSecondWidget->setStyleSheet("QWidget{color:#FFFFFF;}");
+    MVLFourthWidget->setStyleSheet("QWidget{color:#FFFFFF;}");
     FirstToolBar = new QToolBar(tr("工具栏1"), MVLFirstWidget);
-    //FirstToolBar->setStyleSheet("QToolBar{border:1px solid gray;}");
-    FirstToolBar->setGeometry(0, 0, MVLFirstWidget->width(), MVLFirstWidget->height());
+    FirstToolBar->resize(MVLFirstWidget->width(), MVLFirstWidget->height());
     SecondToolBar = new QToolBar(tr("工具栏2"), MVLSecondWidget);
-    //SecondToolBar->setStyleSheet("QToolBar{border:1px solid gray;}");
-    SecondToolBar->setGeometry(0, 0, MVLSecondWidget->width(), MVLSecondWidget->height());
-    InitToolBarAction();
-    connect(LocalImportAction, &QAction::triggered, this, &OperationWidget::onLocalImportClicked);
-    connect(MapBagToolButton, SIGNAL(clicked()), this, SLOT(onMapBagClicked()));
-    connect(FunctionToolButton, SIGNAL(clicked()), this, SLOT(onFunctionClicked()));
+    SecondToolBar->resize(MVLSecondWidget->width(), MVLSecondWidget->height());
 }
 void OperationWidget::InitToolBarAction()
 {
 
-    MapBagToolButton = new QToolButton(this);
+    MapBagToolButton = new QToolButton(MVLFirstWidget);
     MapBagToolButton->setText("地图包");
+    MapBagToolButton->setStyleSheet("QToolButoon{color:#FFFFFF;border: 1px solid gray;}");
     MapBagToolButton->setCheckable(true);
     FirstToolBar->addWidget(MapBagToolButton);
     LocalImportAction = new QAction(tr("&本地导入"), MVLSecondWidget);
@@ -49,7 +57,7 @@ void OperationWidget::InitToolBarAction()
     ServerCopyAction = new QAction(tr("&增量构建"), MVLSecondWidget);
     ServerCopyAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/fuwuqibeifen.png"));
 
-    FunctionToolButton = new QToolButton(this);
+    FunctionToolButton = new QToolButton(MVLFirstWidget);
     FunctionToolButton->setText("功能操作");
     FunctionToolButton->setCheckable(true);
     FirstToolBar->addWidget(FunctionToolButton);
@@ -77,9 +85,8 @@ void OperationWidget::InitToolBarAction()
 void OperationWidget::InitPaint()
 {
     qDebug()<<"----InitPaint()----";
-    qDebug()<<MVLThirdWidget->width();
-    qDebug()<<MVLThirdWidget->height();
     paint_ = new Paint(MVLThirdWidget);
+    paint_->resize(MVLThirdWidget->width(), MVLThirdWidget->height());
     paint_->setPaintRect(MVLThirdWidget->width(), MVLThirdWidget->height());
 }
 void OperationWidget::onMapBagClicked()

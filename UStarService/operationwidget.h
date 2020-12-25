@@ -16,6 +16,8 @@ public:
     explicit OperationWidget(QWidget *parent = 0);
     void InitToolBarAction();
     void InitPaint();
+    void createView();
+
 
 private slots:
     void    onMapBagClicked();
