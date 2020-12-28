@@ -6,8 +6,8 @@ LoginForm::LoginForm(QDialog *parent) :
 {
     //设置窗体标题
     this->setStyleSheet("background-color:#1E1E1E;");
-    this->setMaximumSize(600, 450);
-    this->setMinimumSize(600, 450);
+    this->setMaximumSize(608, 735);
+    this->setMinimumSize(608, 735);
     this->setWindowTitle(tr("欢迎使用优智达"));
 
     logo_label_ = new QLabel(this);
@@ -15,40 +15,67 @@ LoginForm::LoginForm(QDialog *parent) :
     logo_ = new QImage();
 
     logo_label_->setScaledContents(true);
-    logo_label_->resize(300, 100);
-    logo_label_->move(150, 50);
-    logo_->load("/home/boocax/QtCreator/log/IMG_0080.JPG");
+    logo_label_->resize(155, 207);
+    logo_label_->move(227, 87);
+    logo_->load("/home/boocax/QtCreator/log/Icon/logo2.png");
     logo_label_->setPixmap(QPixmap::fromImage(*logo_));
 
+    DescriptionLabel1 = new QLabel(this);
+    DescriptionLabel1->setGeometry(214, 334, 180, 50);
+    DescriptionLabel1->setText("优智达运维");
+    QFont font1("Microsoft YaHei", 25, 75);
+    DescriptionLabel1->setFont(font1);
+    DescriptionLabel1->setAlignment(Qt::AlignCenter);
+    DescriptionLabel1->setStyleSheet("color: #FFFFFF;");
+    DescriptionLabel2 = new QLabel(this);
+    DescriptionLabel2->setGeometry(214, 396, 180, 28);
+    DescriptionLabel2->setText("全国领先的运维软件");
+    QFont font2("Microsoft ChangGuiTi", 15);
+    DescriptionLabel2->setFont(font2);
+    DescriptionLabel2->setAlignment(Qt::AlignCenter);
+    DescriptionLabel2->setStyleSheet("color: #FFFFFF;");
     //用户名Label
     userNameLbl = new QLabel(this);   //new一个标签对象
-    userNameLbl->move(195,180);         //移动到(70,80)位置(Label左上角坐标，相对于父窗体)
+    userNameLbl->setGeometry(166, 453, 48, 22);
     userNameLbl->setText("用户名:");  //设置标签文本
+    userNameLbl->setAlignment(Qt::AlignCenter);
 
     //用户名输入框
     userNameLEd = new QLineEdit(this);
-    userNameLEd->move(245,180);
+    userNameLEd->setGeometry(225, 448, 200, 32);
     userNameLEd->setPlaceholderText(tr("请输入用户名!"));//占位符
 
     //密码Label
     pwdLbl = new QLabel(this);
-    pwdLbl->move(210,230);
+    pwdLbl->setGeometry(179, 508, 32, 22);
     pwdLbl->setText("密码:");
 
     //密码输入框
     pwdLEd = new QLineEdit(this);
-    pwdLEd->move(245,230);
+    pwdLEd->setGeometry(225, 503, 200, 32);
     pwdLEd->setPlaceholderText("请输入密码!");
     pwdLEd->setEchoMode(QLineEdit::Password);//输入的密码以圆点显示
 
+    PWDCheckBox = new QCheckBox(this);
+    PWDCheckBox->setGeometry(225, 563, 16, 16);
+
+    RememberLabel = new QLabel(this);
+    RememberLabel->setGeometry(245, 559, 60, 22);
+    RememberLabel->setText("记住密码");
+
+    ForgetLabel = new QLabel(this);
+    ForgetLabel->setGeometry(358, 559, 60, 22);
+    ForgetLabel->setText("<u>忘记密码</u>");
     //登录按钮
     loginBtn = new QPushButton(this);
-    loginBtn->move(185,320);
-    loginBtn->setText("登录");
+    loginBtn->setGeometry(225, 605, 72, 32);
+    loginBtn->setText("提交");
+    loginBtn->setStyleSheet("background-color: #FFE4AD;");
 
     //退出按钮
     exitBtn = new QPushButton(this);
-    exitBtn->move(345,320);
+    exitBtn->setGeometry(355, 605, 72, 32);
+    exitBtn->setStyleSheet("background-color: #FFE4AD;");
     exitBtn->setText("退出");
 
     //单击登录按钮时 执行 LoginForm::login 槽函数(自定义)；单击退出按钮时 执行 LoginForm::close 槽函数(窗体的关闭函数，不用自己写)

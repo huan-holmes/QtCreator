@@ -8,7 +8,9 @@ OperationWidget::OperationWidget(QWidget *parent):
     InitToolBarAction();
     connect(LocalImportAction, &QAction::triggered, this, &OperationWidget::onLocalImportClicked);
     connect(MapBagToolButton, SIGNAL(clicked()), this, SLOT(onMapBagClicked()));
+    connect(POIToolButton, SIGNAL(clicked()), this, SLOT(onPOIClicked()));
     connect(FunctionToolButton, SIGNAL(clicked()), this, SLOT(onFunctionClicked()));
+    connect(OperationLogToolButton, SIGNAL(clicked()), this, SLOT(onOperationClicked()));
 }
 void OperationWidget::createView()
 {
@@ -57,6 +59,22 @@ void OperationWidget::InitToolBarAction()
     ServerCopyAction = new QAction(tr("&增量构建"), MVLSecondWidget);
     ServerCopyAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/fuwuqibeifen.png"));
 
+    POIToolButton = new QToolButton(MVLFirstWidget);
+    POIToolButton->setText("POI");
+    POIToolButton->setCheckable(true);
+    FirstToolBar->addWidget(POIToolButton);
+    RoomPointAction = new QAction((tr("&房间点")), MVLSecondWidget);
+    RoomPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/blue.png"));
+    GoalPointAction = new QAction((tr("&目标点")), MVLSecondWidget);
+    GoalPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/yellow.png"));
+    DeceleratePointAction = new QAction((tr("&减速点")), MVLSecondWidget);
+    DeceleratePointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/red.png"));
+    ChargePointAction = new QAction((tr("&充电点")), MVLSecondWidget);
+    ChargePointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/green.png"));
+    LiftPointAction = new QAction((tr("&电梯点")), MVLSecondWidget);
+    LiftPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/white.png"));
+
+
     FunctionToolButton = new QToolButton(MVLFirstWidget);
     FunctionToolButton->setText("功能操作");
     FunctionToolButton->setCheckable(true);
@@ -78,6 +96,11 @@ void OperationWidget::InitToolBarAction()
     AbnormalPushAction = new QAction((tr("&异常推送")), MVLSecondWidget);
     AbnormalPushAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/log.png"));
 
+    OperationLogToolButton = new QToolButton();
+    OperationLogToolButton->setText("操作记录");
+    OperationLogToolButton->setCheckable(true);
+    FirstToolBar->addWidget(OperationLogToolButton);
+
     onMapBagClicked();
     InitPaint();
 
@@ -92,7 +115,9 @@ void OperationWidget::InitPaint()
 void OperationWidget::onMapBagClicked()
 {
     MapBagToolButton->setChecked(true);
+    POIToolButton->setChecked(false);
     FunctionToolButton->setChecked(false);
+    OperationLogToolButton->setChecked(false);
     SecondToolBar->clear();
     SecondToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     SecondToolBar->addAction(LocalImportAction);
@@ -101,12 +126,41 @@ void OperationWidget::onMapBagClicked()
     SecondToolBar->addAction(ServerCopyAction);
 
 }
+void OperationWidget::onPOIClicked()
+{
+    MapBagToolButton->setChecked(false);
+    POIToolButton->setChecked(true);
+    FunctionToolButton->setChecked(false);
+    OperationLogToolButton->setChecked(false);
+    SecondToolBar->clear();
+    SecondToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    ToolStoreyLable = new QLabel;
+    ToolStoreyLable->setText("当前楼层:");
+    StoreyComboBox = new QComboBox;
+    StoreyComboBox->setStyleSheet("QComboBox { min-width: 24px; }");
+    StoreyComboBox->addItem("1F");
+    StoreyComboBox->addItem("2F");
+    StoreyComboBox->addItem("3F");
+    StoreyComboBox->addItem("4F");
+    StoreyComboBox->addItem("5F");
+    StoreyComboBox->addItem("6F");
+
+    SecondToolBar->addWidget(ToolStoreyLable);
+    SecondToolBar->addWidget(StoreyComboBox);
+    SecondToolBar->addAction(RoomPointAction);
+    SecondToolBar->addAction(GoalPointAction);
+    SecondToolBar->addAction(DeceleratePointAction);
+    SecondToolBar->addAction(ChargePointAction);
+    SecondToolBar->addAction(LiftPointAction);
+}
 
 void OperationWidget::onFunctionClicked()
 {
 
     MapBagToolButton->setChecked(false);
+    POIToolButton->setChecked(false);
     FunctionToolButton->setChecked(true);
+    OperationLogToolButton->setChecked(false);
     SecondToolBar->clear();
     SecondToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     SecondToolBar->addAction(RobotAction);
@@ -117,9 +171,48 @@ void OperationWidget::onFunctionClicked()
     SecondToolBar->addAction(OrderAction);
     SecondToolBar->addAction(LogAction);
     SecondToolBar->addAction(AbnormalPushAction);
-
-
 }
+
+void OperationWidget::onOperationClicked()
+{
+    MapBagToolButton->setChecked(false);
+    POIToolButton->setChecked(false);
+    FunctionToolButton->setChecked(false);
+    OperationLogToolButton->setChecked(true);
+    SecondToolBar->clear();
+    UserNameLabel = new QLabel;
+    QLabel *loginTimeLabel = new QLabel;
+    loginTimeLabel->setText("登录时间: ");
+    QLabel *endTimeLabel = new QLabel;
+    endTimeLabel->setText("至：");
+    UserNameLabel->setText("用户名:");
+    UserNameLineEdit = new QLineEdit;
+    UserNameLineEdit->setStyleSheet("QLineEdit { min-width: 120px; max-width: 120px}");
+    UserNameLineEdit->setPlaceholderText(tr("请输入用户名!"));
+    QDateTimeEdit *startDateEdit = new QDateTimeEdit(QDate::currentDate(), this);
+    startDateEdit->setStyleSheet("QDateTimeEdit { min-width: 120px; max-width: 120px; min-height: 30};");
+    startDateEdit->setMinimumDate(QDate::currentDate().addDays(-365));  // -365天
+    startDateEdit->setMaximumDate(QDate::currentDate().addDays(365));  // +365天
+    startDateEdit->setCalendarPopup(true);  // 日历弹出
+
+    QDateTimeEdit *endDateEdit = new QDateTimeEdit(QDate::currentDate(), this);
+    endDateEdit->setStyleSheet("QDateTimeEdit { min-width: 120px; max-width: 120px; min-height: 30};");
+    endDateEdit->setMinimumDate(QDate::currentDate().addDays(-365));  // -365天
+    endDateEdit->setMaximumDate(QDate::currentDate().addDays(365));  // +365天
+    endDateEdit->setCalendarPopup(true);  // 日历弹出
+
+    QToolButton *searchToolButton = new QToolButton;
+    searchToolButton->setText(tr("查询"));
+    searchToolButton->setStyleSheet("QToolButton {background-color:#FFFFC8; color: black};");
+    SecondToolBar->addWidget(UserNameLabel);
+    SecondToolBar->addWidget(UserNameLineEdit);
+    SecondToolBar->addWidget(loginTimeLabel);
+    SecondToolBar->addWidget(startDateEdit);
+    SecondToolBar->addWidget(endTimeLabel);
+    SecondToolBar->addWidget(endDateEdit);
+    SecondToolBar->addWidget(searchToolButton);
+}
+
 
 void OperationWidget::onLocalImportClicked()
 {

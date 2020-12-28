@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_OperationWidget_t {
-    QByteArrayData data[5];
-    char stringdata0[72];
+    QByteArrayData data[7];
+    char stringdata0[104];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,12 +32,15 @@ static const qt_meta_stringdata_OperationWidget_t qt_meta_stringdata_OperationWi
 QT_MOC_LITERAL(0, 0, 15), // "OperationWidget"
 QT_MOC_LITERAL(1, 16, 15), // "onMapBagClicked"
 QT_MOC_LITERAL(2, 32, 0), // ""
-QT_MOC_LITERAL(3, 33, 17), // "onFunctionClicked"
-QT_MOC_LITERAL(4, 51, 20) // "onLocalImportClicked"
+QT_MOC_LITERAL(3, 33, 12), // "onPOIClicked"
+QT_MOC_LITERAL(4, 46, 17), // "onFunctionClicked"
+QT_MOC_LITERAL(5, 64, 18), // "onOperationClicked"
+QT_MOC_LITERAL(6, 83, 20) // "onLocalImportClicked"
 
     },
     "OperationWidget\0onMapBagClicked\0\0"
-    "onFunctionClicked\0onLocalImportClicked"
+    "onPOIClicked\0onFunctionClicked\0"
+    "onOperationClicked\0onLocalImportClicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -47,7 +50,7 @@ static const uint qt_meta_data_OperationWidget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -55,11 +58,15 @@ static const uint qt_meta_data_OperationWidget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   29,    2, 0x08 /* Private */,
-       3,    0,   30,    2, 0x08 /* Private */,
-       4,    0,   31,    2, 0x08 /* Private */,
+       1,    0,   39,    2, 0x08 /* Private */,
+       3,    0,   40,    2, 0x08 /* Private */,
+       4,    0,   41,    2, 0x08 /* Private */,
+       5,    0,   42,    2, 0x08 /* Private */,
+       6,    0,   43,    2, 0x08 /* Private */,
 
  // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -74,8 +81,10 @@ void OperationWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->onMapBagClicked(); break;
-        case 1: _t->onFunctionClicked(); break;
-        case 2: _t->onLocalImportClicked(); break;
+        case 1: _t->onPOIClicked(); break;
+        case 2: _t->onFunctionClicked(); break;
+        case 3: _t->onOperationClicked(); break;
+        case 4: _t->onLocalImportClicked(); break;
         default: ;
         }
     }
@@ -107,13 +116,13 @@ int OperationWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 5)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 3;
+        _id -= 5;
     }
     return _id;
 }

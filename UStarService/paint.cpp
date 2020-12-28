@@ -15,6 +15,34 @@ Paint::Paint(QWidget *parent):
     paintRect_ = QRect(0, 0, width(), height());
     ratio_= 1.0;             //初始化图片缩放比例
     action_ = Paint::None;
+    BigButton = new QPushButton(this);
+    BigButton->setGeometry(2, 50, 40, 40);
+    //BigButton->setStyleSheet("QPushButton{background-image:url(:/home/boocax/QtCreator/log/Icon/big2.png);background-position:center;}");
+    BigButton->setStyleSheet("border:1px dotted white;");
+    BigButton->setFlat(true);
+    BigButton->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/big2.png"));
+
+    LittleButton = new QPushButton(this);
+    LittleButton->setGeometry(2, 100, 40, 40);
+    LittleButton->setStyleSheet("border:1px dotted white;");
+    LittleButton->setFlat(true);
+    LittleButton->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/small2.png"));
+
+    RotateButton = new QPushButton(this);
+    RotateButton->setGeometry(2, 150, 40, 40);
+    RotateButton->setStyleSheet("border:1px dotted white;");
+    RotateButton->setFlat(true);
+    RotateButton->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/rotate2.png"));
+
+    ResetButton = new QPushButton(this);
+    ResetButton->setGeometry(2, 200, 40, 40);
+    ResetButton->setStyleSheet("border:1px dotted white;");
+    ResetButton->setFlat(true);
+    ResetButton->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/move2.png"));
+    connect(BigButton, SIGNAL(clicked()), this, SLOT(onBigClicked()));
+    connect(LittleButton, SIGNAL(clicked()), this, SLOT(onLittleClicked()));
+    connect(RotateButton, SIGNAL(clicked()), this, SLOT(onRotateClicked()));
+    connect(ResetButton, SIGNAL(clicked()), this, SLOT(onResetClicked()));
 }
 
 bool Paint::event(QEvent * event)
@@ -297,6 +325,12 @@ void Paint::onDownClicked()
   offset_.setY(20);
   this->update();
 }
+void Paint::onRotateClicked()
+{
+
+  this->update();
+}
+
 void Paint::onResetClicked()
 {
   action_=Paint::Reset;

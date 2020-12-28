@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QPaintEvent>
 #include <QDebug>
+#include <QPushButton>
 #include "gridline.h"
 
 
@@ -42,7 +43,11 @@ public:
         Style,
         ChooseRobot,
     };
-
+public:
+    QPushButton *BigButton;
+    QPushButton *LittleButton;
+    QPushButton *RotateButton;
+    QPushButton *ResetButton;
 
 private:
     QPixmap  pixmap_;
@@ -68,6 +73,7 @@ private slots:
     void    paintEvent(QPaintEvent *event);
     void    onUpClicked();
     void    onDownClicked();
+    void    onRotateClicked();
     void    onResetClicked();
     void    OnLeftClicked();
     void    OnRightClicked();

@@ -8,6 +8,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QDir>
+#include <QCheckBox>
 class LoginForm : public QDialog
 {
     Q_OBJECT //使用信号与槽需要的宏
@@ -27,6 +28,11 @@ private:
     QPushButton *exitBtn;        //退出按钮
     QLabel *logo_label_;
     QImage *logo_;
+    QLabel *DescriptionLabel1;
+    QLabel *DescriptionLabel2;
+    QCheckBox *PWDCheckBox;
+    QLabel *RememberLabel;
+    QLabel *ForgetLabel;
 };
 
 #endif // LOGINFORM_H

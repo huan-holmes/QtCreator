@@ -7,6 +7,11 @@
 #include <QAction>
 #include <QDebug>
 #include <QFileDialog>
+#include <QLabel>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QDate>
+#include <QDateTimeEdit>
 #include "paint.h"
 
 class OperationWidget : public QWidget
@@ -21,7 +26,9 @@ public:
 
 private slots:
     void    onMapBagClicked();
+    void    onPOIClicked();
     void    onFunctionClicked();
+    void    onOperationClicked();
     void    onLocalImportClicked();
 
 public:
@@ -41,6 +48,14 @@ private:
     QAction *ServerImportAction;
     QAction *LoaclCopyAction;
     QAction *ServerCopyAction;
+    QToolButton *POIToolButton;
+    QLabel *ToolStoreyLable;
+    QAction *RoomPointAction;
+    QComboBox *StoreyComboBox;
+    QAction *GoalPointAction;
+    QAction *DeceleratePointAction;
+    QAction *ChargePointAction;
+    QAction *LiftPointAction;
     QToolButton *FunctionToolButton;
     QAction *RobotAction;
     QAction *DrawerAction;
@@ -50,6 +65,10 @@ private:
     QAction *OrderAction;
     QAction *LogAction;
     QAction *AbnormalPushAction;
+    QToolButton *OperationLogToolButton;
+    QLabel *UserNameLabel;
+    QLineEdit *UserNameLineEdit;
+
 
 
 

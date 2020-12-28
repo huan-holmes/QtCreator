@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Paint_t {
-    QByteArrayData data[15];
-    char stringdata0[186];
+    QByteArrayData data[16];
+    char stringdata0[202];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,21 +36,22 @@ QT_MOC_LITERAL(3, 18, 12), // "QPaintEvent*"
 QT_MOC_LITERAL(4, 31, 5), // "event"
 QT_MOC_LITERAL(5, 37, 11), // "onUpClicked"
 QT_MOC_LITERAL(6, 49, 13), // "onDownClicked"
-QT_MOC_LITERAL(7, 63, 14), // "onResetClicked"
-QT_MOC_LITERAL(8, 78, 13), // "OnLeftClicked"
-QT_MOC_LITERAL(9, 92, 14), // "OnRightClicked"
-QT_MOC_LITERAL(10, 107, 15), // "onLittleClicked"
-QT_MOC_LITERAL(11, 123, 12), // "onBigClicked"
-QT_MOC_LITERAL(12, 136, 14), // "onClearClicked"
-QT_MOC_LITERAL(13, 151, 13), // "onLineClicked"
-QT_MOC_LITERAL(14, 165, 20) // "onVirtualWallClicked"
+QT_MOC_LITERAL(7, 63, 15), // "onRotateClicked"
+QT_MOC_LITERAL(8, 79, 14), // "onResetClicked"
+QT_MOC_LITERAL(9, 94, 13), // "OnLeftClicked"
+QT_MOC_LITERAL(10, 108, 14), // "OnRightClicked"
+QT_MOC_LITERAL(11, 123, 15), // "onLittleClicked"
+QT_MOC_LITERAL(12, 139, 12), // "onBigClicked"
+QT_MOC_LITERAL(13, 152, 14), // "onClearClicked"
+QT_MOC_LITERAL(14, 167, 13), // "onLineClicked"
+QT_MOC_LITERAL(15, 181, 20) // "onVirtualWallClicked"
 
     },
     "Paint\0paintEvent\0\0QPaintEvent*\0event\0"
-    "onUpClicked\0onDownClicked\0onResetClicked\0"
-    "OnLeftClicked\0OnRightClicked\0"
-    "onLittleClicked\0onBigClicked\0"
-    "onClearClicked\0onLineClicked\0"
+    "onUpClicked\0onDownClicked\0onRotateClicked\0"
+    "onResetClicked\0OnLeftClicked\0"
+    "OnRightClicked\0onLittleClicked\0"
+    "onBigClicked\0onClearClicked\0onLineClicked\0"
     "onVirtualWallClicked"
 };
 #undef QT_MOC_LITERAL
@@ -61,7 +62,7 @@ static const uint qt_meta_data_Paint[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -69,20 +70,22 @@ static const uint qt_meta_data_Paint[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   69,    2, 0x08 /* Private */,
-       5,    0,   72,    2, 0x08 /* Private */,
-       6,    0,   73,    2, 0x08 /* Private */,
-       7,    0,   74,    2, 0x08 /* Private */,
-       8,    0,   75,    2, 0x08 /* Private */,
-       9,    0,   76,    2, 0x08 /* Private */,
-      10,    0,   77,    2, 0x08 /* Private */,
-      11,    0,   78,    2, 0x08 /* Private */,
-      12,    0,   79,    2, 0x08 /* Private */,
-      13,    0,   80,    2, 0x08 /* Private */,
-      14,    0,   81,    2, 0x08 /* Private */,
+       1,    1,   74,    2, 0x08 /* Private */,
+       5,    0,   77,    2, 0x08 /* Private */,
+       6,    0,   78,    2, 0x08 /* Private */,
+       7,    0,   79,    2, 0x08 /* Private */,
+       8,    0,   80,    2, 0x08 /* Private */,
+       9,    0,   81,    2, 0x08 /* Private */,
+      10,    0,   82,    2, 0x08 /* Private */,
+      11,    0,   83,    2, 0x08 /* Private */,
+      12,    0,   84,    2, 0x08 /* Private */,
+      13,    0,   85,    2, 0x08 /* Private */,
+      14,    0,   86,    2, 0x08 /* Private */,
+      15,    0,   87,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -106,14 +109,15 @@ void Paint::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         case 0: _t->paintEvent((*reinterpret_cast< QPaintEvent*(*)>(_a[1]))); break;
         case 1: _t->onUpClicked(); break;
         case 2: _t->onDownClicked(); break;
-        case 3: _t->onResetClicked(); break;
-        case 4: _t->OnLeftClicked(); break;
-        case 5: _t->OnRightClicked(); break;
-        case 6: _t->onLittleClicked(); break;
-        case 7: _t->onBigClicked(); break;
-        case 8: _t->onClearClicked(); break;
-        case 9: _t->onLineClicked(); break;
-        case 10: _t->onVirtualWallClicked(); break;
+        case 3: _t->onRotateClicked(); break;
+        case 4: _t->onResetClicked(); break;
+        case 5: _t->OnLeftClicked(); break;
+        case 6: _t->OnRightClicked(); break;
+        case 7: _t->onLittleClicked(); break;
+        case 8: _t->onBigClicked(); break;
+        case 9: _t->onClearClicked(); break;
+        case 10: _t->onLineClicked(); break;
+        case 11: _t->onVirtualWallClicked(); break;
         default: ;
         }
     }
@@ -144,13 +148,13 @@ int Paint::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 12;
     }
     return _id;
 }
