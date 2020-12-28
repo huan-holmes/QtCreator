@@ -11,6 +11,12 @@ OperationWidget::OperationWidget(QWidget *parent):
     connect(POIToolButton, SIGNAL(clicked()), this, SLOT(onPOIClicked()));
     connect(FunctionToolButton, SIGNAL(clicked()), this, SLOT(onFunctionClicked()));
     connect(OperationLogToolButton, SIGNAL(clicked()), this, SLOT(onOperationClicked()));
+    connect(RoomPointAction, &QAction::triggered, this, &OperationWidget::onRoomPointClicked);
+    connect(GoalPointAction, &QAction::triggered, this, &OperationWidget::onGoalPointClicked);
+    connect(DeceleratePointAction, &QAction::triggered, this, &OperationWidget::onDeceleratePointClicked);
+    connect(ChargePointAction, &QAction::triggered, this, &OperationWidget::onChargePointClicked);
+    connect(LiftPointAction, &QAction::triggered, this, &OperationWidget::onLiftPointClicked);
+    connect(OtherPointAction, &QAction::triggered, this, &OperationWidget::onOtherPointClicked);
 }
 void OperationWidget::createView()
 {
@@ -73,6 +79,8 @@ void OperationWidget::InitToolBarAction()
     ChargePointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/green.png"));
     LiftPointAction = new QAction((tr("&电梯点")), MVLSecondWidget);
     LiftPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/white.png"));
+    OtherPointAction = new QAction((tr("&电梯点")), MVLSecondWidget);
+    OtherPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/yellow.png"));
 
 
     FunctionToolButton = new QToolButton(MVLFirstWidget);
@@ -152,6 +160,7 @@ void OperationWidget::onPOIClicked()
     SecondToolBar->addAction(DeceleratePointAction);
     SecondToolBar->addAction(ChargePointAction);
     SecondToolBar->addAction(LiftPointAction);
+    SecondToolBar->addAction(OtherPointAction);
 }
 
 void OperationWidget::onFunctionClicked()
@@ -222,4 +231,41 @@ void OperationWidget::onLocalImportClicked()
                                                "Image Files(*.jpg *.png *.bmp *.pgm *.pbm);;All(*.*)");
     paint_->showImage(str);
 
+}
+void OperationWidget::onRoomPointClicked()
+{
+    button_style_ = "blue";
+    paint_->setPOIPointStyle(button_style_);
+    qDebug()<<button_style_;
+}
+
+void OperationWidget::onGoalPointClicked()
+{
+    button_style_ = "yellow";
+    paint_->setPOIPointStyle(button_style_);
+    qDebug()<<button_style_;
+}
+void OperationWidget::onDeceleratePointClicked()
+{
+    button_style_ = "red";
+    paint_->setPOIPointStyle(button_style_);
+    qDebug()<<button_style_;
+}
+void OperationWidget::onChargePointClicked()
+{
+    button_style_ = "green";
+    paint_->setPOIPointStyle(button_style_);
+    qDebug()<<button_style_;
+}
+void OperationWidget::onLiftPointClicked()
+{
+    button_style_ = "gray";
+    paint_->setPOIPointStyle(button_style_);
+    qDebug()<<button_style_;
+}
+void OperationWidget::onOtherPointClicked()
+{
+    button_style_ = "goldyellow";
+    paint_->setPOIPointStyle(button_style_);
+    qDebug()<<button_style_;
 }

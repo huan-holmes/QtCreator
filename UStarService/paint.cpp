@@ -451,6 +451,22 @@ void Paint::addPointOfInterest(int x, int y)
     {
         qrgb = qRgb(0, 0, 255);
     }
+    if (button_style_ == "yellow")
+    {
+        qrgb = qRgb(255, 255, 0);
+    }
+    if (button_style_ == "red")
+    {
+        qrgb = qRgb(255, 0, 0);
+    }
+    if (button_style_ == "gray")
+    {
+        qrgb = qRgb(112, 128, 144);
+    }
+    if (button_style_ == "goldyellow")
+    {
+        qrgb = qRgb(218, 165, 32);
+    }
     for (int i = -1; i < 2; i++)
     {
         for (int j = -1; j < 2; j++)
@@ -488,4 +504,9 @@ void Paint::showImage(QString str)
 
        onResetClicked();
     }
+}
+
+void Paint::setPOIPointStyle(QString str)
+{
+    button_style_ = str;
 }

@@ -25,6 +25,7 @@ public:
     void addPointOfInterest(int x, int y);
     void setPaintRect(int width, int height);
     void showImage(QString str);
+    void setPOIPointStyle(QString str);
     //void onResetClicked();
 public:
     enum  Type {

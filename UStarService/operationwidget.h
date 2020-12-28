@@ -30,9 +30,17 @@ private slots:
     void    onFunctionClicked();
     void    onOperationClicked();
     void    onLocalImportClicked();
+    void    onRoomPointClicked();
+    void    onGoalPointClicked();
+    void    onDeceleratePointClicked();
+    void    onChargePointClicked();
+    void    onLiftPointClicked();
+    void    onOtherPointClicked();
 
 public:
     Paint *paint_;
+
+    QString button_style_;
 private:
     QVBoxLayout *MainVLayout;
     QWidget *MVLFirstWidget;
@@ -56,6 +64,7 @@ private:
     QAction *DeceleratePointAction;
     QAction *ChargePointAction;
     QAction *LiftPointAction;
+    QAction *OtherPointAction;
     QToolButton *FunctionToolButton;
     QAction *RobotAction;
     QAction *DrawerAction;
