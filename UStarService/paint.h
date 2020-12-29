@@ -7,6 +7,7 @@
 #include <QPaintEvent>
 #include <QDebug>
 #include <QPushButton>
+#include <QColor>
 #include "gridline.h"
 
 
@@ -26,6 +27,9 @@ public:
     void setPaintRect(int width, int height);
     void showImage(QString str);
     void setPOIPointStyle(QString str);
+    void changeVirtualWallState();
+    void changeVirtualWallStateAbnormal();
+    void setVirtualWallColor(QColor color);
     //void onResetClicked();
 public:
     enum  Type {
@@ -70,6 +74,7 @@ private:
     int virtual_wall_y1_;
     int virtual_wall_x2_;
     int virtual_wall_y2_;
+    QRgb virtual_color_;
 private slots:
     void    paintEvent(QPaintEvent *event);
     void    onUpClicked();

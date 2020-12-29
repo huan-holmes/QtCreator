@@ -9,33 +9,35 @@ Paint::Paint(QWidget *parent):
     virtual_wall_y1_(0),
     virtual_wall_x2_(0),
     virtual_wall_y2_(0),
+    virtual_color_(qRgb(0, 0, 0)),
     button_style_(""),
     allOffset_(0,0)
 {
+
     paintRect_ = QRect(0, 0, width(), height());
     ratio_= 1.0;             //初始化图片缩放比例
     action_ = Paint::None;
     BigButton = new QPushButton(this);
-    BigButton->setGeometry(2, 50, 40, 40);
+    BigButton->setGeometry(2, 60, 40, 40);
     //BigButton->setStyleSheet("QPushButton{background-image:url(:/home/boocax/QtCreator/log/Icon/big2.png);background-position:center;}");
     BigButton->setStyleSheet("border:1px dotted white;");
     BigButton->setFlat(true);
     BigButton->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/big2.png"));
 
     LittleButton = new QPushButton(this);
-    LittleButton->setGeometry(2, 100, 40, 40);
+    LittleButton->setGeometry(2, 110, 40, 40);
     LittleButton->setStyleSheet("border:1px dotted white;");
     LittleButton->setFlat(true);
     LittleButton->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/small2.png"));
 
     RotateButton = new QPushButton(this);
-    RotateButton->setGeometry(2, 150, 40, 40);
+    RotateButton->setGeometry(2, 160, 40, 40);
     RotateButton->setStyleSheet("border:1px dotted white;");
     RotateButton->setFlat(true);
     RotateButton->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/rotate2.png"));
 
     ResetButton = new QPushButton(this);
-    ResetButton->setGeometry(2, 200, 40, 40);
+    ResetButton->setGeometry(2, 210, 40, 40);
     ResetButton->setStyleSheet("border:1px dotted white;");
     ResetButton->setFlat(true);
     ResetButton->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/move2.png"));
@@ -159,7 +161,7 @@ bool Paint::event(QEvent * event)
                     {
                         for(int j = -1; j < 1; j++)
                         {
-                            image_.setPixel((mouse->x()-paintRect_.x() - (paintRect_.width()/2-ratio_*pix_width_/2))/ratio_ - allOffset_.x() / ratio_ +i, (mouse->y()-paintRect_.y()-(paintRect_.height()/2-ratio_*pix_height_/2))/ratio_ -allOffset_.y() / ratio_+ j, qRgb(0, 0, 0));
+                            image_.setPixel((mouse->x()-paintRect_.x() - (paintRect_.width()/2-ratio_*pix_width_/2))/ratio_ - allOffset_.x() / ratio_ +i, (mouse->y()-paintRect_.y()-(paintRect_.height()/2-ratio_*pix_height_/2))/ratio_ -allOffset_.y() / ratio_+ j, virtual_color_);
                         }
 
                     }
@@ -431,7 +433,7 @@ void Paint::drawLine(std::vector<int> line_xs, std::vector<int> line_ys)
     {
         for(int j = -1; j <= 1; j++)
         {
-            image_.setPixel(line_xs[i+j], line_ys[i], qRgb(0, 0, 0));
+            image_.setPixel(line_xs[i+j], line_ys[i], virtual_color_);
         }
     }
     pixmap_ = pixmap_.fromImage(image_);
@@ -509,4 +511,44 @@ void Paint::showImage(QString str)
 void Paint::setPOIPointStyle(QString str)
 {
     button_style_ = str;
+}
+void Paint::changeVirtualWallState()
+{
+    virtual_wall_x1_ = 0;
+    virtual_wall_y1_ = 0;
+    virtual_wall_x2_ = 0;
+    virtual_wall_y2_ = 0;
+    action_=Paint::VirtualWall;
+    if (virtual_wall_flag_ == 0)
+    {
+        virtual_wall_flag_ = 1;
+        QApplication::setOverrideCursor(Qt::PointingHandCursor);
+    }
+    else
+    {
+        virtual_wall_flag_ = 0;
+        QApplication::setOverrideCursor(Qt::ArrowCursor);
+    }
+
+    this->update();
+}
+void Paint::changeVirtualWallStateAbnormal()
+{
+    resetVirtualWallState();
+    action_=Paint::Line;
+    if(line_flag_)
+    {
+        line_flag_ = false;
+    }
+    else
+    {
+        QApplication::setOverrideCursor(Qt::SizeBDiagCursor);
+        line_flag_ = true;
+
+    }
+    this->update();
+}
+void Paint::setVirtualWallColor(QColor color)
+{
+    virtual_color_ = qRgb(color.red(), color.green(), color.blue());
 }

@@ -261,10 +261,9 @@ void MappingWidget::onVirtualWallClicked()
     qDebug()<<"----onVirtualWallClicked()----";
 //    VirtualWallDockWindow vwdw(MVLThirdWidget);
     QDockWidget *vwdw;
-    vwdw = new VirtualWallDockWidget(MVLThirdWidget);
-    vwdw->setGeometry(42, 50, 300, 200);
-    //vwdw->resize(300, 200);
-    vwdw->setStyleSheet("background-color:white;");
+    vwdw = new VirtualWallDockWidget(MVLThirdWidget, paint_);
+    vwdw->setGeometry(43, 30, 300, 200);
+    vwdw->setStyleSheet("background-color:#1F1F1F;");
     vwdw->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable);//设置停靠窗口特性，可移动，可关闭
     vwdw->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);//设置可停靠区域为主窗口左边和右边
     vwdw->show();
