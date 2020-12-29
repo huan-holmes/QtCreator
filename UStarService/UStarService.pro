@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     mainwindow.cpp \
     paint.cpp \
     operationwidget.cpp \
-    mappingwidget.cpp
+    mappingwidget.cpp \
+    virtualwalldockwidget.cpp
 
 HEADERS  += \
     gridline.h \
@@ -29,7 +30,8 @@ HEADERS  += \
     mianwindow.h \
     paint.h \
     operationwidget.h \
-    mappingwidget.h
+    mappingwidget.h \
+    virtualwalldockwidget.h
 
 FORMS    +=
 

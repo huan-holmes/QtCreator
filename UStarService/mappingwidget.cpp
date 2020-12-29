@@ -19,6 +19,7 @@ MappingWidget::MappingWidget(QWidget *parent):
     connect(ChargePointAction, &QAction::triggered, this, &MappingWidget::onChargePointClicked);
     connect(LiftPointAction, &QAction::triggered, this, &MappingWidget::onLiftPointClicked);
     connect(OtherPointAction, &QAction::triggered, this, &MappingWidget::onOtherPointClicked);
+    connect(VirtualWallAction, &QAction::triggered, this, &MappingWidget::onVirtualWallClicked);
 }
 void MappingWidget::createView()
 {
@@ -254,4 +255,17 @@ void MappingWidget::onOtherPointClicked()
     button_style_ = "goldyellow";
     paint_->setPOIPointStyle(button_style_);
     qDebug()<<button_style_;
+}
+void MappingWidget::onVirtualWallClicked()
+{
+    qDebug()<<"----onVirtualWallClicked()----";
+//    VirtualWallDockWindow vwdw(MVLThirdWidget);
+    QDockWidget *vwdw;
+    vwdw = new VirtualWallDockWidget(MVLThirdWidget);
+    vwdw->setGeometry(42, 50, 300, 200);
+    //vwdw->resize(300, 200);
+    vwdw->setStyleSheet("background-color:white;");
+    vwdw->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable);//设置停靠窗口特性，可移动，可关闭
+    vwdw->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);//设置可停靠区域为主窗口左边和右边
+    vwdw->show();
 }

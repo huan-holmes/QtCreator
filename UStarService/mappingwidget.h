@@ -12,7 +12,10 @@
 #include <QLineEdit>
 #include <QDate>
 #include <QDateTimeEdit>
+#include <QDockWidget>
+#include <QTextEdit>
 #include "paint.h"
+#include "virtualwalldockwidget.h"
 
 class MappingWidget : public QWidget
 {
@@ -36,6 +39,7 @@ private slots:
     void    onChargePointClicked();
     void    onLiftPointClicked();
     void    onOtherPointClicked();
+    void    onVirtualWallClicked();
 
 public:
     Paint *paint_;
