@@ -1,5 +1,5 @@
-#ifndef OPERATIONWIDGET_H
-#define OPERATIONWIDGET_H
+#ifndef MAPPINGWIDGET_H
+#define MAPPINGWIDGET_H
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QToolBar>
@@ -14,22 +14,21 @@
 #include <QDateTimeEdit>
 #include "paint.h"
 
-class OperationWidget : public QWidget
+class MappingWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit OperationWidget(QWidget *parent = 0);
+    explicit MappingWidget(QWidget *parent = 0);
     void InitToolBarAction();
     void InitPaint();
     void createView();
 
-
 private slots:
+    void    onMappingClicked();
     void    onMapBagClicked();
     void    onPOIClicked();
-    void    onFunctionClicked();
-    void    onOperationClicked();
+    void    onOperationLogClicked();
     void    onLocalImportClicked();
     void    onRoomPointClicked();
     void    onGoalPointClicked();
@@ -52,6 +51,11 @@ private:
     QToolBar *FirstToolBar;
     QToolBar *SecondToolBar;
 
+    QToolButton *MappingToolButton;
+    QAction *NewMapAction;
+    QAction *ModifyMappingAction;
+    QAction *DecorateAction;
+    QAction *VirtualWallAction;
     QToolButton *MapBagToolButton;
     QAction *LocalImportAction;
     QAction *ServerImportAction;
@@ -66,15 +70,6 @@ private:
     QAction *ChargePointAction;
     QAction *LiftPointAction;
     QAction *OtherPointAction;
-    QToolButton *FunctionToolButton;
-    QAction *RobotAction;
-    QAction *DrawerAction;
-    QAction *CallAction;
-    QAction *RouteAction;
-    QAction *ContainerControlAction;
-    QAction *OrderAction;
-    QAction *LogAction;
-    QAction *AbnormalPushAction;
     QToolButton *OperationLogToolButton;
     QLabel *UserNameLabel;
     QLineEdit *UserNameLineEdit;
@@ -82,6 +77,10 @@ private:
     QLineEdit *StartTimeLineEdit;
     QLabel *EndTimeLabel;
     QLineEdit *EndTimeLineEdit;
+    QToolButton *SearchToolButton;
+
 };
-#endif // OPERATIONWIDGET_H
+
+
+#endif // MAPPINGWIDGET_H
 

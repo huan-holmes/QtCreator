@@ -14,6 +14,7 @@ class LoginForm : public QDialog
     Q_OBJECT //使用信号与槽需要的宏
 public:
     explicit LoginForm(QDialog *parent = 0);  //explicit 防止歧义
+    void writeLog(QString str);
 
 signals:
 

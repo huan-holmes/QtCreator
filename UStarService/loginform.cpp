@@ -92,42 +92,49 @@ void LoginForm::login()
     //tr()函数，防止设置中文时乱码
     if(userNameLEd->text().trimmed() == tr("ustar") && pwdLEd->text() == tr("ustar123"))
     {
-        QDateTime dTime;
-        QTime time;
-        QDate date;
-        dTime.setTime(time.currentTime());
-        dTime.setDate(date.currentDate());
-        QString currentDate = dTime.toString("yyyy:MM:dd:hh:mm:ss");
-        qDebug()<<currentDate;
-        QString data_file = "/home/boocax/QtCreator/log";
-        QDir dir_;
-        bool exist = dir_.exists(data_file);
-        if(!exist)
-        {
+//        QDateTime dTime;
+//        QTime time;
+//        QDate date;
+//        dTime.setTime(time.currentTime());
+//        dTime.setDate(date.currentDate());
+//        QString currentDate = dTime.toString("yyyy:MM:dd:hh:mm:ss");
+//        qDebug()<<currentDate;
+//        QString data_file = "/home/boocax/QtCreator/log";
+//        QDir dir_;
+//        bool exist = dir_.exists(data_file);
+//        if(!exist)
+//        {
 
-            bool isok = dir_.mkdir(data_file); // 新建文件夹
+//            bool isok = dir_.mkdir(data_file); // 新建文件夹
 
-                if(!isok)
+//                if(!isok)
 
-                    QMessageBox::warning(this,"sdf","can't mkdir",QMessageBox::Yes);
+//                    QMessageBox::warning(this,"sdf","can't mkdir",QMessageBox::Yes);
 
-        }
-        QString fileName = data_file+"/"+"login.txt";
-        QFile file(fileName);
-        if(!file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append))
+//        }
+//        QString fileName = data_file+"/"+"login.txt";
+//        QFile file(fileName);
+//        if(!file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append))
 
-        {
+//        {
 
-            QMessageBox::warning(this,"sdf","can't open",QMessageBox::Yes);
+//            QMessageBox::warning(this,"sdf","can't open",QMessageBox::Yes);
 
-        }
+//        }
 
-        QTextStream stream(&file);
+//        QTextStream stream(&file);
 
-        stream<<currentDate+":"+"ustar"<<"\n";
+//        stream<<currentDate+":"+"ustar"<<"\n";
 
-        file.close();
-        accept();//关闭窗体，并设置返回值为Accepted
+//        file.close();
+        writeLog(userNameLEd->text().trimmed());
+        //accept();//关闭窗体，并设置返回值为Accepted
+        done(1);
+    }
+    else if(userNameLEd->text().trimmed() == tr("ustar123") && pwdLEd->text() == tr("ustar123"))
+    {
+        writeLog(userNameLEd->text().trimmed());
+        done(2);
     }
     else
     {                              //标题              内容                OK按钮
@@ -141,3 +148,42 @@ void LoginForm::login()
        userNameLEd->setFocus();
     }
 }
+void LoginForm::writeLog(QString str)
+{
+    QDateTime dTime;
+    QTime time;
+    QDate date;
+    dTime.setTime(time.currentTime());
+    dTime.setDate(date.currentDate());
+    QString currentDate = dTime.toString("yyyy:MM:dd:hh:mm:ss");
+    qDebug()<<currentDate;
+    QString data_file = "/home/boocax/QtCreator/log";
+    QDir dir_;
+    bool exist = dir_.exists(data_file);
+    if(!exist)
+    {
+
+        bool isok = dir_.mkdir(data_file); // 新建文件夹
+
+            if(!isok)
+
+                QMessageBox::warning(this,"sdf","can't mkdir",QMessageBox::Yes);
+
+    }
+    QString fileName = data_file+"/"+"login.txt";
+    QFile file(fileName);
+    if(!file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append))
+
+    {
+
+        QMessageBox::warning(this,"sdf","can't open",QMessageBox::Yes);
+
+    }
+
+    QTextStream stream(&file);
+
+    stream<<currentDate+":"+str<<"\n";
+
+    file.close();
+}
+

@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     robot.cpp \
     mainwindow.cpp \
     paint.cpp \
-    operationwidget.cpp
+    operationwidget.cpp \
+    mappingwidget.cpp
 
 HEADERS  += \
     gridline.h \
@@ -27,7 +28,8 @@ HEADERS  += \
     robot.h \
     mianwindow.h \
     paint.h \
-    operationwidget.h
+    operationwidget.h \
+    mappingwidget.h
 
 FORMS    +=
 
