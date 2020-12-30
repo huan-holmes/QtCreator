@@ -34,6 +34,10 @@ private:
     QCheckBox *PWDCheckBox;
     QLabel *RememberLabel;
     QLabel *ForgetLabel;
+    QCheckBox *MapCheckBox;
+    QLabel *MapLabel;
+    QCheckBox *OperationCheckBox;
+    QLabel *OperationLabel;
 };
 
 #endif // LOGINFORM_H

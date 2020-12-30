@@ -21,15 +21,15 @@ LoginForm::LoginForm(QDialog *parent) :
     logo_label_->setPixmap(QPixmap::fromImage(*logo_));
 
     DescriptionLabel1 = new QLabel(this);
-    DescriptionLabel1->setGeometry(214, 334, 180, 50);
-    DescriptionLabel1->setText("优智达运维");
+    DescriptionLabel1->setGeometry(212, 334, 199, 50);
+    DescriptionLabel1->setText("优智达机器人");
     QFont font1("Microsoft YaHei", 25, 75);
     DescriptionLabel1->setFont(font1);
     DescriptionLabel1->setAlignment(Qt::AlignCenter);
     DescriptionLabel1->setStyleSheet("color: #FFFFFF;");
     DescriptionLabel2 = new QLabel(this);
-    DescriptionLabel2->setGeometry(214, 396, 180, 28);
-    DescriptionLabel2->setText("全国领先的运维软件");
+    DescriptionLabel2->setGeometry(190, 396, 240, 28);
+    DescriptionLabel2->setText("全国领先的机器人管理软件");
     QFont font2("Microsoft ChangGuiTi", 15);
     DescriptionLabel2->setFont(font2);
     DescriptionLabel2->setAlignment(Qt::AlignCenter);
@@ -77,6 +77,18 @@ LoginForm::LoginForm(QDialog *parent) :
     exitBtn->setGeometry(355, 605, 72, 32);
     exitBtn->setStyleSheet("background-color: #FFE4AD;");
     exitBtn->setText("退出");
+
+    MapCheckBox = new QCheckBox(this);
+    MapCheckBox->setGeometry(355, 670, 16, 16);
+    MapLabel = new QLabel(this);
+    MapLabel->setGeometry(375, 665, 60, 22);
+    MapLabel->setText("建图人员");
+
+    OperationCheckBox = new QCheckBox(this);
+    OperationCheckBox->setGeometry(443, 670, 16, 16);
+    OperationLabel = new QLabel(this);
+    OperationLabel->setGeometry(463, 665, 60, 22);
+    OperationLabel->setText("运维人员");
 
     //单击登录按钮时 执行 LoginForm::login 槽函数(自定义)；单击退出按钮时 执行 LoginForm::close 槽函数(窗体的关闭函数，不用自己写)
     connect(loginBtn,&QPushButton::clicked,this,&LoginForm::login);

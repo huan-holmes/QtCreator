@@ -4,6 +4,7 @@ OperationWidget::OperationWidget(QWidget *parent):
 {
     this->setGeometry(300, 30, 1200, 1000);
     this->setStyleSheet("background-color:#1E1E1E;");
+    this->setWindowTitle("优智达运维");
     createView();
     InitToolBarAction();
     onMapBagClicked();
