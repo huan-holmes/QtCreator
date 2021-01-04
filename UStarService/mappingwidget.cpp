@@ -9,6 +9,7 @@ MappingWidget::MappingWidget(QWidget *parent):
     InitToolBarAction();
     onMappingClicked();
     InitPaint();
+    InitVideoDockWidget();
     connect(MappingToolButton, SIGNAL(clicked()), this, SLOT(onMappingClicked()));
     connect(MapBagToolButton, SIGNAL(clicked()), this, SLOT(onMapBagClicked()));
     connect(POIToolButton, SIGNAL(clicked()), this, SLOT(onPOIClicked()));
@@ -21,6 +22,7 @@ MappingWidget::MappingWidget(QWidget *parent):
     connect(LiftPointAction, &QAction::triggered, this, &MappingWidget::onLiftPointClicked);
     connect(OtherPointAction, &QAction::triggered, this, &MappingWidget::onOtherPointClicked);
     connect(VirtualWallAction, &QAction::triggered, this, &MappingWidget::onVirtualWallClicked);
+    connect(IPChangeAction,  &QAction::triggered, this, &MappingWidget::onIPChangeClicked);
 }
 void MappingWidget::createView()
 {
@@ -99,11 +101,45 @@ void MappingWidget::InitToolBarAction()
     OtherPointAction = new QAction((tr("&其他点")), MVLSecondWidget);
     OtherPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/yellow.png"));
 
-    OperationLogToolButton = new QToolButton();
+    OperationLogToolButton = new QToolButton(MVLFirstWidget);
     OperationLogToolButton->setText("操作记录");
     OperationLogToolButton->setCheckable(true);
     FirstToolBar->addWidget(OperationLogToolButton);
 
+    QWidget* spacer = new QWidget();
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    FirstToolBar->addWidget(spacer);
+
+    IPChangeAction = new QAction(MVLFirstWidget);
+    IPChangeAction->setText("  切换IP");
+    QFont font1("Microsoft YaHei", 10, 5);
+    font1.setUnderline(true);
+    IPChangeAction->setFont(font1);
+
+    //IPChangeAction->setAlignment(Qt::AlignCenter);
+    FirstToolBar->addAction(IPChangeAction);
+
+    NowTimeIPLabel = new QLabel(MVLFirstWidget);
+    NowTimeIPLabel->setText("  当前IP：");
+    QFont font2("Microsoft YaHei", 10, 5);
+    NowTimeIPLabel->setFont(font2);
+    NowTimeIPLabel->setAlignment(Qt::AlignCenter);
+    FirstToolBar->addWidget(NowTimeIPLabel);
+
+    NowTimeIPValueLabel = new QLabel(MVLFirstWidget);
+    NowTimeIPValueLabel->setText("  192.168.14.133");
+    QFont font3("Microsoft YaHei", 10, 5);
+    NowTimeIPValueLabel->setFont(font3);
+    NowTimeIPValueLabel->setAlignment(Qt::AlignCenter);
+    FirstToolBar->addWidget(NowTimeIPValueLabel);
+
+
+    AddressLabel = new QLabel(MVLFirstWidget);
+    AddressLabel->setText("  苏州 苏州湾艾美酒店");
+    QFont font4("Microsoft YaHei", 10, 10);
+    AddressLabel->setFont(font4);
+    AddressLabel->setAlignment(Qt::AlignCenter);
+    FirstToolBar->addWidget(AddressLabel);
 
 
 }
@@ -113,6 +149,18 @@ void MappingWidget::InitPaint()
     paint_ = new Paint(MVLThirdWidget);
     paint_->resize(MVLThirdWidget->width(), MVLThirdWidget->height());
     paint_->setPaintRect(MVLThirdWidget->width(), MVLThirdWidget->height());
+}
+void MappingWidget::InitVideoDockWidget()
+{
+    qDebug()<<"----InitVideoDockWidget()----";
+//    VirtualWallDockWindow vwdw(MVLThirdWidget);
+    QDockWidget *vdw;
+    vdw = new VideoDockWidget(MVLThirdWidget);
+    vdw->setGeometry(MVLThirdWidget->width() - 205, 30, 200, 270);
+    vdw->setStyleSheet("background-color:#1F1F1F;");
+    vdw->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable);//设置停靠窗口特性，可移动，可关闭
+    vdw->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);//设置可停靠区域为主窗口左边和右边
+    vdw->show();
 }
 void MappingWidget::onMappingClicked()
 {
@@ -268,4 +316,28 @@ void MappingWidget::onVirtualWallClicked()
     vwdw->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable);//设置停靠窗口特性，可移动，可关闭
     vwdw->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);//设置可停靠区域为主窗口左边和右边
     vwdw->show();
+}
+
+void MappingWidget::onIPChangeClicked()
+{
+    qDebug()<<"robot"<<endl;
+
+    RobotWindow *robot = new RobotWindow();
+    robot->show();
+//    cv::Mat mat = robot->image_;
+//    qDebug()<<robot->image_.channels();
+//    cv::Mat Rgb;
+//    QImage Img;
+//    if (mat.channels() == 3)//RGB Img
+//    {
+//        cv::cvtColor(mat, Rgb, CV_BGR2RGB);//颜色空间转换
+//        Img = QImage((const uchar*)(Rgb.data), Rgb.cols, Rgb.rows, Rgb.cols * Rgb.channels(), QImage::Format_RGB888);
+//    }
+//    else//Gray Img
+//    {
+//        Img = QImage((const uchar*)(mat.data), mat.cols, mat.rows, mat.cols*mat.channels(), QImage::Format_Indexed8);
+//    }
+//    MvLabel->setPixmap(QPixmap::fromImage(Img));
+    //qDebug()<<Img.byteCount();
+    //SplitterTopWidget->update();
 }

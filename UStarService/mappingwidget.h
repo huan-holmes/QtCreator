@@ -16,6 +16,8 @@
 #include <QTextEdit>
 #include "paint.h"
 #include "virtualwalldockwidget.h"
+#include "robot.h"
+#include "videodockwidget.h"
 
 class MappingWidget : public QWidget
 {
@@ -26,6 +28,7 @@ public:
     void InitToolBarAction();
     void InitPaint();
     void createView();
+    void InitVideoDockWidget();
 
 private slots:
     void    onMappingClicked();
@@ -40,6 +43,7 @@ private slots:
     void    onLiftPointClicked();
     void    onOtherPointClicked();
     void    onVirtualWallClicked();
+    void    onIPChangeClicked();
 
 public:
     Paint *paint_;
@@ -82,6 +86,10 @@ private:
     QLabel *EndTimeLabel;
     QLineEdit *EndTimeLineEdit;
     QToolButton *SearchToolButton;
+    QAction *IPChangeAction;
+    QLabel *NowTimeIPLabel;
+    QLabel *NowTimeIPValueLabel;
+    QLabel *AddressLabel;
 
 };
 

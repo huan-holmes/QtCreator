@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     paint.cpp \
     operationwidget.cpp \
     mappingwidget.cpp \
-    virtualwalldockwidget.cpp
+    virtualwalldockwidget.cpp \
+    videodockwidget.cpp
 
 HEADERS  += \
     gridline.h \
@@ -31,7 +32,8 @@ HEADERS  += \
     paint.h \
     operationwidget.h \
     mappingwidget.h \
-    virtualwalldockwidget.h
+    virtualwalldockwidget.h \
+    videodockwidget.h
 
 FORMS    +=
 

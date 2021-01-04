@@ -56,14 +56,16 @@ SOURCES       = ../UStarService/main.cpp \
 		../UStarService/paint.cpp \
 		../UStarService/operationwidget.cpp \
 		../UStarService/mappingwidget.cpp \
-		../UStarService/virtualwalldockwidget.cpp qrc_resource.cpp \
+		../UStarService/virtualwalldockwidget.cpp \
+		../UStarService/videodockwidget.cpp qrc_resource.cpp \
 		moc_loginform.cpp \
 		moc_robot.cpp \
 		moc_mianwindow.cpp \
 		moc_paint.cpp \
 		moc_operationwidget.cpp \
 		moc_mappingwidget.cpp \
-		moc_virtualwalldockwidget.cpp
+		moc_virtualwalldockwidget.cpp \
+		moc_videodockwidget.cpp
 OBJECTS       = main.o \
 		gridline.o \
 		loginform.o \
@@ -73,6 +75,7 @@ OBJECTS       = main.o \
 		operationwidget.o \
 		mappingwidget.o \
 		virtualwalldockwidget.o \
+		videodockwidget.o \
 		qrc_resource.o \
 		moc_loginform.o \
 		moc_robot.o \
@@ -80,7 +83,8 @@ OBJECTS       = main.o \
 		moc_paint.o \
 		moc_operationwidget.o \
 		moc_mappingwidget.o \
-		moc_virtualwalldockwidget.o
+		moc_virtualwalldockwidget.o \
+		moc_videodockwidget.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -175,7 +179,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../UStarService/paint.h \
 		../UStarService/operationwidget.h \
 		../UStarService/mappingwidget.h \
-		../UStarService/virtualwalldockwidget.h ../UStarService/main.cpp \
+		../UStarService/virtualwalldockwidget.h \
+		../UStarService/videodockwidget.h ../UStarService/main.cpp \
 		../UStarService/gridline.cpp \
 		../UStarService/loginform.cpp \
 		../UStarService/robot.cpp \
@@ -183,7 +188,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../UStarService/paint.cpp \
 		../UStarService/operationwidget.cpp \
 		../UStarService/mappingwidget.cpp \
-		../UStarService/virtualwalldockwidget.cpp
+		../UStarService/virtualwalldockwidget.cpp \
+		../UStarService/videodockwidget.cpp
 QMAKE_TARGET  = UStarService
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = UStarService
@@ -416,8 +422,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../UStarService/resource.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../UStarService/gridline.h ../UStarService/loginform.h ../UStarService/robot.h ../UStarService/mianwindow.h ../UStarService/paint.h ../UStarService/operationwidget.h ../UStarService/mappingwidget.h ../UStarService/virtualwalldockwidget.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../UStarService/main.cpp ../UStarService/gridline.cpp ../UStarService/loginform.cpp ../UStarService/robot.cpp ../UStarService/mainwindow.cpp ../UStarService/paint.cpp ../UStarService/operationwidget.cpp ../UStarService/mappingwidget.cpp ../UStarService/virtualwalldockwidget.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../UStarService/gridline.h ../UStarService/loginform.h ../UStarService/robot.h ../UStarService/mianwindow.h ../UStarService/paint.h ../UStarService/operationwidget.h ../UStarService/mappingwidget.h ../UStarService/virtualwalldockwidget.h ../UStarService/videodockwidget.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../UStarService/main.cpp ../UStarService/gridline.cpp ../UStarService/loginform.cpp ../UStarService/robot.cpp ../UStarService/mainwindow.cpp ../UStarService/paint.cpp ../UStarService/operationwidget.cpp ../UStarService/mappingwidget.cpp ../UStarService/virtualwalldockwidget.cpp ../UStarService/videodockwidget.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -445,9 +451,9 @@ qrc_resource.cpp: ../UStarService/resource.qrc \
 		../UStarService/button_circular.qss
 	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name resource ../UStarService/resource.qrc -o qrc_resource.cpp
 
-compiler_moc_header_make_all: moc_loginform.cpp moc_robot.cpp moc_mianwindow.cpp moc_paint.cpp moc_operationwidget.cpp moc_mappingwidget.cpp moc_virtualwalldockwidget.cpp
+compiler_moc_header_make_all: moc_loginform.cpp moc_robot.cpp moc_mianwindow.cpp moc_paint.cpp moc_operationwidget.cpp moc_mappingwidget.cpp moc_virtualwalldockwidget.cpp moc_videodockwidget.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_loginform.cpp moc_robot.cpp moc_mianwindow.cpp moc_paint.cpp moc_operationwidget.cpp moc_mappingwidget.cpp moc_virtualwalldockwidget.cpp
+	-$(DEL_FILE) moc_loginform.cpp moc_robot.cpp moc_mianwindow.cpp moc_paint.cpp moc_operationwidget.cpp moc_mappingwidget.cpp moc_virtualwalldockwidget.cpp moc_videodockwidget.cpp
 moc_loginform.cpp: ../UStarService/loginform.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/boocax/QtCreator/UStarService -I/home/boocax/QtCreator/UStarService -I/usr/local/include -I/usr/local/include/opencv -I/usr/local/include/opencv2 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../UStarService/loginform.h -o moc_loginform.cpp
 
@@ -472,11 +478,18 @@ moc_operationwidget.cpp: ../UStarService/paint.h \
 moc_mappingwidget.cpp: ../UStarService/paint.h \
 		../UStarService/gridline.h \
 		../UStarService/virtualwalldockwidget.h \
+		../UStarService/robot.h \
+		../UStarService/videodockwidget.h \
 		../UStarService/mappingwidget.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/boocax/QtCreator/UStarService -I/home/boocax/QtCreator/UStarService -I/usr/local/include -I/usr/local/include/opencv -I/usr/local/include/opencv2 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../UStarService/mappingwidget.h -o moc_mappingwidget.cpp
 
-moc_virtualwalldockwidget.cpp: ../UStarService/virtualwalldockwidget.h
+moc_virtualwalldockwidget.cpp: ../UStarService/paint.h \
+		../UStarService/gridline.h \
+		../UStarService/virtualwalldockwidget.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/boocax/QtCreator/UStarService -I/home/boocax/QtCreator/UStarService -I/usr/local/include -I/usr/local/include/opencv -I/usr/local/include/opencv2 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../UStarService/virtualwalldockwidget.h -o moc_virtualwalldockwidget.cpp
+
+moc_videodockwidget.cpp: ../UStarService/videodockwidget.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/boocax/QtCreator/UStarService -I/home/boocax/QtCreator/UStarService -I/usr/local/include -I/usr/local/include/opencv -I/usr/local/include/opencv2 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../UStarService/videodockwidget.h -o moc_videodockwidget.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -499,7 +512,8 @@ main.o: ../UStarService/main.cpp ../UStarService/mianwindow.h \
 		../UStarService/operationwidget.h \
 		../UStarService/paint.h \
 		../UStarService/mappingwidget.h \
-		../UStarService/virtualwalldockwidget.h
+		../UStarService/virtualwalldockwidget.h \
+		../UStarService/videodockwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../UStarService/main.cpp
 
 gridline.o: ../UStarService/gridline.cpp ../UStarService/gridline.h
@@ -529,11 +543,18 @@ operationwidget.o: ../UStarService/operationwidget.cpp ../UStarService/operation
 mappingwidget.o: ../UStarService/mappingwidget.cpp ../UStarService/mappingwidget.h \
 		../UStarService/paint.h \
 		../UStarService/gridline.h \
-		../UStarService/virtualwalldockwidget.h
+		../UStarService/virtualwalldockwidget.h \
+		../UStarService/robot.h \
+		../UStarService/videodockwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mappingwidget.o ../UStarService/mappingwidget.cpp
 
-virtualwalldockwidget.o: ../UStarService/virtualwalldockwidget.cpp 
+virtualwalldockwidget.o: ../UStarService/virtualwalldockwidget.cpp ../UStarService/virtualwalldockwidget.h \
+		../UStarService/paint.h \
+		../UStarService/gridline.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o virtualwalldockwidget.o ../UStarService/virtualwalldockwidget.cpp
+
+videodockwidget.o: ../UStarService/videodockwidget.cpp ../UStarService/videodockwidget.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o videodockwidget.o ../UStarService/videodockwidget.cpp
 
 qrc_resource.o: qrc_resource.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resource.o qrc_resource.cpp
@@ -558,6 +579,9 @@ moc_mappingwidget.o: moc_mappingwidget.cpp
 
 moc_virtualwalldockwidget.o: moc_virtualwalldockwidget.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_virtualwalldockwidget.o moc_virtualwalldockwidget.cpp
+
+moc_videodockwidget.o: moc_videodockwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_videodockwidget.o moc_videodockwidget.cpp
 
 ####### Install
 
