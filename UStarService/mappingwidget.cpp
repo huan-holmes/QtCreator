@@ -9,6 +9,7 @@ MappingWidget::MappingWidget(QWidget *parent):
     InitToolBarAction();
     onMappingClicked();
     InitPaint();
+    InitStateLabel();
     InitVideoDockWidget();
     connect(MappingToolButton, SIGNAL(clicked()), this, SLOT(onMappingClicked()));
     connect(MapBagToolButton, SIGNAL(clicked()), this, SLOT(onMapBagClicked()));
@@ -23,6 +24,7 @@ MappingWidget::MappingWidget(QWidget *parent):
     connect(OtherPointAction, &QAction::triggered, this, &MappingWidget::onOtherPointClicked);
     connect(VirtualWallAction, &QAction::triggered, this, &MappingWidget::onVirtualWallClicked);
     connect(IPChangeAction,  &QAction::triggered, this, &MappingWidget::onIPChangeClicked);
+    connect(CameraAction,  &QAction::triggered, this, &MappingWidget::onCameraClicked);
 }
 void MappingWidget::createView()
 {
@@ -38,9 +40,9 @@ void MappingWidget::createView()
     MainVLayout->addWidget(MVLSecondWidget);
     MainVLayout->addWidget(MVLThirdWidget);
     MainVLayout->addWidget(MVLFourthWidget);
-    MVLFirstWidget->setFixedHeight(height() * 0.03);
+    MVLFirstWidget->setFixedHeight(height() * 0.04);
     MVLSecondWidget->setFixedHeight(height() * 0.06);
-    MVLThirdWidget->setFixedHeight(height() * 0.88);
+    MVLThirdWidget->setFixedHeight(height() * 0.87);
     MVLFourthWidget->setFixedHeight(height() * 0.03);
     MVLFirstWidget->setFixedWidth(width());
     MVLSecondWidget->setFixedWidth(width());
@@ -56,6 +58,13 @@ void MappingWidget::createView()
 }
 void MappingWidget::InitToolBarAction()
 {
+    ToolLogLable = new QLabel(MVLFirstWidget);
+    LogImage=new QImage; //新建一个image对象
+    LogImage->load("/home/boocax/QtCreator/log/Icon/logo.png"); //将图像资源载入对象img，注意路径，可点进图片右键复制路径
+    LogImage->scaled(ToolLogLable->size(), Qt::KeepAspectRatio);
+    ToolLogLable->setScaledContents(true);
+    ToolLogLable->setPixmap(QPixmap::fromImage(*LogImage)); //将图片放入label，使用setPixmap,注意指针*img
+    FirstToolBar->addWidget(ToolLogLable);
 
     MappingToolButton = new QToolButton(MVLFirstWidget);
     MappingToolButton->setText("地图构建");
@@ -100,13 +109,19 @@ void MappingWidget::InitToolBarAction()
     LiftPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/white.png"));
     OtherPointAction = new QAction((tr("&其他点")), MVLSecondWidget);
     OtherPointAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/yellow.png"));
+    CameraAction = new QAction(tr("&摄像头"), MVLSecondWidget);
+    CameraAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/camera.png"));
+    SenserStateAction = new QAction(tr("&传感器状态"), MVLSecondWidget);
+    SenserStateAction->setIcon(QIcon("/home/boocax/QtCreator/log/Icon/chuanganqizhuangtai.png"));
 
     OperationLogToolButton = new QToolButton(MVLFirstWidget);
     OperationLogToolButton->setText("操作记录");
     OperationLogToolButton->setCheckable(true);
     FirstToolBar->addWidget(OperationLogToolButton);
 
-    QWidget* spacer = new QWidget();
+    SpacerWidget = new QWidget();
+
+    QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     FirstToolBar->addWidget(spacer);
 
@@ -142,6 +157,8 @@ void MappingWidget::InitToolBarAction()
     FirstToolBar->addWidget(AddressLabel);
 
 
+
+
 }
 void MappingWidget::InitPaint()
 {
@@ -150,17 +167,34 @@ void MappingWidget::InitPaint()
     paint_->resize(MVLThirdWidget->width(), MVLThirdWidget->height());
     paint_->setPaintRect(MVLThirdWidget->width(), MVLThirdWidget->height());
 }
+void MappingWidget::InitStateLabel()
+{
+    StateRobotLabel = new QLabel(MVLFourthWidget);
+    StateRobotLabel->setGeometry(0, 5, 15, MVLFourthWidget->height()-10);
+    StateRobotImage = new QImage; //新建一个image对象
+    StateRobotImage->load("/home/boocax/QtCreator/log/Icon/chuanganqizhuangtai.png"); //将图像资源载入对象img，注意路径，可点进图片右键复制路径
+    StateRobotImage->scaled(StateRobotLabel->size(), Qt::KeepAspectRatio);
+    StateRobotLabel->setScaledContents(true);
+    StateRobotLabel->setPixmap(QPixmap::fromImage(*StateRobotImage)); //将图片放入label，使用setPixmap,注意指针*img
+    StateRobotNameLabel = new QLabel(MVLFourthWidget);
+    StateRobotNameLabel->setGeometry(StateRobotLabel->width(), 0, 50, MVLFourthWidget->height());
+    QFont font1("Microsoft YaHei", 10, 40);
+    StateRobotNameLabel->setFont(font1);
+    StateRobotNameLabel->setAlignment(Qt::AlignCenter);
+    StateRobotNameLabel->setStyleSheet("color: #99FFFF;");
+    StateRobotNameLabel->setText(" Robot01");
+}
 void MappingWidget::InitVideoDockWidget()
 {
     qDebug()<<"----InitVideoDockWidget()----";
 //    VirtualWallDockWindow vwdw(MVLThirdWidget);
-    QDockWidget *vdw;
-    vdw = new VideoDockWidget(MVLThirdWidget);
-    vdw->setGeometry(MVLThirdWidget->width() - 205, 30, 200, 270);
-    vdw->setStyleSheet("background-color:#1F1F1F;");
-    vdw->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable);//设置停靠窗口特性，可移动，可关闭
-    vdw->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);//设置可停靠区域为主窗口左边和右边
-    vdw->show();
+
+    VideoWidget = new VideoDockWidget(MVLThirdWidget);
+    VideoWidget->setGeometry(MVLThirdWidget->width() - 205, 30, 200, 270);
+    VideoWidget->setStyleSheet("background-color:#1F1F1F;");
+    VideoWidget->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable);//设置停靠窗口特性，可移动，可关闭
+    VideoWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);//设置可停靠区域为主窗口左边和右边
+    VideoWidget->show();
 }
 void MappingWidget::onMappingClicked()
 {
@@ -174,6 +208,11 @@ void MappingWidget::onMappingClicked()
     SecondToolBar->addAction(ModifyMappingAction);
     SecondToolBar->addAction(DecorateAction);
     SecondToolBar->addAction(VirtualWallAction);
+    SpacerWidget = new QWidget();
+    SpacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    SecondToolBar->addWidget(SpacerWidget);
+    SecondToolBar->addAction(CameraAction);
+    SecondToolBar->addAction(SenserStateAction);
 
 }
 void MappingWidget::onMapBagClicked()
@@ -188,6 +227,11 @@ void MappingWidget::onMapBagClicked()
     SecondToolBar->addAction(ServerImportAction);
     SecondToolBar->addAction(LoaclCopyAction);
     SecondToolBar->addAction(ServerCopyAction);
+    SpacerWidget = new QWidget();
+    SpacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    SecondToolBar->addWidget(SpacerWidget);
+    SecondToolBar->addAction(CameraAction);
+    SecondToolBar->addAction(SenserStateAction);
 
 }
 void MappingWidget::onPOIClicked()
@@ -217,6 +261,12 @@ void MappingWidget::onPOIClicked()
     SecondToolBar->addAction(ChargePointAction);
     SecondToolBar->addAction(LiftPointAction);
     SecondToolBar->addAction(OtherPointAction);
+    SecondToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    SpacerWidget = new QWidget();
+    SpacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    SecondToolBar->addWidget(SpacerWidget);
+    SecondToolBar->addAction(CameraAction);
+    SecondToolBar->addAction(SenserStateAction);
 }
 void MappingWidget::onOperationLogClicked()
 {
@@ -258,6 +308,11 @@ void MappingWidget::onOperationLogClicked()
     SecondToolBar->addWidget(EndTimeLabel);
     SecondToolBar->addWidget(endDateEdit);
     SecondToolBar->addWidget(SearchToolButton);
+    SpacerWidget = new QWidget();
+    SpacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    SecondToolBar->addWidget(SpacerWidget);
+    SecondToolBar->addAction(CameraAction);
+    SecondToolBar->addAction(SenserStateAction);
 }
 void MappingWidget::onLocalImportClicked()
 {
@@ -340,4 +395,8 @@ void MappingWidget::onIPChangeClicked()
 //    MvLabel->setPixmap(QPixmap::fromImage(Img));
     //qDebug()<<Img.byteCount();
     //SplitterTopWidget->update();
+}
+void MappingWidget::onCameraClicked()
+{
+    VideoWidget->show();
 }

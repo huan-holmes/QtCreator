@@ -28,6 +28,7 @@ public:
     void InitToolBarAction();
     void InitPaint();
     void createView();
+    void InitStateLabel();
     void InitVideoDockWidget();
 
 private slots:
@@ -44,7 +45,7 @@ private slots:
     void    onOtherPointClicked();
     void    onVirtualWallClicked();
     void    onIPChangeClicked();
-
+    void    onCameraClicked();
 public:
     Paint *paint_;
     QString button_style_;
@@ -56,9 +57,13 @@ private:
     QWidget *MVLThirdWidget;
     QWidget *MVLFourthWidget;
 
+    QWidget* SpacerWidget;
     QToolBar *FirstToolBar;
     QToolBar *SecondToolBar;
+    QStatusBar *StatusBar;
 
+    QLabel *ToolLogLable;
+    QImage *LogImage;
     QToolButton *MappingToolButton;
     QAction *NewMapAction;
     QAction *ModifyMappingAction;
@@ -90,7 +95,14 @@ private:
     QLabel *NowTimeIPLabel;
     QLabel *NowTimeIPValueLabel;
     QLabel *AddressLabel;
+    QAction *CameraAction;
+    QAction *SenserStateAction;
 
+    QDockWidget *VideoWidget;
+
+    QLabel *StateRobotLabel;
+    QImage *StateRobotImage;
+    QLabel *StateRobotNameLabel;
 };
 
 

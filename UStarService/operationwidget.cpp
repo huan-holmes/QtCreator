@@ -35,9 +35,9 @@ void OperationWidget::createView()
     MainVLayout->addWidget(MVLSecondWidget);
     MainVLayout->addWidget(MVLThirdWidget);
     MainVLayout->addWidget(MVLFourthWidget);
-    MVLFirstWidget->setFixedHeight(height() * 0.03);
+    MVLFirstWidget->setFixedHeight(height() * 0.04);
     MVLSecondWidget->setFixedHeight(height() * 0.06);
-    MVLThirdWidget->setFixedHeight(height() * 0.88);
+    MVLThirdWidget->setFixedHeight(height() * 0.87);
     MVLFourthWidget->setFixedHeight(height() * 0.03);
     MVLFirstWidget->setFixedWidth(width());
     MVLSecondWidget->setFixedWidth(width());
@@ -53,6 +53,14 @@ void OperationWidget::createView()
 }
 void OperationWidget::InitToolBarAction()
 {
+    ToolLogLable = new QLabel(MVLFirstWidget);
+    LogImage = new QImage; //新建一个image对象
+    LogImage->load("/home/boocax/QtCreator/log/Icon/logo.png"); //将图像资源载入对象img，注意路径，可点进图片右键复制路径
+    LogImage->scaled(ToolLogLable->size(), Qt::KeepAspectRatio);
+    ToolLogLable->setScaledContents(true);
+    ToolLogLable->setPixmap(QPixmap::fromImage(*LogImage)); //将图片放入label，使用setPixmap,注意指针*img
+    FirstToolBar->addWidget(ToolLogLable);
+
     MapBagToolButton = new QToolButton(MVLFirstWidget);
     MapBagToolButton->setText("地图包");
     MapBagToolButton->setStyleSheet("QToolButoon{color:#FFFFFF;border: 1px solid gray;}");

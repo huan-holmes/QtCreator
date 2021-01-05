@@ -52,6 +52,8 @@ private:
     QToolBar *FirstToolBar;
     QToolBar *SecondToolBar;
 
+    QLabel *ToolLogLable;
+    QImage *LogImage;
     QToolButton *MapBagToolButton;
     QAction *LocalImportAction;
     QAction *ServerImportAction;
