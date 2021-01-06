@@ -399,4 +399,8 @@ void MappingWidget::onIPChangeClicked()
 void MappingWidget::onCameraClicked()
 {
     VideoWidget->show();
+//    while(1)
+//    {
+//        VideoWidget->ReadSocketImage2Label();
+//    }
 }
