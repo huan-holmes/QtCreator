@@ -21,6 +21,7 @@ public:
 
     void InitSocketInfo();
     void ReadSocketImage2Label();
+    //void showVideo();
 
 public:
     QTcpSocket *socket_;

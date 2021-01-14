@@ -18,12 +18,18 @@ class VirtualWallDockWidget : public QDockWidget
 
 public:
     explicit VirtualWallDockWidget(QWidget *parent = 0, Paint *paint = 0);
+    QString converRGB16HexStr(QColor color);
 
 public:
     Paint *paint_;
     QLabel *ImageLabel;
     QImage *Img;
     QLabel *VirtualWallType;
+    QLabel *BrushSizeLabel;
+    QPushButton *RevokeButton;
+    QPushButton *CancelRevokeButton;
+    QPushButton *EmptyButton;
+    QPushButton *SaveButton;
 
     QPushButton *LineButton;
     QPushButton *CurveButton;
@@ -31,7 +37,11 @@ public:
     QPushButton *AbnormalButton;
     QLabel *VirtualWallColor;
     QPushButton *ColorButton;
-    QPalette *ColorPalette;
+    QPushButton *OneSizeButton;
+    QPushButton *TwoSizeButton;
+    QPushButton *ThreeSizeButton;
+    QPushButton *FourSizeButton;
+    //QPalette *ColorPalette;
 private slots:
     void onLineClicked();
     void onAbnormalClicked();

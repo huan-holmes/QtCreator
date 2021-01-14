@@ -15,7 +15,6 @@ VideoDockWidget::VideoDockWidget(QWidget *parent)
 
 
 }
-
 VideoDockWidget::~VideoDockWidget()
 {
 //    QString br = "-1";
@@ -39,17 +38,15 @@ void VideoDockWidget::InitSocketInfo()
 }
 void VideoDockWidget::ReadSocketImage2Label()
 {
+
     qDebug()<<"----ReadSocketImage2Label()---";
     socket_->waitForReadyRead(1000);
     char recvMsg[65536] = {0};
     int recvRe = socket_->read(recvMsg, 65536);
-    //QString res = recvMsg;
     std::vector<uchar> vec_data(recvMsg, recvMsg+65536);
-    //qDebug()<<vec_data[0];
     cv::Mat img;
     cv::imdecode(cv::Mat(vec_data), CV_LOAD_IMAGE_COLOR, &img);
     Img = QImage((const uchar*)(img.data), img.cols, img.rows, img.cols * img.channels(), QImage::Format_RGB888);
     Img.scaled(VideoShowLabel->size(), Qt::KeepAspectRatio);
-    qDebug()<<1;
     VideoShowLabel->setPixmap(QPixmap::fromImage(Img)); //将图片放入label，使用setPixmap,注意指针*img
 }

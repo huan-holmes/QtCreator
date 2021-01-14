@@ -98,7 +98,7 @@ private:
     QAction *CameraAction;
     QAction *SenserStateAction;
 
-    QDockWidget *VideoWidget;
+    VideoDockWidget *VideoWidget;
 
     QLabel *StateRobotLabel;
     QImage *StateRobotImage;
