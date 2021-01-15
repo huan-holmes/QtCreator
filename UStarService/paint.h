@@ -30,6 +30,7 @@ public:
     void changeVirtualWallState();
     void changeVirtualWallStateAbnormal();
     void setVirtualWallColor(QColor color);
+    void setWallSize(int size);
     //void onResetClicked();
 public:
     enum  Type {
@@ -47,6 +48,7 @@ public:
         Reset,
         Style,
         ChooseRobot,
+        Rotate,
     };
 public:
     QPushButton *BigButton;
@@ -62,6 +64,8 @@ private:
     QPoint offset_;           //一次的图片偏移值
     QPoint allOffset_;          //总偏移
 
+    int rotate_;
+    int wall_size_;
     float ratio_;              //缩放比例
     int action_;          //动作(放大,缩小,移动...)
     int pix_width_;            //图片宽

@@ -97,6 +97,10 @@ VirtualWallDockWidget::VirtualWallDockWidget(QWidget *parent, Paint *paint)
     connect(LineButton, SIGNAL(clicked()), this, SLOT(onLineClicked()));
     connect(AbnormalButton, SIGNAL(clicked()), this, SLOT(onAbnormalClicked()));
     connect(ColorButton, SIGNAL(clicked()), this, SLOT(onColorClicked()));
+    connect(OneSizeButton, SIGNAL(clicked()), this, SLOT(onOneSizeClicked()));
+    connect(TwoSizeButton, SIGNAL(clicked()), this, SLOT(onTwoSizeClicked()));
+    connect(ThreeSizeButton, SIGNAL(clicked()), this, SLOT(onThreeSizeClicked()));
+    connect(FourSizeButton, SIGNAL(clicked()), this, SLOT(onFourSizeClicked()));
 }
 
 void VirtualWallDockWidget::onLineClicked()
@@ -129,4 +133,20 @@ QString VirtualWallDockWidget::converRGB16HexStr(QColor color) {
     QString hexStr = "#"+redStr+greenStr+blueStr;
     //返回hexStr
     return hexStr;
+}
+void VirtualWallDockWidget::onOneSizeClicked()
+{
+    paint_->setWallSize(1);
+}
+void VirtualWallDockWidget::onTwoSizeClicked()
+{
+    paint_->setWallSize(2);
+}
+void VirtualWallDockWidget::onThreeSizeClicked()
+{
+    paint_->setWallSize(3);
+}
+void VirtualWallDockWidget::onFourSizeClicked()
+{
+    paint_->setWallSize(4);
 }

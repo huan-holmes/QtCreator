@@ -46,6 +46,10 @@ private slots:
     void onLineClicked();
     void onAbnormalClicked();
     void onColorClicked();
+    void onOneSizeClicked();
+    void onTwoSizeClicked();
+    void onThreeSizeClicked();
+    void onFourSizeClicked();
 };
 #endif // VIRTUALWALLDOCKWIDGET_H
 

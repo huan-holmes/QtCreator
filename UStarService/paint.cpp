@@ -11,7 +11,9 @@ Paint::Paint(QWidget *parent):
     virtual_wall_y2_(0),
     virtual_color_(qRgb(0, 0, 0)),
     button_style_(""),
-    allOffset_(0,0)
+    allOffset_(0,0),
+    rotate_(0),
+    wall_size_(1)
 {
 
     paintRect_ = QRect(0, 0, width(), height());
@@ -157,9 +159,9 @@ bool Paint::event(QEvent * event)
                 }
                 else
                 {
-                    for(int i=-1; i < 1; i++)
+                    for(int i=-wall_size_; i <= wall_size_; i++)
                     {
-                        for(int j = -1; j < 1; j++)
+                        for(int j = -wall_size_; j <= wall_size_; j++)
                         {
                             image_.setPixel((mouse->x()-paintRect_.x() - (paintRect_.width()/2-ratio_*pix_width_/2))/ratio_ - allOffset_.x() / ratio_ +i, (mouse->y()-paintRect_.y()-(paintRect_.height()/2-ratio_*pix_height_/2))/ratio_ -allOffset_.y() / ratio_+ j, virtual_color_);
                         }
@@ -299,7 +301,13 @@ void Paint::paintEvent(QPaintEvent *event)
     if(h>(paintRect_.height()-y))
         h = paintRect_.height()-y;
 
-
+    if(rotate_ != 0)
+    {
+        paintRecter.translate(paintRect_.width() / 2.0, paintRect_.height() / 2.0);
+        paintRecter.rotate(rotate_);
+        paintRecter.translate(-paintRect_.width() / 2.0, -paintRect_.height() / 2.0);
+        action_ = Paint::None;
+    }
 
     paintRecter.drawTiledPixmap(x+paintRect_.x(),y+paintRect_.y(),w,h,crtPixmap_,sx,sy);             //绘画图形
 
@@ -329,7 +337,12 @@ void Paint::onDownClicked()
 }
 void Paint::onRotateClicked()
 {
-
+  action_ = Paint::Rotate;
+  rotate_ += 90;
+  if (rotate_ % 360 == 0)
+  {
+      rotate_ = 0;
+  }
   this->update();
 }
 
@@ -339,6 +352,7 @@ void Paint::onResetClicked()
   allOffset_.setX(0);
   allOffset_.setY(0);
   ratio_ = 1.000;
+  rotate_ = 0;
   this->update();
 }
 void Paint::OnLeftClicked()
@@ -431,9 +445,13 @@ void Paint::drawLine(std::vector<int> line_xs, std::vector<int> line_ys)
 {
     for (int i = 0; i < line_xs.size(); i++)
     {
-        for(int j = -1; j <= 1; j++)
+        for(int j = -wall_size_; j <= wall_size_; j++)
         {
-            image_.setPixel(line_xs[i+j], line_ys[i], virtual_color_);
+            for(int n = -wall_size_; n <= wall_size_; n++)
+            {
+                image_.setPixel(line_xs[i+j], line_ys[i+n], virtual_color_);
+            }
+
         }
     }
     pixmap_ = pixmap_.fromImage(image_);
@@ -551,4 +569,8 @@ void Paint::changeVirtualWallStateAbnormal()
 void Paint::setVirtualWallColor(QColor color)
 {
     virtual_color_ = qRgb(color.red(), color.green(), color.blue());
+}
+void Paint::setWallSize(int size)
+{
+    wall_size_ = size;
 }
